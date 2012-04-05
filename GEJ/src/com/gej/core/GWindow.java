@@ -3,10 +3,7 @@ package com.gej.core;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.Toolkit;
 import java.awt.Window;
-import java.awt.image.BufferStrategy;
-
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -32,43 +29,26 @@ public class GWindow {
 		}
 		frame = new JFrame(Global.TITLE);
 		frame.add(gm);
-		frame.setSize(Global.WIDTH, Global.HEIGHT);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.setIgnoreRepaint(true);
 		if (fullscreen){
 			GraphicsEnvironment genv = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			device = genv.getDefaultScreenDevice();
-			try {
-				frame.setUndecorated(true);
-				device.setFullScreenWindow((Window)frame);
-				DisplayMode[] modes = device.getDisplayModes();
-				for (DisplayMode mode : modes){
-					if (mode.getWidth()==Global.WIDTH && mode.getHeight()==Global.HEIGHT){
-						device.setDisplayMode(mode);
-					}
+			frame.setUndecorated(true);
+			device.setFullScreenWindow((Window)frame);
+			DisplayMode[] modes = device.getDisplayModes();
+			for (DisplayMode mode : modes){
+				if (mode.getWidth()==Global.WIDTH && mode.getHeight()==Global.HEIGHT){
+					device.setDisplayMode(mode);
 				}
-			} finally {
-				device.getFullScreenWindow().dispose();
-				device.setFullScreenWindow(null);
 			}
 		} else {
+			frame.setSize(Global.WIDTH, Global.HEIGHT);
 			frame.setLocationRelativeTo(null);
 		}
 		frame.setVisible(true);
 	}
-	
-	 public void update() {
-		 Window window = getWindow();
-	     if (window != null) {
-	         BufferStrategy strategy = window.getBufferStrategy();
-	         if (!strategy.contentsLost()) {
-	             strategy.show();
-	         }
-	     }
-	     Toolkit.getDefaultToolkit().sync();
-	 }
-
 	
 	public int getWidth(){
 		return frame.getWidth();
@@ -84,6 +64,10 @@ public class GWindow {
 		} else {
 			return device.getFullScreenWindow();
 		}
+	}
+	
+	public void setTitle(String title){
+		frame.setTitle(title);
 	}
 
 }
