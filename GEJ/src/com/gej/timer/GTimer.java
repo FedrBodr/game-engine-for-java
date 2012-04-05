@@ -18,6 +18,14 @@ public class GTimer implements ActionListener {
 		this.listener = listener;
 		timer = new Timer(time, this);
 	}
+	
+	public synchronized void start(){
+		timer.start();
+	}
+	
+	public synchronized void stop(){
+		timer.stop();
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
