@@ -1,5 +1,7 @@
 package com.gej.core;
 
+import java.awt.Graphics2D;
+
 import javax.swing.JPanel;
 
 /**
@@ -8,13 +10,23 @@ import javax.swing.JPanel;
  * 
  * @author Sri Harsha Chilakapati
  */
-public class Game extends JPanel {
+public abstract class Game extends JPanel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5934394613281562786L;
 
+	public Game(){
+		
+	}
 	
+	public abstract void initResources();
+	
+	public abstract void render(Graphics2D g);
+	
+	public void update(int elapsedTime){
+		// Do nothing
+	}
 	
 }
