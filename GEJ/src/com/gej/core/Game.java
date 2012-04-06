@@ -1,5 +1,6 @@
 package com.gej.core;
 
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import javax.swing.ImageIcon;
@@ -31,6 +32,7 @@ public abstract class Game extends JPanel implements Runnable {
 		setIgnoreRepaint(true);
 		setFocusTraversalKeysEnabled(false);
 		setFocusable(true);
+		setDoubleBuffered(true);
 		initResources();
 	}
 	
@@ -38,23 +40,26 @@ public abstract class Game extends JPanel implements Runnable {
 		long startTime = System.currentTimeMillis();
 		long currTime = startTime;
 		while (running){
+			currTime = System.currentTimeMillis();
 			long elapsedTime = currTime - startTime;
-			currTime += elapsedTime;
 			update(elapsedTime);
-			Graphics2D g = (Graphics2D)getGraphics();
-			if (g!=null){
-				g.setColor(getBackground());
-				g.fillRect(0, 0, getWidth(), getHeight());
-				g.setColor(getForeground());
-				render(g);
-				g.dispose();
-			}
+			repaint();
+			startTime = System.currentTimeMillis();
 			try {
 				Thread.sleep(30);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public void paint(Graphics g){
+		Graphics2D g2D = (Graphics2D)g;
+		g2D.setColor(getBackground());
+		g2D.fillRect(0, 0, getWidth(), getHeight());
+		g2D.setColor(getForeground());
+		render(g2D);
+		g2D.dispose();
 	}
 	
 	public void disposeWindow(){
@@ -66,13 +71,11 @@ public abstract class Game extends JPanel implements Runnable {
 		window = new GWindow(this, bool);
 	}
 	
-	public abstract void initResources();
+	public synchronized void initResources() {}
 	
-	public abstract void render(Graphics2D g);
+	public synchronized void render(Graphics2D g){}
 	
-	public void update(long elapsedTime){
-		// Do nothing
-	}
+	public synchronized void update(long elapsedTime) {}
 	
 	public Image loadImage(String name){
 		return new ImageIcon(this.getClass().getClassLoader().getResource(name)).getImage();

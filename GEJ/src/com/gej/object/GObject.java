@@ -1,43 +1,130 @@
 package com.gej.object;
 
 import java.awt.Image;
+import java.awt.Rectangle;
 
 import com.gej.graphics.Animation;
 
 public class GObject {
-	
-	Animation anim = null;
-	
-	public float x = 0;
-	public float y = 0;
-	
-	public float dx = 0;
-	public float dy = 0;
-	
-	public GObject(Animation anim){
-		this.anim = anim;
-	}
-	
-	public GObject(Image image){
-		this(new Animation(new Image[]{image}, 1000));
-	}
-	
-	public void update(long elapsedTime){
-		x = x + dx * elapsedTime;
-		y = y + dy * elapsedTime;
-		anim.update(elapsedTime);
-	}
-	
-	public int getWidth(){
-		return anim.getImage().getWidth(null);
-	}
-	
-	public int getHeight(){
-		return anim.getImage().getHeight(null);
-	}
-	
-	public Image getImage(){
-		return anim.getImage();
-	}
 
+    private Animation anim;
+    private float x;
+    private float y;
+    private float dx;
+    private float dy;
+
+    public GObject(Animation anim) {
+        this.anim = anim;
+    }
+    
+    public GObject(Image img){
+    	this.anim = new Animation(new Image[]{img}, 100);
+    }
+
+    public void update(long elapsedTime) {
+        x += dx * elapsedTime;
+        y += dy * elapsedTime;
+        anim.update(elapsedTime);
+    }
+    
+    public Rectangle getBounds(){
+    	return new Rectangle(Math.round(getX()), Math.round(getY()), getWidth(), getHeight());
+    }
+    
+    public boolean isCollidingWith(GObject other){
+    	return getBounds().intersects(other.getBounds());
+    }
+    
+    public boolean isTopCollision(GObject other){
+    	boolean bool = isCollidingWith(other);
+    	if (bool){
+    		if (getY()>=other.getY()){
+    			bool = true;
+    		} else {
+    			bool = false;
+    		}
+    	}
+    	return bool;
+    }
+    
+    public boolean isBottomCollision(GObject other){
+    	boolean bool = isCollidingWith(other);
+    	if (bool){
+    		if (getY()<=other.getY()){
+    			bool = true;
+    		} else {
+    			bool = false;
+    		}
+    	}
+    	return bool;
+    }
+    
+    public boolean isLeftCollision(GObject other){
+    	boolean bool = isCollidingWith(other);
+    	if (bool){
+    		if (getX()>=other.getX()){
+    			bool = true;
+    		} else {
+    			bool = false;
+    		}
+    	}
+    	return bool;
+    }
+    
+    public boolean isRightCollision(GObject other){
+    	boolean bool = isCollidingWith(other);
+    	if (bool){
+    		if (getX()<=other.getX()){
+    			bool = true;
+    		} else {
+    			bool = false;
+    		}
+    	}
+    	return bool;
+    }
+    
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+    
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public int getWidth() {
+        return anim.getImage().getWidth(null);
+    }
+
+    public int getHeight() {
+        return anim.getImage().getHeight(null);
+    }
+
+    public float getVelocityX() {
+        return dx;
+    }
+
+    public float getVelocityY() {
+        return dy;
+    }
+
+    public void setVelocityX(float dx) {
+        this.dx = dx;
+    }
+
+    public void setVelocityY(float dy) {
+        this.dy = dy;
+    }
+
+    public Image getImage() {
+        return anim.getImage();
+    }
 }
+
