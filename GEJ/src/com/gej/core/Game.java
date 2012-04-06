@@ -12,7 +12,7 @@ import javax.swing.JPanel;
  * 
  * @author Sri Harsha Chilakapati
  */
-public abstract class Game extends JPanel implements Runnable {
+public abstract class Game extends JPanel {
 
 	/**
 	 * 
@@ -25,15 +25,14 @@ public abstract class Game extends JPanel implements Runnable {
 	boolean running = false;
 	
 	public Game(){
-		Thread th = new Thread(this);
-		th.start();
 		running = true;
 		window = new GWindow(this, fullscreen);
-		setIgnoreRepaint(true);
+		//setIgnoreRepaint(true);
 		setFocusTraversalKeysEnabled(false);
 		setFocusable(true);
 		setDoubleBuffered(true);
 		initResources();
+		run();
 	}
 	
 	public void run(){

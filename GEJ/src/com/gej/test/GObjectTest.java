@@ -14,15 +14,12 @@ public class GObjectTest extends Game {
 	
 	GObject box = null;
 	
-	{
-		setFullScreen(true);
-    }
-		
 	@Override
 	public void initResources(){
 		box = new GObject(loadImage("resources/box.png"));
 		box.setVelocityX(0.08f);
         box.setVelocityY(0.08f);
+        setFullScreen(true);
 	}
 	
 	@Override
