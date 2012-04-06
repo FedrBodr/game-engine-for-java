@@ -83,6 +83,15 @@ public class GObject {
     	return bool;
     }
     
+    public void bounce(GObject other){
+    	if (isTopCollision(other)||isBottomCollision(other)){
+    		dy = -dy;
+    	}
+    	if (isLeftCollision(other)||isRightCollision(other)){
+    		dx = -dx;
+    	}
+    }
+    
     public float getX() {
         return x;
     }

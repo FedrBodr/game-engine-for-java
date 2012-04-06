@@ -36,20 +36,16 @@ public class KeyTest extends Game {
 	
 	@Override
 	public void update(long elapsedTime){
-		if (exit!=null){
-			if (exit.isPressed()){
-				System.exit(0);
-			}
+		if (exit.isPressed()){
+			System.exit(0);
 		}
 	}
 
 	@Override
 	public void render(Graphics2D g) {
-		if (left!=null&&right!=null&&exit!=null){
-			g.drawString("Left : " + left.isPressed(), 10, 20);
-			g.drawString("Right : " + right.isPressed(), 10, 50);
-			g.drawString("Press ESCAPE to exit", 10, 80);
-		}
+		g.drawString("Left : " + left.isPressed(), 10, 20);
+		g.drawString("Right : " + right.isPressed(), 10, 50);
+		g.drawString("Press ESCAPE to exit", 10, 80);
 	}
 	
 	public static void main(String[] args){
