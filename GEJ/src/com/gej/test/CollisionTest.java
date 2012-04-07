@@ -44,7 +44,7 @@ public class CollisionTest extends Game {
 		// Load the background
 		background = loadImage("resources/back.png");
 		// Setting the frame rate
-		setFPS(500);
+		setFPS(100);
 	}
 	
 	@Override
