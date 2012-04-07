@@ -20,17 +20,14 @@ public class AnimationTest extends Game {
 	@Override
 	public void initResources(){
 		window.setTitle("AnimationTest");
-		setFullScreen(true);
 		setFPS(100);
 		// The images
 		Image image1 = loadImage("resources/box.png");
 		Image image2 = loadImage("resources/box2.png");
-		Animation anim = new Animation();
-		anim.addFrame(image1, 250);
-		anim.addFrame(image2, 250);
-		anim.start();
+		Animation anim = new Animation(new Image[]{image1, image2}, 250);
 		animObject = new GObject(anim);
 		background = loadImage("resources/back.png");
+		setFullScreen(true);
 	}
 	
 	@Override

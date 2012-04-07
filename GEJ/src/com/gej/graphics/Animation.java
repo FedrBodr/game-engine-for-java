@@ -5,71 +5,42 @@ import java.util.ArrayList;
 
 public class Animation {
 
-    private ArrayList<AnimFrame> frames;
-    private int currFrameIndex;
-    private long animTime;
-    private long totalDuration;
-
-    public Animation() {
-        frames = new ArrayList<AnimFrame>();
-        totalDuration = 0;
-        start();
-    }
-
-    public Animation(Image[] images, int duration) {
-    	frames = new ArrayList<AnimFrame>();
-    	totalDuration = 0;
-    	for (int i=0; i<images.length; i++){
-    		addFrame(images[i], duration);
-    	}
-    	start();
+	ArrayList<Image> images = null;
+	ArrayList<Integer> durations = null;
+	
+	int currFrameIndex = 0;
+	int duration = 0;
+	
+	public Animation(){
+		images = new ArrayList<Image>();
+		durations = new ArrayList<Integer>();
 	}
-
-	public synchronized void addFrame(Image image, long duration) {
-        totalDuration += duration;
-        frames.add(new AnimFrame(image, totalDuration));
-    }
-    
-    public synchronized void start() {
-        animTime = 0;
-        currFrameIndex = 0;
-    }
-
-    public synchronized void update(long elapsedTime) {
-        if (frames.size() > 1) {
-            animTime += elapsedTime;
-            if (animTime >= totalDuration) {
-                animTime = animTime % totalDuration;
-                currFrameIndex = 0;
-            }
-            while (animTime > getFrame(currFrameIndex).endTime) {
-                currFrameIndex++;
-            }
-        }
-    }
-
-    public synchronized Image getImage() {
-        if (frames.size() == 0) {
-            return null;
-        } else {
-            return getFrame(currFrameIndex).image;
-        }
-    }
-
-    private AnimFrame getFrame(int i) {
-        return (AnimFrame)frames.get(i);
-    }
-
-
-    public class AnimFrame {
-
-        Image image;
-        long endTime;
-
-        public AnimFrame(Image image, long endTime) {
-            this.image = image;
-            this.endTime = endTime;
-        }
-    }
+	
+	public Animation(Image[] frames, int duration){
+		this();
+		for (int i=0; i<frames.length; i++){
+			addFrame(frames[i], duration);
+		}
+	}
+	
+	public void addFrame(Image frame, int duration){
+		images.add(frame);
+		durations.add(duration);
+	}
+	
+	public synchronized void update(long elapsedTime){
+		duration += elapsedTime;
+		if (duration>=durations.get(currFrameIndex)){
+			duration = 0;
+			currFrameIndex++;
+			if (currFrameIndex>=images.size()){
+				currFrameIndex = 0;
+			}
+		}
+	}
+	
+	public synchronized Image getImage(){
+		return images.get(currFrameIndex);
+	}
+	
 }
-
