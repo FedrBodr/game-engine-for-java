@@ -42,7 +42,7 @@ public class GWindow implements WindowListener {
 			device.setFullScreenWindow((Window)frame);
 			DisplayMode[] modes = device.getDisplayModes();
 			for (DisplayMode mode : modes){
-				if (mode.getWidth()==Global.WIDTH && mode.getHeight()==Global.HEIGHT){
+				if (mode.getWidth()==Global.WIDTH && mode.getHeight()==Global.HEIGHT && mode.getBitDepth()==32){
 					device.setDisplayMode(mode);
 				}
 			}
