@@ -116,7 +116,7 @@ public abstract class Game extends JPanel {
 	/**
 	 * Initialize the resources
 	 */
-	public synchronized void initResources() {}
+	public void initResources() {}
 	
 	/**
 	 * Render the game. Draw all your objects etc., in
