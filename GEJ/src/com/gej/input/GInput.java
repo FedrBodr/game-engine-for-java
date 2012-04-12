@@ -21,6 +21,10 @@ import com.gej.object.GAction;
 
 public class GInput implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 	
+	public static GInput install(Component c){
+		return new GInput(c);
+	}
+	
 	public static final Cursor INVISIBLE_CURSOR = Toolkit.getDefaultToolkit().createCustomCursor(Toolkit.getDefaultToolkit().getImage(""), new Point(0,0), "Invisible");
 	
 	public static final int MOUSE_MOVE_LEFT  = 0;

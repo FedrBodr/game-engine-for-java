@@ -8,9 +8,9 @@ import com.gej.graphics.Animation;
 public class GObject {
 
     private Animation anim;
-    private float x;
-    private float y;
-    private float dx;
+    protected float x;
+    protected float y;
+    protected float dx;
     private float dy;
 
     public GObject(Animation anim) {
