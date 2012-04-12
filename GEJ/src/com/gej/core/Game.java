@@ -75,13 +75,13 @@ public abstract class Game extends JPanel {
 			currTime = System.currentTimeMillis();
 			long elapsedTime = currTime - startTime;
 			delay = 1000/fps;
-			update(elapsedTime);
-			repaint();
-			startTime = System.currentTimeMillis();
 			try {
+				update(elapsedTime);
+				repaint();
+				startTime = System.currentTimeMillis();
 				Thread.sleep(delay);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			} catch (InterruptedException | NullPointerException e) {
+				// Do nothing, but try again
 			}
 		}
 	}
