@@ -146,6 +146,14 @@ public class Map {
 		}
 	}
 	
+	public int getWidth(){
+		return MAP_WIDTH * TILE_SIZE;
+	}
+	
+	public int getHeight(){
+		return MAP_HEIGHT * TILE_SIZE;
+	}
+	
 	public void removeObject(GObject obj){
 		objects.remove(obj);
 	}

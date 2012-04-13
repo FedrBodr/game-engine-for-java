@@ -1,11 +1,14 @@
 SIZE:48
-DDDDDDDDDDDDDDD
-D            DD
-D            DD
-D    DDD     DD
-D            DD
-D            DD
-DDD          DD
-D            DD
-D   B        DD
-GGGGGGGGGGGGGGG
+DDDDDDDDDDDDDDDDDDDDDDDDDDDD
+D                          D
+D                          D
+D                          D
+D           DDDDD          D
+D                          D
+D    DDD                   D
+D                   DDD    D
+D                          D
+DDD         DDDDD          D
+D                          D
+DB                         D
+GGGGGGGGGGGGGGGGGGGGGGGGGGGG

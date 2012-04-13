@@ -3,6 +3,11 @@ package com.gej.graphics;
 import java.awt.Image;
 import java.util.ArrayList;
 
+/**
+ * This
+ * 
+ * @author Sri Harsha Chilakapati
+ */
 public class Animation {
 
 	ArrayList<Image> images = null;
@@ -32,10 +37,21 @@ public class Animation {
 		duration += elapsedTime;
 		if (duration>=durations.get(currFrameIndex)){
 			duration = 0;
-			currFrameIndex++;
-			if (currFrameIndex>=images.size()){
-				currFrameIndex = 0;
-			}
+			nextFrame();
+		}
+	}
+	
+	public void nextFrame(){
+		currFrameIndex++;
+		if (currFrameIndex>=images.size()){
+			currFrameIndex = 0;
+		}
+	}
+	
+	public void previousFrame(){
+		currFrameIndex--;
+		if (currFrameIndex<0){
+			currFrameIndex = 0;
 		}
 	}
 	

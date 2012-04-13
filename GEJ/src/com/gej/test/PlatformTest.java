@@ -9,6 +9,7 @@ import com.gej.core.Global;
 import com.gej.input.GInput;
 import com.gej.map.Map;
 import com.gej.map.MapLoader;
+import com.gej.map.MapView;
 import com.gej.object.GAction;
 import com.gej.object.GObject;
 
@@ -20,26 +21,29 @@ public class PlatformTest extends Game implements MapLoader {
 	private static final long serialVersionUID = 5231267119693208693L;
 	
 	Map map = null;
+	MapView view = null;
 	
 	Image   background = null;
 	GObject bouncy = null;
 	
-	GAction left = null;
+	GAction left  = null;
 	GAction right = null;
 	GAction space = null;
-	GAction exit = null;
+	GAction exit  = null;
 	
 	int jump_time = 0;
 	boolean jump_started = false;
+	
 	
 	@Override
 	public void initResources(){
 		background = loadImage("resources/back_water.png");
 		map = Map.loadMap("resources/PlatformTest.txt", this);
+		view  = new MapView(map);
 		space = new GAction("SPACE");
-		left = new GAction("LEFT");
+		left  = new GAction("LEFT");
 		right = new GAction("RIGHT");
-		exit = new GAction("EXIT");
+		exit  = new GAction("EXIT");
 		GInput input = new GInput(this);
 		input.mapToKey(space, KeyEvent.VK_SPACE);
 		input.mapToKey(left, KeyEvent.VK_LEFT);
@@ -77,6 +81,7 @@ public class PlatformTest extends Game implements MapLoader {
 	
 	@Override
 	public void update(long elapsedTime){
+		view.follow(bouncy);
 		if (exit.isPressed()){
 			System.exit(0);
 		}
@@ -110,13 +115,17 @@ public class PlatformTest extends Game implements MapLoader {
 		if (map.isCollisionFree(bouncy.getX(), ny, bouncy)){
 			bouncy.setY(ny);
 		}
+		if (view!=null){
+			view.update(elapsedTime);
+		}
 	}
 	
 	@Override
 	public void render(Graphics2D g){
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
-		map.renderMap(g);
-		g.drawImage(bouncy.getImage(), Math.round(bouncy.getX()), Math.round(bouncy.getY()), null);
+		if (view!=null){
+			view.render(g);
+		}
 	}
 	
 	public static void main(String[] args){

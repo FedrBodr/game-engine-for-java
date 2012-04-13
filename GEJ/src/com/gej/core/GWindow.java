@@ -8,38 +8,45 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
-import javax.swing.UnsupportedLookAndFeelException;
 
+/**
+ * This class is used to wrap the game in a window.
+ * Could be used to switch to fullscreen mode. Please
+ * note that it is integrated into the Game class.
+ * You need not invoke it. So, this class is unused
+ * by the end user.
+ * 
+ * @author Sri Harsha Chilakapati
+ */
 public class GWindow implements WindowListener {
 	
-	JFrame frame = null;
-	boolean fullscreen = false;
-	GraphicsDevice device = null;
+	// Private variables
+	private JFrame frame = null;
+	private boolean fullscreen = false;
+	private GraphicsDevice device = null;
 	
+	/**
+	 * Constructs a new game window with the game and
+	 * a value for the fullscreen state.
+	 * 
+	 * @param gm The game object to be displayed
+	 * @param fullscreen The fullscreen state of the game
+	 */
 	public GWindow(Game gm, boolean fullscreen){
+		// Create a new frame
 		this.fullscreen = fullscreen;
-		LookAndFeelInfo[] lafs = UIManager.getInstalledLookAndFeels();
-		for (LookAndFeelInfo laf : lafs){
-			if (laf.getName().startsWith("Nimbus")){
-				try {
-					UIManager.setLookAndFeel(laf.getClassName());
-				} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-					e.printStackTrace();
-				}
-			}
-		}
 		frame = new JFrame(Global.TITLE);
 		frame.add(gm);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.setIgnoreRepaint(true);
+		// If fullscreen, start up in fullscreen mode
 		if (fullscreen){
 			GraphicsEnvironment genv = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			device = genv.getDefaultScreenDevice();
 			frame.setUndecorated(true);
 			device.setFullScreenWindow((Window)frame);
+			// Select the resolution specified in the Global class
 			DisplayMode[] modes = device.getDisplayModes();
 			for (DisplayMode mode : modes){
 				if (mode.getWidth()==Global.WIDTH && mode.getHeight()==Global.HEIGHT && mode.getBitDepth()==32){
@@ -47,20 +54,34 @@ public class GWindow implements WindowListener {
 				}
 			}
 		} else {
+			// Start the window in normal state
 			frame.setSize(Global.WIDTH, Global.HEIGHT);
 			frame.setLocationRelativeTo(null);
 		}
+		// Display the window
 		frame.setVisible(true);
 	}
 	
+	/**
+	 * Get the current width of this window. 
+	 * @return The current width of this window
+	 */
 	public int getWidth(){
 		return frame.getWidth();
 	}
 	
+	/**
+	 * Get the current height of this window.
+	 * @return The current height of this window
+	 */
 	public int getHeight(){
 		return frame.getHeight();
 	}
 	
+	/**
+	 * Get the instance of java.awt.window used by this object
+	 * @return The instance of java.awt.window
+	 */
 	public Window getWindow(){
 		if (!fullscreen){
 			return (Window)frame;
@@ -69,9 +90,15 @@ public class GWindow implements WindowListener {
 		}
 	}
 	
+	/**
+	 * Sets the title to be displayed in the window border
+	 * @param title The title of the window
+	 */
 	public void setTitle(String title){
 		frame.setTitle(title);
 	}
+	
+	// From the WindowListener interface
 
 	@Override
 	public void windowActivated(WindowEvent arg0) {
