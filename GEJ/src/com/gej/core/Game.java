@@ -3,6 +3,9 @@ package com.gej.core;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
+import java.util.HashMap;
+
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
@@ -29,6 +32,8 @@ public abstract class Game extends JPanel {
 	private int fps = 50;
 	private int delay = 1000/fps;
 	
+	private HashMap<String, Image> cache = null;
+	
 	/**
 	 * Constructs a new Game with default values.
 	 * No need to use the constructor, as it is
@@ -38,6 +43,7 @@ public abstract class Game extends JPanel {
 	public Game(){
 		running = true;
 		window = new GWindow(this, fullscreen);
+		cache = new HashMap<String, Image>();
 		setFocusTraversalKeysEnabled(false);
 		setFocusable(true);
 		setDoubleBuffered(true);
@@ -88,12 +94,15 @@ public abstract class Game extends JPanel {
 	
 	/** Paint and render the game */
 	public void paint(Graphics g){
-		Graphics2D g2D = (Graphics2D)g;
-		g2D.setColor(getBackground());
-		g2D.fillRect(0, 0, getWidth(), getHeight());
-		g2D.setColor(getForeground());
-		render(g2D);
-		g2D.dispose();
+		try {
+			Graphics2D g2D = (Graphics2D)g;
+			g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2D.setColor(getBackground());
+			g2D.fillRect(0, 0, getWidth(), getHeight());
+			g2D.setColor(getForeground());
+			render(g2D);
+			g2D.dispose();
+		} catch (Exception e){}
 	}
 	
 	/**
@@ -111,6 +120,11 @@ public abstract class Game extends JPanel {
 	public void setFullScreen(boolean bool){
 		disposeWindow();
 		window = new GWindow(this, bool);
+	}
+	
+	public void resetWindow(){
+		disposeWindow();
+		window = new GWindow(this, fullscreen);
 	}
 	
 	/**
@@ -139,7 +153,14 @@ public abstract class Game extends JPanel {
 	 * @return The loaded image.
 	 */
 	public Image loadImage(String name){
-		return new ImageIcon(this.getClass().getClassLoader().getResource(name)).getImage();
+		Image img = null;
+		if (cache.containsKey(name)){
+			img = cache.get(name);
+		} else {
+			img =  new ImageIcon(this.getClass().getClassLoader().getResource(name)).getImage();
+			cache.put(name, img);
+		}
+		return img;
 	}
 		
 }

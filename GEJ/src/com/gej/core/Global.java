@@ -8,8 +8,9 @@ package com.gej.core;
  */
 public class Global {
 	
-	public static String  TITLE      = "GEJ - The simplest GameEngine for Java";
-	public static int     WIDTH      = 640;
-	public static int     HEIGHT     = 480;
+	public static String  TITLE                      = "GEJ - The simplest GameEngine for Java";
+	public static int     WIDTH                      = 640;
+	public static int     HEIGHT                     = 480;
+	public static boolean USE_PIXELPERFECT_COLLISION = false;
 
 }

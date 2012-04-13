@@ -3,8 +3,6 @@ package com.gej.examples.MazerBox;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-
 import com.gej.core.Game;
 import com.gej.input.GInput;
 import com.gej.map.Map;
@@ -85,8 +83,10 @@ public class MazerBox extends Game implements MapLoader {
 			nx = nx + speed * elapsedTime;
 		}
 		// If the new position is collision free, move the player
-		if (map.isCollisionFree(nx, ny, player.getWidth(), player.getHeight())){
+		if (map.isCollisionFree(nx, player.getY(), player)){
 			player.setX(nx);
+		}
+		if (map.isCollisionFree(player.getX(), ny, player)){
 			player.setY(ny);
 		}
 	}
@@ -96,13 +96,7 @@ public class MazerBox extends Game implements MapLoader {
 		// Draw the background
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
 		// Draw the map
-		ArrayList<GObject> objects = map.getObjects();
-		for (int i=0; i<objects.size(); i++){
-			GObject obj = objects.get(i);
-			if (obj!=null){
-				g.drawImage(obj.getImage(), Math.round(obj.getX()), Math.round(obj.getY()), null);
-			}
-		}
+		map.renderMap(g);
 		// Draw the player
 		g.drawImage(player.getImage(), Math.round(player.getX()), Math.round(player.getY()), null);
 	}
@@ -116,6 +110,7 @@ public class MazerBox extends Game implements MapLoader {
 			GObject wall = new GObject(wall_box);
 			wall.setX(x);
 			wall.setY(y);
+			wall.setSolid(true);
 			return wall;
 		} else if (c=='P'){
 			// Now it's the player

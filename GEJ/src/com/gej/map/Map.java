@@ -1,11 +1,13 @@
 package com.gej.map;
 
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import com.gej.core.Global;
 import com.gej.object.GObject;
 
 public class Map {
@@ -96,14 +98,22 @@ public class Map {
 		return obj;
 	}
 	
-	public boolean isCollisionFree(float x, float y, int width, int height){
+	public boolean isCollisionFree(float x, float y, GObject object){
 		boolean bool = true;
-		Rectangle bounds = new Rectangle(Math.round(x), Math.round(y), width, height);
+		Rectangle bounds = new Rectangle(Math.round(x), Math.round(y), object.getWidth(), object.getHeight());
 		for (int i=0; i<objects.size(); i++){
 			GObject obj = objects.get(i);
 			try {
 				if (bounds.intersects(obj.getBounds())){
-					bool = false;
+					if (obj.isSolid()){
+						bool = false;
+					}
+					if (bool && Global.USE_PIXELPERFECT_COLLISION){
+						bool = GObject.isPixelPerfectCollision(obj, Math.round(obj.getX()), Math.round(obj.getY()), object);
+						if (bool){
+							bool = false;
+						}
+					}
 				}
 			} catch (NullPointerException e){}
 		}
@@ -120,6 +130,19 @@ public class Map {
 				System.out.print(mapdata[x][y]+" ");
 			}
 			System.out.print("\n");
+		}
+	}
+	
+	public void renderMap(Graphics2D g){
+		renderMap(g, 0, 0);
+	}
+	
+	public void renderMap(Graphics2D g, int x, int y){
+		for (int i=0; i<objects.size(); i++){
+			GObject obj = objects.get(i);
+			if (obj!=null){
+				g.drawImage(obj.getImage(), Math.round(obj.getX()) + x, Math.round(obj.getY()) + y, null);
+			}
 		}
 	}
 	

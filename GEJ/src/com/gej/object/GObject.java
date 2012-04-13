@@ -2,8 +2,11 @@ package com.gej.object;
 
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
+import com.gej.core.Global;
 import com.gej.graphics.Animation;
+import com.gej.graphics.ImageTool;
 
 public class GObject {
 
@@ -12,6 +15,8 @@ public class GObject {
     protected float y;
     protected float dx;
     private float dy;
+    
+    private boolean solid = false;
 
     public GObject(Animation anim) {
         this.anim = anim;
@@ -32,8 +37,47 @@ public class GObject {
     }
     
     public boolean isCollidingWith(GObject other){
-    	return getBounds().intersects(other.getBounds());
+    	boolean bool = getBounds().intersects(other.getBounds());
+    	if (bool && Global.USE_PIXELPERFECT_COLLISION){
+    		bool = isPixelPerfectCollision(this, Math.round(getX()), Math.round(getY()), other);
+    	}
+    	return bool;
     }
+    
+    public static boolean isPixelPerfectCollision(GObject this_obj, int thisx, int thisy, GObject other){
+		boolean bool = false;
+		// Get their images
+		BufferedImage image1 = ImageTool.toBufferedImage(this_obj.getImage());
+		BufferedImage image2 = ImageTool.toBufferedImage(other.getImage());
+		// Initialize
+		double width1 = thisx + image1.getWidth()-2,
+		       height1 = this_obj.y + image1.getHeight()-2,
+			   width2 = other.x + image2.getWidth()-2,
+		       height2 = other.y + image2.getHeight()-2;
+		   int xstart = (int) Math.max(thisx, other.x),
+			   ystart = (int) Math.max(this_obj.y, other.y),
+			   xend   = (int) Math.min(width1, width2),
+			   yend   = (int) Math.min(height1, height2);
+	    // Bounding box
+	    int totx = Math.abs(xend - xstart);
+	    int toty = Math.abs(yend - ystart);
+	    // Check the pixels
+        for (int i=1; i<toty-1; i++){
+    	    int ny = Math.abs(ystart - (int) this_obj.y) + i;
+	        int ny1 = Math.abs(ystart - (int) other.y) + i;
+		    for (int j=1; j<totx-1; j++) {
+			    int nx = Math.abs(xstart - (int) thisx) + j;
+		        int nx1 = Math.abs(xstart - (int) other.x) + j;
+		        try {
+		            if (((image1.getRGB(nx,ny) & 0xFF000000) != 0x00) && ((image2.getRGB(nx1,ny1) & 0xFF000000) != 0x00)) {
+		                // They are colliding
+		                bool = true;
+			        }
+ 			    } catch (Exception e) {}
+		    }
+	    }
+	    return bool;
+	}
     
     public boolean isTopCollision(GObject other){
     	boolean bool = isCollidingWith(other);
@@ -92,6 +136,14 @@ public class GObject {
     	}
     }
     
+    public void setSolid(boolean value){
+    	solid = value;
+    }
+    
+    public boolean isSolid(){
+    	return solid;
+    }
+    
     public float getX() {
         return x;
     }
@@ -135,5 +187,5 @@ public class GObject {
     public Image getImage() {
         return anim.getImage();
     }
+    
 }
-
