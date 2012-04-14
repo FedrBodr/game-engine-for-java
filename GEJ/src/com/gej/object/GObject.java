@@ -135,7 +135,7 @@ public class GObject {
     		dx = -dx;
     	}
     }
-    
+      
     public void setSolid(boolean value){
     	solid = value;
     }
