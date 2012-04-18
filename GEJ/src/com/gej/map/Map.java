@@ -19,16 +19,18 @@ public class Map {
 	int MAP_HEIGHT = 0;
 	
 	ArrayList<GObject> objects = null;
+	ArrayList<Tile>    tiles   = null;
 	
 	public Map(){
 	}
 	
-	public Map(char[][] mapdata, int MAP_WIDTH, int MAP_HEIGHT, int TILE_SIZE, ArrayList<GObject> objects){
+	public Map(char[][] mapdata, int MAP_WIDTH, int MAP_HEIGHT, int TILE_SIZE, ArrayList<GObject> objects, ArrayList<Tile> tiles){
 		this.mapdata = mapdata;
 		this.MAP_WIDTH = MAP_WIDTH;
 		this.MAP_HEIGHT = MAP_HEIGHT;
 		this.TILE_SIZE = TILE_SIZE;
 		this.objects = objects;
+		this.tiles = tiles;
 		Global.OBJECTS.clear();
 		Global.OBJECTS.addAll(objects);
 	}
@@ -57,6 +59,7 @@ public class Map {
 		int mapWidth = 0;
 		ArrayList<String> lines = new ArrayList<String>();
 		ArrayList<GObject> objs = new ArrayList<GObject>();
+		ArrayList<Tile> tiles = new ArrayList<Tile>();
 		try {
 			String line = reader.readLine();
 			while (line!=null){
@@ -77,9 +80,10 @@ public class Map {
 			for (int j=0; j<lines.get(i).length(); j++){
 				mapData[j][i] = lines.get(i).charAt(j);
 				objs.add(loader.getObject(mapData[j][i], j*tileSize, i*tileSize));
+				tiles.add(loader.getTile(mapData[j][i], j*tileSize, i*tileSize));
 			}
 		}
-		map = new Map(mapData, mapWidth, mapHeight, tileSize, objs);
+		map = new Map(mapData, mapWidth, mapHeight, tileSize, objs, tiles);
 		return map;
 	}
 
@@ -97,7 +101,7 @@ public class Map {
 		return obj;
 	}
 	
-	public boolean isCollisionFree(float x, float y, GObject object){
+	public boolean isObjectCollisionFree(float x, float y, GObject object){
 		boolean bool = true;
 		Rectangle bounds = new Rectangle(Math.round(x), Math.round(y), object.getWidth(), object.getHeight());
 		for (int i=0; i<objects.size(); i++){
@@ -117,6 +121,20 @@ public class Map {
 					}
 				} catch (NullPointerException e){}
 			}
+		}
+		return bool;
+	}
+	
+	public boolean isTileCollisionFree(float x, float y, GObject object){
+		boolean bool = true;
+		Rectangle bounds = new Rectangle(Math.round(x), Math.round(y), object.getWidth(), object.getHeight());
+		for (int i=0; i<tiles.size(); i++){
+			Tile tile = tiles.get(i);
+			try {
+				if (bounds.intersects(tile.getBounds())){
+					bool = false;
+				}
+			} catch (NullPointerException e){}
 		}
 		return bool;
 	}
@@ -146,6 +164,16 @@ public class Map {
 				int obj_y = Math.round(obj.getY()) + y;
 				if (visibleRect.intersects(new Rectangle(obj_x, obj_y, obj.getWidth(), obj.getHeight()))){
 					g.drawImage(obj.getImage(), obj_x, obj_y, null);
+				}
+			}
+		}
+		for (int i=0; i<tiles.size(); i++){
+			Tile tile = tiles.get(i);
+			if (tile!=null){
+				int tileX = tile.getX() + x;
+				int tileY = tile.getY() + y;
+				if (visibleRect.intersects(new Rectangle(tileX, tileY, tile.getImage().getWidth(null), tile.getImage().getHeight(null)))){
+					g.drawImage(tile.getImage(), tileX, tileY, null);
 				}
 			}
 		}

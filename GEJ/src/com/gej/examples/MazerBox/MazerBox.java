@@ -7,6 +7,7 @@ import com.gej.core.Game;
 import com.gej.input.GInput;
 import com.gej.map.Map;
 import com.gej.map.MapLoader;
+import com.gej.map.Tile;
 import com.gej.object.GAction;
 import com.gej.object.GObject;
 
@@ -83,10 +84,10 @@ public class MazerBox extends Game implements MapLoader {
 			nx = nx + speed * elapsedTime;
 		}
 		// If the new position is collision free, move the player
-		if (map.isCollisionFree(nx, player.getY(), player)){
+		if (map.isObjectCollisionFree(nx, player.getY(), player)){
 			player.setX(nx);
 		}
-		if (map.isCollisionFree(player.getX(), ny, player)){
+		if (map.isObjectCollisionFree(player.getX(), ny, player)){
 			player.setY(ny);
 		}
 	}
@@ -124,6 +125,12 @@ public class MazerBox extends Game implements MapLoader {
 	
 	public static void main(String[] args){
 		new MazerBox();
+	}
+
+	@Override
+	public Tile getTile(char c, int x, int y) {
+		// It won't use tiles
+		return null;
 	}
 	
 }

@@ -9,6 +9,7 @@ import com.gej.input.GInput;
 import com.gej.map.Map;
 import com.gej.map.MapLoader;
 import com.gej.map.MapView;
+import com.gej.map.Tile;
 import com.gej.object.GAction;
 import com.gej.object.GObject;
 
@@ -63,20 +64,7 @@ public class PlatformTest extends Game implements MapLoader {
 
 	@Override
 	public GObject getObject(char c, int x, int y) {
-		if (c=='D'){
-			// The D and G are walls but with different sprites
-			GObject wall = new GObject(loadImage("resources/dark_floor.png"));
-			wall.setSolid(true);
-			wall.setX(x);
-			wall.setY(y);
-			return wall;
-		} else if (c=='G'){
-			GObject wall = new GObject(loadImage("resources/grass_floor.png"));
-			wall.setSolid(true);
-			wall.setX(x);
-			wall.setY(y);
-			return wall;
-		} else if (c=='B'){
+		if (c=='B'){
 			// B is the player
 			bouncy = new Bouncy(loadImage("resources/bouncy_ball.png"));
 			bouncy.setX(x);
@@ -89,6 +77,18 @@ public class PlatformTest extends Game implements MapLoader {
 			return enemy;
 		}
 		return null;
+	}
+
+	@Override
+	public Tile getTile(char c, int x, int y) {
+		if (c=='D'){
+			// The D and G are walls but with different sprites
+			return new Tile(loadImage("resources/dark_floor.png"), x, y);
+		} else if (c=='G'){
+			return new Tile(loadImage("resources/grass_floor.png"), x, y);
+		} else {
+			return null;
+		}
 	}
 	
 	@Override
@@ -163,7 +163,7 @@ public class PlatformTest extends Game implements MapLoader {
 				// Increase the jump time
 				jump_time += elapsedTime;
 				// If there is a wall in the jump path, end the jump
-				if (!map.isCollisionFree(nx, ny, bouncy)){
+				if (!map.isTileCollisionFree(nx, ny, bouncy)){
 					jump_started = false;
 				}
 			} else {
@@ -175,7 +175,7 @@ public class PlatformTest extends Game implements MapLoader {
 			// If space is pressed and the player is not in any jump,
 			// and there is a wall below the player, start the jump
 			if (space.isPressed() && !jump_started){
-				if (!map.isCollisionFree(nx, ny+5, bouncy)){
+				if (!map.isTileCollisionFree(nx, ny+5, bouncy)){
 					jump_time = 0;
 					jump_started = true;
 				}
@@ -189,15 +189,15 @@ public class PlatformTest extends Game implements MapLoader {
 				nx = nx + 0.15f * elapsedTime;
 			}
 			// Move to the new x-position only if the position is collision free
-			if (map.isCollisionFree(nx, bouncy.getY(), this)){
+			if (map.isTileCollisionFree(nx, bouncy.getY(), this)){
 				bouncy.setX(nx);
 			}
 			// Move to the new y-position only if the position is collision free
-			if (map.isCollisionFree(bouncy.getX(), ny, this)){
+			if (map.isTileCollisionFree(bouncy.getX(), ny, this)){
 				bouncy.setY(ny);
 			}
 			// Now check collision
-			if (!map.isCollisionFree(nx, ny, this)){
+			if (!map.isObjectCollisionFree(nx, ny, this)){
 				collision(map.getCollidingObject(nx, ny, getWidth(), getHeight()));
 			}
 		}
@@ -227,12 +227,12 @@ public class PlatformTest extends Game implements MapLoader {
 					float ny = getY() + 0.15f * elapsedTime;
 					boolean bool1 = false;
 					boolean bool2 = false;
-					if (map.isCollisionFree(nx, getY(), this)){
+					if (map.isTileCollisionFree(nx, getY(), this)){
 						setX(nx);
 					} else {
 						bool1 = true;
 					}
-					if (map.isCollisionFree(getX(), ny, this)){
+					if (map.isTileCollisionFree(getX(), ny, this)){
 						setY(ny);
 					} else {
 						bool2 = true;
