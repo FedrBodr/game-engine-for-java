@@ -3,8 +3,12 @@ package com.gej.test;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
+
 import java.util.ArrayList;
+
 import com.gej.core.Game;
+import com.gej.graphics.Animation;
+import com.gej.graphics.ImageTool;
 import com.gej.input.GInput;
 import com.gej.map.Map;
 import com.gej.map.MapLoader;
@@ -34,6 +38,10 @@ public class PlatformTest extends Game implements MapLoader {
 	GAction space = null;
 	GAction reset = null;
 	GAction exit  = null;
+	
+	// Private game variables
+	int numCoins = 0;
+	int collectedCoins = 0;
 	
 	@Override
 	public void initResources(){
@@ -75,6 +83,13 @@ public class PlatformTest extends Game implements MapLoader {
 			enemy.setX(x);
 			enemy.setY(y);
 			return enemy;
+		} else if (c=='C'){
+			numCoins++;
+			return new Coin(x, y);
+		} else if (c=='c'){
+			return new Coin(x, y);
+		} else if (c=='O'){
+			return new Door(x, y);
 		}
 		return null;
 	}
@@ -109,6 +124,9 @@ public class PlatformTest extends Game implements MapLoader {
 			GObject obj = objects.get(i);
 			if (obj!=null && obj.isAlive()){
 				obj.update(elapsedTime);
+				if (obj.isCollidingWith(bouncy)){
+					bouncy.collision(obj);
+				}
 			}
 		}
 		// Update the view
@@ -188,23 +206,30 @@ public class PlatformTest extends Game implements MapLoader {
 			if (right.isPressed()){
 				nx = nx + 0.15f * elapsedTime;
 			}
+			if (!map.isObjectCollisionFree(nx, ny, bouncy)){
+				if (map.getCollidingObject(nx, ny, bouncy.getWidth(), bouncy.getHeight()) instanceof Door){
+					if (numCoins==collectedCoins){
+						setX(nx);
+						setY(ny);
+					}
+				}
+			}
 			// Move to the new x-position only if the position is collision free
 			if (map.isTileCollisionFree(nx, bouncy.getY(), this)){
-				bouncy.setX(nx);
+				setX(nx);
 			}
 			// Move to the new y-position only if the position is collision free
 			if (map.isTileCollisionFree(bouncy.getX(), ny, this)){
-				bouncy.setY(ny);
-			}
-			// Now check collision
-			if (!map.isObjectCollisionFree(nx, ny, this)){
-				collision(map.getCollidingObject(nx, ny, getWidth(), getHeight()));
+				setY(ny);
 			}
 		}
 		
 		public void collision(GObject other){
 			if (other instanceof Enemy && other.isAlive()){
 				resetMap();
+			} else if (other instanceof Coin && other.isAlive()){
+				collectedCoins++;
+				other.destroy();
 			}
 		}
 		
@@ -242,6 +267,46 @@ public class PlatformTest extends Game implements MapLoader {
 					}
 				}
 			}
+		}
+		
+	}	
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public class Coin extends GObject {
+		
+		public Coin(int x, int y){
+			super(new Animation(ImageTool.splitImage(loadImage("resources/coin.png"), 1, 32), 150));
+			setX(x);
+			setY(y);
+		}
+		
+	}	
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public class Door extends GObject {
+		
+		public Door(int x, int y){
+			super(loadImage("resources/dark_floor.png"));
+			setX(x);
+			setY(y);
+		}
+		
+		@Override
+		public void update(long elapsedTime){
+			if (collectedCoins==numCoins){
+				destroy();
+			}
+		}
+		
+		@Override
+		public Image getImage(){
+			return getAnimation().getImage();
 		}
 		
 	}

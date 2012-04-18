@@ -162,9 +162,9 @@ public class Map {
 			if (obj!=null){
 				int obj_x = Math.round(obj.getX()) + x;
 				int obj_y = Math.round(obj.getY()) + y;
-				if (visibleRect.intersects(new Rectangle(obj_x, obj_y, obj.getWidth(), obj.getHeight()))){
+				//if (visibleRect.intersects(new Rectangle(obj_x, obj_y, obj.getWidth(), obj.getHeight()))){
 					g.drawImage(obj.getImage(), obj_x, obj_y, null);
-				}
+				//}
 			}
 		}
 		for (int i=0; i<tiles.size(); i++){

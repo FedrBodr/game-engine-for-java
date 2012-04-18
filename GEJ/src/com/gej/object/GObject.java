@@ -202,4 +202,8 @@ public class GObject {
     	}
     }
     
+    public Animation getAnimation(){
+    	return anim;
+    }
+    
 }
