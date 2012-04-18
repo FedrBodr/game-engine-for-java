@@ -1,7 +1,7 @@
 package com.gej.map;
 
 import java.awt.Graphics2D;
-import java.util.ArrayList;
+import java.awt.Rectangle;
 
 import com.gej.core.Global;
 import com.gej.object.GObject;
@@ -22,6 +22,10 @@ public class MapView {
 		follower = obj;
 	}
 	
+	public Rectangle getVisibleRect(){
+		return new Rectangle(0, 0, Global.WIDTH, Global.HEIGHT);
+	}
+	
 	public void update(long elapsedTime){
 		if (follower != null){
 				OffSetX = Math.round(Global.WIDTH/2 - follower.getX() - map.TILE_SIZE);
@@ -36,15 +40,18 @@ public class MapView {
 	
 	public void render(Graphics2D g){
 		try {
-			ArrayList<GObject> objects = map.getObjects();
-			for (int i=0; i<objects.size(); i++){
-				GObject object = objects.get(i);
-				if (object!=follower && object!=null){
-					g.drawImage(object.getImage(), Math.round(object.getX()) + OffSetX, Math.round(object.getY()) + OffSetY, null);
-				}
+			map.renderMap(g, OffSetX, OffSetY, getVisibleRect());
+			if (follower!=null){
 				g.drawImage(follower.getImage(), Math.round(follower.getX()) + OffSetX, Math.round(follower.getY()) + OffSetY, null);
 			}
 		} catch (NullPointerException e){}
+	}
+	
+	public boolean isVisible(GObject obj){
+		boolean bool = false;
+		Rectangle objRect = new Rectangle(Math.round(obj.getX())+OffSetX, Math.round(obj.getY())+OffSetY, obj.getWidth(), obj.getHeight());
+		bool = getVisibleRect().intersects(objRect);
+		return bool;
 	}
 	
 }

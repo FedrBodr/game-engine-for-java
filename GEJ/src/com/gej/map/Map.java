@@ -21,7 +21,6 @@ public class Map {
 	ArrayList<GObject> objects = null;
 	
 	public Map(){
-		// Do nothing
 	}
 	
 	public Map(char[][] mapdata, int MAP_WIDTH, int MAP_HEIGHT, int TILE_SIZE, ArrayList<GObject> objects){
@@ -30,6 +29,8 @@ public class Map {
 		this.MAP_HEIGHT = MAP_HEIGHT;
 		this.TILE_SIZE = TILE_SIZE;
 		this.objects = objects;
+		Global.OBJECTS.clear();
+		Global.OBJECTS.addAll(objects);
 	}
 	
 	public float toTileX(float x){
@@ -91,9 +92,7 @@ public class Map {
 				if (bounds.intersects(object.getBounds())){
 					obj = object;
 				}
-			} catch (NullPointerException e){
-				
-			}
+			} catch (NullPointerException e){}
 		}
 		return obj;
 	}
@@ -103,19 +102,21 @@ public class Map {
 		Rectangle bounds = new Rectangle(Math.round(x), Math.round(y), object.getWidth(), object.getHeight());
 		for (int i=0; i<objects.size(); i++){
 			GObject obj = objects.get(i);
-			try {
-				if (bounds.intersects(obj.getBounds())){
-					if (obj.isSolid()){
-						bool = false;
-					}
-					if (bool && Global.USE_PIXELPERFECT_COLLISION){
-						bool = GObject.isPixelPerfectCollision(obj, Math.round(obj.getX()), Math.round(obj.getY()), object);
-						if (bool){
+			if (object!=obj){
+				try {
+					if (bounds.intersects(obj.getBounds())){
+						if (obj.isAlive()){
 							bool = false;
 						}
+						if (bool && Global.USE_PIXELPERFECT_COLLISION){
+							bool = GObject.isPixelPerfectCollision(obj, Math.round(obj.getX()), Math.round(obj.getY()), object);
+							if (bool){
+								bool = false;
+							}
+						}
 					}
-				}
-			} catch (NullPointerException e){}
+				} catch (NullPointerException e){}
+			}
 		}
 		return bool;
 	}
@@ -134,14 +135,18 @@ public class Map {
 	}
 	
 	public void renderMap(Graphics2D g){
-		renderMap(g, 0, 0);
+		renderMap(g, 0, 0, new Rectangle(0, 0, Global.WIDTH, Global.HEIGHT));
 	}
 	
-	public void renderMap(Graphics2D g, int x, int y){
+	public void renderMap(Graphics2D g, int x, int y, Rectangle visibleRect){
 		for (int i=0; i<objects.size(); i++){
 			GObject obj = objects.get(i);
 			if (obj!=null){
-				g.drawImage(obj.getImage(), Math.round(obj.getX()) + x, Math.round(obj.getY()) + y, null);
+				int obj_x = Math.round(obj.getX()) + x;
+				int obj_y = Math.round(obj.getY()) + y;
+				if (visibleRect.intersects(new Rectangle(obj_x, obj_y, obj.getWidth(), obj.getHeight()))){
+					g.drawImage(obj.getImage(), obj_x, obj_y, null);
+				}
 			}
 		}
 	}

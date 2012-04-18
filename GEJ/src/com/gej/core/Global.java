@@ -1,5 +1,9 @@
 package com.gej.core;
 
+import java.util.Vector;
+
+import com.gej.object.GObject;
+
 /**
  * This class contains static fields which can be called by any
  * sprite, or the game class itself.
@@ -16,5 +20,7 @@ public class Global {
 	public static int     HEIGHT                     = 480;
 	/** The switch for pixel perfect collision detection */
 	public static boolean USE_PIXELPERFECT_COLLISION = false;
+	
+	public static Vector<GObject> OBJECTS                     = new Vector<GObject>();
 
 }

@@ -3,6 +3,7 @@ package com.gej.core;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -55,7 +56,10 @@ public class GWindow implements WindowListener {
 			}
 		} else {
 			// Start the window in normal state
-			frame.setSize(Global.WIDTH, Global.HEIGHT);
+			Insets i = frame.getInsets();
+			int w = Global.WIDTH + i.left + i.right;
+			int h = Global.HEIGHT + i.top + i.bottom;
+			frame.setSize(w, h);
 			frame.setLocationRelativeTo(null);
 		}
 		// Display the window

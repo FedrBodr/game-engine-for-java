@@ -3,7 +3,6 @@ package com.gej.object;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-
 import com.gej.core.Global;
 import com.gej.graphics.Animation;
 import com.gej.graphics.ImageTool;
@@ -17,6 +16,7 @@ public class GObject {
     private float dy;
     
     private boolean solid = false;
+    private boolean alive = true;
 
     public GObject(Animation anim) {
         this.anim = anim;
@@ -42,6 +42,14 @@ public class GObject {
     		bool = isPixelPerfectCollision(this, Math.round(getX()), Math.round(getY()), other);
     	}
     	return bool;
+    }
+    
+    public boolean isAlive(){
+    	return alive;
+    }
+    
+    public void destroy(){
+    	alive = false;
     }
     
     public static boolean isPixelPerfectCollision(GObject this_obj, int thisx, int thisy, GObject other){
@@ -127,6 +135,8 @@ public class GObject {
     	return bool;
     }
     
+    public void collision(GObject other){}
+    
     public void bounce(GObject other){
     	if (isTopCollision(other)||isBottomCollision(other)){
     		dy = -dy;
@@ -185,7 +195,11 @@ public class GObject {
     }
 
     public Image getImage() {
-        return anim.getImage();
+    	if (isAlive()){
+    		return anim.getImage();
+    	} else {
+    		return null;
+    	}
     }
     
 }

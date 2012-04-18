@@ -59,6 +59,10 @@ public abstract class Game extends JPanel {
 		return 1000/delay;
 	}
 	
+	public int getDelay(){
+		return delay;
+	}
+	
 	/**
 	 * Sets the number of frames to be rendered by this game
 	 * @param fps The FPS value
@@ -83,7 +87,7 @@ public abstract class Game extends JPanel {
 			delay = 1000/fps;
 			try {
 				update(elapsedTime);
-				repaint();
+				repaint();				
 				startTime = System.currentTimeMillis();
 				Thread.sleep(delay);
 			} catch (InterruptedException | NullPointerException e) {
@@ -92,17 +96,14 @@ public abstract class Game extends JPanel {
 		}
 	}
 	
-	/** Paint and render the game */
 	public void paint(Graphics g){
-		try {
-			Graphics2D g2D = (Graphics2D)g;
-			g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g2D.setColor(getBackground());
-			g2D.fillRect(0, 0, getWidth(), getHeight());
-			g2D.setColor(getForeground());
-			render(g2D);
-			g2D.dispose();
-		} catch (Exception e){}
+		Graphics2D g2D = (Graphics2D)g;
+		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2D.setColor(getBackground());
+		g2D.fillRect(0, 0, getWidth(), getHeight());
+		g2D.setColor(getForeground());
+		render(g2D);
+		g2D.dispose();
 	}
 	
 	/**
@@ -137,7 +138,7 @@ public abstract class Game extends JPanel {
 	 * this game.
 	 * @param g The graphics context
 	 */
-	public void render(Graphics2D g){}
+	public synchronized void render(Graphics2D g){}
 	
 	/**
 	 * Use this method to update your game. You could
@@ -145,7 +146,7 @@ public abstract class Game extends JPanel {
 	 * them in this method.
 	 * @param elapsedTime The time elapsed in the current frame
 	 */
-	public void update(long elapsedTime) {}
+	public synchronized void update(long elapsedTime) {}
 	
 	/**
 	 * Gets you image to load from the root of your jar file
