@@ -1,5 +1,6 @@
 package com.gej.object;
 
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -204,6 +205,18 @@ public class GObject {
     
     public Animation getAnimation(){
     	return anim;
+    }
+    
+    public void setAnimation(Animation anim){
+    	this.anim = anim;
+    }
+    
+    public void setImage(Image img){
+    	this.anim = new Animation(new Image[]{img}, 150);
+    }
+    
+    public void render(Graphics2D g){
+    	g.drawImage(getImage(), Math.round(x), Math.round(y), null);
     }
     
 }
