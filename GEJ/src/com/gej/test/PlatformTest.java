@@ -6,7 +6,9 @@ import java.awt.event.KeyEvent;
 
 import java.util.ArrayList;
 
+import com.gej.core.GWindow;
 import com.gej.core.Game;
+import com.gej.core.Global;
 import com.gej.graphics.Animation;
 import com.gej.graphics.ImageTool;
 import com.gej.input.GInput;
@@ -65,9 +67,7 @@ public class PlatformTest extends Game implements MapLoader {
 		input.mapToKey(exit, KeyEvent.VK_ESCAPE);
 		// disable the cursor
 		input.setCursor(GInput.INVISIBLE_CURSOR);
-		// set the fps and run in fullscreen mode
-		setFPS(150);
-		//setFullScreen(true);
+		Global.FRAMES_PER_SECOND = 150;
 	}
 
 	@Override
@@ -143,7 +143,7 @@ public class PlatformTest extends Game implements MapLoader {
 		if (view!=null){
 			view.render(g);
 		}
-		g.drawString("FPS: " + getFPS() + "  Actual FPS: " + (1000/getDelay()), 15, 15);
+		g.drawString("FPS: " + Global.FRAMES_PER_SECOND, 15, 15);
 	}
 	
 	public void resetMap(){
@@ -153,7 +153,7 @@ public class PlatformTest extends Game implements MapLoader {
 	
 	// Start the game
 	public static void main(String[] args){
-		new PlatformTest();
+		GWindow.setup(new PlatformTest(), "");
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////

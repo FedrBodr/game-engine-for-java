@@ -3,6 +3,8 @@ package com.gej.examples.MazerBox;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
+
+import com.gej.core.GWindow;
 import com.gej.core.Game;
 import com.gej.input.GInput;
 import com.gej.map.Map;
@@ -53,10 +55,6 @@ public class MazerBox extends Game implements MapLoader {
 		input.mapToKey(left, KeyEvent.VK_LEFT);
 		input.mapToKey(right, KeyEvent.VK_RIGHT);
 		input.mapToKey(exit, KeyEvent.VK_ESCAPE);
-		// Window
-		window.setTitle("MazerBox");
-		setFPS(150);
-		setFullScreen(true);
 	}
 	
 	@Override
@@ -124,7 +122,7 @@ public class MazerBox extends Game implements MapLoader {
 	}
 	
 	public static void main(String[] args){
-		new MazerBox();
+		GWindow.setup(new MazerBox(), "");
 	}
 
 	@Override

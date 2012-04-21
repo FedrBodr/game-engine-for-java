@@ -15,23 +15,16 @@ import javax.swing.JPanel;
  * 
  * @author Sri Harsha Chilakapati
  */
-public abstract class Game extends JPanel {
+public abstract class Game extends JPanel implements Runnable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5934394613281562786L;
-	
-	/** The GWindow object for this game */
-	protected GWindow window = null;
-	
+		
 	// Private variables
-	private boolean fullscreen = false;
 	private boolean running = false;
-    
-	private int fps = 50;
-	private int delay = 1000/fps;
-	
+    	
 	private HashMap<String, Image> cache = null;
 	
 	/**
@@ -42,90 +35,51 @@ public abstract class Game extends JPanel {
 	 */
 	public Game(){
 		running = true;
-		window = new GWindow(this, fullscreen);
 		cache = new HashMap<String, Image>();
 		setFocusTraversalKeysEnabled(false);
 		setFocusable(true);
 		setDoubleBuffered(true);
-		initResources();
-		run();
+		Thread th = new Thread(this);
+		th.start();
 	}
 	
-	/**
-	 * Returns the current FPS value of this game.
-	 * @return The current FPS value
-	 */
-	public int getFPS(){
-		return 1000/delay;
-	}
-	
-	public int getDelay(){
-		return delay;
-	}
-	
-	/**
-	 * Sets the number of frames to be rendered by this game
-	 * @param fps The FPS value
-	 */
-	public void setFPS(int fps){
-		this.fps = fps;
-		delay = 1000/fps;
-	}
-	
+		
 	/**
 	 * Starts the game and acts as a game loop.
-	 * The default FPS value is 50. But you can
-	 * change it in your code by using the
-	 * setFPS() method.
+	 * The default FPS value is 100. But you can
+	 * change it in your code by using the Global class.
 	 */
 	public void run(){
-		long startTime = System.currentTimeMillis();
+		initResources();
+		long startTime = System.nanoTime()/1000000;
 		long currTime = startTime;
 		while (running){
-			currTime = System.currentTimeMillis();
 			long elapsedTime = currTime - startTime;
-			delay = 1000/fps;
+			startTime = System.nanoTime()/1000000;
+			update(elapsedTime);
+			repaint();
 			try {
-				update(elapsedTime);
-				repaint();				
-				startTime = System.currentTimeMillis();
-				Thread.sleep(delay);
-			} catch (InterruptedException | NullPointerException e) {
-				// Do nothing, but try again
+				Thread.sleep(1000/Global.FRAMES_PER_SECOND);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
+			currTime = System.nanoTime()/1000000;
 		}
 	}
 	
 	public void paint(Graphics g){
-		Graphics2D g2D = (Graphics2D)g;
-		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2D.setColor(getBackground());
-		g2D.fillRect(0, 0, getWidth(), getHeight());
-		g2D.setColor(getForeground());
-		render(g2D);
-		g2D.dispose();
-	}
-	
-	/**
-	 * Dispose the game's GWindow. Equivalent to
-	 * <code>window.getWindow().dispose()</code>
-	 */
-	public void disposeWindow(){
-		window.getWindow().dispose();
-	}
-	
-	/**
-	 * Sets the full screen state of the game.
-	 * @param bool true for full screen else false.
-	 */
-	public void setFullScreen(boolean bool){
-		disposeWindow();
-		window = new GWindow(this, bool);
-	}
-	
-	public void resetWindow(){
-		disposeWindow();
-		window = new GWindow(this, fullscreen);
+		try {
+			Graphics2D g2D = (Graphics2D)g;
+			g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2D.setColor(getBackground());
+			g2D.fillRect(0, 0, getWidth(), getHeight());
+			g2D.setColor(getForeground());
+			render(g2D);
+			paintComponents(g2D);
+			g2D.dispose();
+		} catch(NullPointerException e){
+			
+		}
 	}
 	
 	/**
@@ -138,7 +92,7 @@ public abstract class Game extends JPanel {
 	 * this game.
 	 * @param g The graphics context
 	 */
-	public synchronized void render(Graphics2D g){}
+	public void render(Graphics2D g){}
 	
 	/**
 	 * Use this method to update your game. You could
@@ -146,7 +100,7 @@ public abstract class Game extends JPanel {
 	 * them in this method.
 	 * @param elapsedTime The time elapsed in the current frame
 	 */
-	public synchronized void update(long elapsedTime) {}
+	public void update(long elapsedTime) {}
 	
 	/**
 	 * Gets you image to load from the root of your jar file

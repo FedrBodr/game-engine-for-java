@@ -12,7 +12,7 @@ D           DDDDD          D
 D    E                     D
 D    DDD             C     D
 D                   DDD    D
-DC            C            D
+DC          E C            D
 DDD         DDDDD          D
 D             D            D
 DB            O            D

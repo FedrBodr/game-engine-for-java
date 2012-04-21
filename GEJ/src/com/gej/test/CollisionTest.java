@@ -4,7 +4,9 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.util.ArrayList;
 
+import com.gej.core.GWindow;
 import com.gej.core.Game;
+import com.gej.core.Global;
 import com.gej.object.GObject;
 
 public class CollisionTest extends Game {
@@ -20,9 +22,6 @@ public class CollisionTest extends Game {
 	
 	@Override
 	public void initResources(){
-		// Customize the window
-		window.setTitle("CollisionTest");
-		setFullScreen(true);
 		// Create the game resources
 		objects = new ArrayList<GObject>();
 		// Create the objects
@@ -44,7 +43,7 @@ public class CollisionTest extends Game {
 		// Load the background
 		background = loadImage("resources/back.png");
 		// Setting the frame rate
-		setFPS(100);
+		Global.FRAMES_PER_SECOND = 150;
 	}
 	
 	@Override
@@ -79,7 +78,7 @@ public class CollisionTest extends Game {
 	}
 	
 	public static void main(String[] args){
-		new CollisionTest();
+		GWindow.setup(new CollisionTest());
 	}
 
 }

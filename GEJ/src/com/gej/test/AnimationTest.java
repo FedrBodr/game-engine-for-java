@@ -3,7 +3,9 @@ package com.gej.test;
 import java.awt.Graphics2D;
 import java.awt.Image;
 
+import com.gej.core.GWindow;
 import com.gej.core.Game;
+import com.gej.core.Global;
 import com.gej.graphics.Animation;
 import com.gej.object.GObject;
 
@@ -19,15 +21,13 @@ public class AnimationTest extends Game {
 	
 	@Override
 	public void initResources(){
-		window.setTitle("AnimationTest");
-		setFPS(100);
 		// The images
 		Image image1 = loadImage("resources/box.png");
 		Image image2 = loadImage("resources/box2.png");
 		Animation anim = new Animation(new Image[]{image1, image2}, 250);
 		animObject = new GObject(anim);
 		background = loadImage("resources/back.png");
-		setFullScreen(true);
+		Global.FULLSCREEN = true;
 	}
 	
 	@Override
@@ -42,7 +42,7 @@ public class AnimationTest extends Game {
 	}
 	
 	public static void main(String[] args){
-		new AnimationTest();
+		GWindow.setup(new AnimationTest());
 	}
 
 }

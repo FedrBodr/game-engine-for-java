@@ -21,6 +21,10 @@ public class Global {
 	/** The switch for pixel perfect collision detection */
 	public static boolean USE_PIXELPERFECT_COLLISION = false;
 	
-	public static Vector<GObject> OBJECTS                     = new Vector<GObject>();
+	public static Vector<GObject> OBJECTS            = new Vector<GObject>();
+	
+	public static boolean FULLSCREEN                 = false;
+	
+	public static int     FRAMES_PER_SECOND          = 100;
 
 }

@@ -2,6 +2,7 @@ package com.gej.test;
 
 import java.awt.Graphics2D;
 
+import com.gej.core.GWindow;
 import com.gej.core.Game;
 import com.gej.input.GInput;
 import com.gej.object.GAction;
@@ -23,8 +24,6 @@ public class GObjectTest extends Game {
 		box = new GObject(loadImage("resources/box.png"));
 		box.setVelocityX(0.08f);
         box.setVelocityY(0.08f);
-        setFullScreen(true);
-        setFPS(75);
         mouse_1 = new GAction("MOUSE1");
         GInput input = new GInput(this);
         input.mapToMouse(mouse_1, GInput.MOUSE_BUTTON_1);
@@ -54,7 +53,7 @@ public class GObjectTest extends Game {
 	}
 	
 	public static void main(String[] args){
-		new GObjectTest();
+		GWindow.setup(new GObjectTest());
 	}
 
 }

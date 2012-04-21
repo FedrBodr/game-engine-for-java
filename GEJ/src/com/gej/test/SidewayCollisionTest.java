@@ -5,7 +5,9 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 
+import com.gej.core.GWindow;
 import com.gej.core.Game;
+import com.gej.core.Global;
 import com.gej.input.GInput;
 import com.gej.object.GObject;
 
@@ -27,14 +29,14 @@ public class SidewayCollisionTest extends Game {
 	public void initResources(){
 		background = loadImage("resources/back.png");
 		object1 = new GObject(loadImage("resources/box.png"));
-		object1.setX(getWidth()/2 - 32);
-		object1.setY(getHeight()/2 - 32);
+		object1.setX(Global.WIDTH/2 - 32);
+		object1.setY(Global.HEIGHT/2 - 32);
 		object2 = new GObject(loadImage("resources/box2.png"));
 		input = new GInput(this);
 		input.setCursor(GInput.INVISIBLE_CURSOR);
 		object2.setX(180);
 		object2.setY(180);
-		setFPS(150);
+		Global.FRAMES_PER_SECOND = 150;
 	}
 	
 	@Override
@@ -60,7 +62,7 @@ public class SidewayCollisionTest extends Game {
 	}
 	
 	public static void main(String[] args){
-		new SidewayCollisionTest();
+		GWindow.setup(new SidewayCollisionTest());
 	}
 
 }

@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.util.ArrayList;
 
+import com.gej.core.GWindow;
 import com.gej.core.Game;
 import com.gej.object.GObject;
 
@@ -51,8 +52,6 @@ public class MazeTest extends Game {
 				y += 64;
 			}
 		}
-		setFPS(150);
-		window.setTitle("MazeTest");
 	}
 	
 	@Override
@@ -66,7 +65,7 @@ public class MazeTest extends Game {
 	}
 	
 	public static void main(String[] args){
-		new MazeTest();
+		GWindow.setup(new MazeTest());
 	}
 	
 }

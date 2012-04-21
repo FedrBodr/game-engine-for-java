@@ -1,145 +1,172 @@
 package com.gej.core;
 
+import java.awt.AWTException;
+import java.awt.Dimension;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.Insets;
+import java.awt.Robot;
+import java.awt.Toolkit;
 import java.awt.Window;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JRootPane;
+import javax.swing.Timer;
 
 /**
- * This class is used to wrap the game in a window.
- * Could be used to switch to fullscreen mode. Please
- * note that it is integrated into the Game class.
- * You need not invoke it. So, this class is unused
- * by the end user.
+ * This class acts as a configured JFrame which is equipped with special abilities.
+ * It can be configured to start as a full screen application, or a windowed application.
+ * It is invoked like this.<br>
+ * 
+ * <pre>GWindow.setup(Game game, String title);</pre>
+ * 
+ * where the values provided are the default ones. The constructors are discussed again
+ * at their respective positions.<br><br>
+ * 
+ * It's other features are..<br><br>
+ * <ul>
+ *     <li>FullScreen, using the FullScreen Exclusive Mode by Sun.</li>
+ *     <li>Uses the Java Metal theme's Title bar</li>
+ *     <li>Monitors and changes the window size, title, fullscreen state by scanning
+ *         the Global class
+ *     <li>Confirmation on the close button</li>
+ *     <li>Also includes a fix for repaint issue on older machines</li> 
+ * </ul>
  * 
  * @author Sri Harsha Chilakapati
  */
-public class GWindow implements WindowListener {
+public class GWindow extends JFrame implements ActionListener {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 449311978071928834L;
 	
-	// Private variables
-	private JFrame frame = null;
-	private boolean fullscreen = false;
-	private GraphicsDevice device = null;
+	/** The timer object we use to re-change the title, width and height */
+	Timer timer = null;
+	/** The Game object (passed as an argument) */
+	Game game = null;
+	
+	boolean fullscreen = false;
+
+	/** This method fixes the repaint issue (flickering) on old machines with
+	 *  latest JRE. It is called automatically by the timer */
+	public void repaintFix(){
+		setIgnoreRepaint(true);
+	}
 	
 	/**
-	 * Constructs a new game window with the game and
-	 * a value for the fullscreen state.
+	 * This is our default constructor. It can be used to create a GWindow instance.
+	 * The arguments to be passed except the Game are just the default one's. They can be
+	 * changed during the game play. (use global.HEIGHT = 240;)
 	 * 
-	 * @param gm The game object to be displayed
-	 * @param fullscreen The fullscreen state of the game
+	 * @param game     The Game object to be displayed
+	 * @param title    The default title (also used on the task bar)
+	 * @param width    The default window width
+	 * @param height   The default window height
 	 */
-	public GWindow(Game gm, boolean fullscreen){
-		// Create a new frame
-		this.fullscreen = fullscreen;
-		frame = new JFrame(Global.TITLE);
-		frame.add(gm);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
-		frame.setIgnoreRepaint(true);
-		// If fullscreen, start up in fullscreen mode
-		if (fullscreen){
-			GraphicsEnvironment genv = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			device = genv.getDefaultScreenDevice();
-			frame.setUndecorated(true);
-			device.setFullScreenWindow((Window)frame);
-			// Select the resolution specified in the Global class
-			DisplayMode[] modes = device.getDisplayModes();
-			for (DisplayMode mode : modes){
-				if (mode.getWidth()==Global.WIDTH && mode.getHeight()==Global.HEIGHT && mode.getBitDepth()==32){
-					device.setDisplayMode(mode);
+	public GWindow(Game game, final String title, int width, int height){
+		// Configure and create the title bar
+		super(title);
+		setUndecorated(true);
+		setResizable(false);
+		setTitle(title);
+		setSize(width, height);
+		// Center the window on the screen
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		getRootPane().setWindowDecorationStyle(JRootPane.PLAIN_DIALOG);
+		// Set and add the game object
+		this.game = game;
+		add(game);
+		game.setFocusable(true);
+		setVisible(true);
+		// Fix the repaint issue on some older machines
+		repaintFix();
+		// Create and start the timer
+		timer = new Timer(1000, this);
+		timer.start();
+		addWindowListener(new WindowAdapter(){
+			@Override
+			public void windowClosing(WindowEvent e){
+				int retVal = JOptionPane.showOptionDialog(null, "Are you sure want to exit?", title, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[]{"Sure, close it!", "Sorry! Go Back!"}, "Sorry! Go Back!");
+				if (retVal==JOptionPane.YES_OPTION){
+					dispose();
+					System.exit(0);
+				} else {
+					// Do nothing
 				}
 			}
-		} else {
-			// Start the window in normal state
-			Insets i = frame.getInsets();
-			int w = Global.WIDTH + i.left + i.right;
-			int h = Global.HEIGHT + i.top + i.bottom;
-			frame.setSize(w, h);
-			frame.setLocationRelativeTo(null);
-		}
-		// Display the window
-		frame.setVisible(true);
+		});
 	}
 	
-	/**
-	 * Get the current width of this window. 
-	 * @return The current width of this window
-	 */
-	public int getWidth(){
-		return frame.getWidth();
-	}
-	
-	/**
-	 * Get the current height of this window.
-	 * @return The current height of this window
-	 */
-	public int getHeight(){
-		return frame.getHeight();
-	}
-	
-	/**
-	 * Get the instance of java.awt.window used by this object
-	 * @return The instance of java.awt.window
-	 */
-	public Window getWindow(){
-		if (!fullscreen){
-			return (Window)frame;
-		} else {
-			return device.getFullScreenWindow();
-		}
-	}
-	
-	/**
-	 * Sets the title to be displayed in the window border
-	 * @param title The title of the window
-	 */
-	public void setTitle(String title){
-		frame.setTitle(title);
-	}
-	
-	// From the WindowListener interface
-
 	@Override
-	public void windowActivated(WindowEvent arg0) {
-		
+	public void actionPerformed(ActionEvent e) {
+		// Get the game's global object
+		// Set it's properties and center the window on screen
+		setTitle(Global.TITLE);
+		if (!Global.FULLSCREEN){
+			setLocationRelativeTo(null);
+			setSize(Global.WIDTH, Global.HEIGHT);
+		}
+		// Check and change the full screen state
+		setFullScreen(Global.FULLSCREEN);
 	}
-
-	@Override
-	public void windowClosed(WindowEvent arg0) {
-		if (fullscreen){
-			device.getFullScreenWindow().dispose();
+	
+	/**
+	 * This method changes the state of full screen. To change the full screen state from the game
+	 * use the global object.
+	 * 
+	 * <pre> Global.FULLSCREEN = true; </pre>
+	 * 
+	 * @param bool The boolean value which is used to switch full screen state.
+	 */
+	public void setFullScreen(boolean bool){
+		// Get the graphics device
+		GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		// If true, switch to FullScreen
+		if (bool==true&&fullscreen==false){
+			getRootPane().setWindowDecorationStyle(JRootPane.NONE);
+			device.setFullScreenWindow((Window)this);
+			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+			if (device.isDisplayChangeSupported()){
+				// Get the available display modes
+				DisplayMode[] modes = device.getDisplayModes();
+				// Cycle and set the best display mode
+				for (DisplayMode mode : modes){
+					if (mode.getWidth()==Global.WIDTH && mode.getHeight()==Global.HEIGHT && mode.getBitDepth()==32){
+						device.setDisplayMode(mode);
+					}
+				}
+			}
+			// Center the mouse using the robot class
+			try {
+				Robot robot = new Robot();
+				robot.mouseMove(dim.width/4, dim.height/4);
+				fullscreen = true;
+			} catch (AWTException e) {
+				e.printStackTrace();
+			}
+		} else if (bool==false&&fullscreen==true){
+			// else change to windowed mode
+			getRootPane().setWindowDecorationStyle(JRootPane.PLAIN_DIALOG);
 			device.setFullScreenWindow(null);
+			fullscreen = false;
 		}
 	}
-
-	@Override
-	public void windowClosing(WindowEvent arg0) {
-		
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent arg0) {
-		
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent arg0) {
-		
-	}
-
-	@Override
-	public void windowIconified(WindowEvent arg0) {
-		
-	}
-
-	@Override
-	public void windowOpened(WindowEvent arg0) {
-		
+	
+	public static GWindow setup(Game game, String title){
+		return new GWindow(game, title, Global.WIDTH, Global.HEIGHT);
 	}
 	
+	public static GWindow setup(Game game){
+		return setup(game, Global.TITLE);
+	}
+
 }

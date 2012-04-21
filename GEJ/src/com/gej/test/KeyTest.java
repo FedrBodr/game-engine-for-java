@@ -3,6 +3,7 @@ package com.gej.test;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 
+import com.gej.core.GWindow;
 import com.gej.core.Game;
 import com.gej.input.GInput;
 import com.gej.object.GAction;
@@ -31,7 +32,6 @@ public class KeyTest extends Game {
 		input.mapToKey(right, KeyEvent.VK_RIGHT);
 		input.mapToKey(right, KeyEvent.VK_D);
 		input.mapToKey(exit, KeyEvent.VK_ESCAPE);
-		setFullScreen(true);
 	}
 	
 	@Override
@@ -49,7 +49,7 @@ public class KeyTest extends Game {
 	}
 	
 	public static void main(String[] args){
-		new KeyTest();
+		GWindow.setup(new KeyTest());
 	}
 
 }
