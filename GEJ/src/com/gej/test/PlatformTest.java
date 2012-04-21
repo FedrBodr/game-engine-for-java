@@ -39,6 +39,7 @@ public class PlatformTest extends Game implements MapLoader {
 	GAction right = null;
 	GAction space = null;
 	GAction reset = null;
+	GAction f4    = null;
 	GAction exit  = null;
 	
 	// Private game variables
@@ -57,6 +58,7 @@ public class PlatformTest extends Game implements MapLoader {
 		left  = new GAction("LEFT");
 		right = new GAction("RIGHT");
 		reset = new GAction("RESET");
+		f4    = new GAction("F4");
 		exit  = new GAction("EXIT");
 		// register them
 		GInput input = new GInput(this);
@@ -64,6 +66,7 @@ public class PlatformTest extends Game implements MapLoader {
 		input.mapToKey(left, KeyEvent.VK_LEFT);
 		input.mapToKey(right, KeyEvent.VK_RIGHT);
 		input.mapToKey(reset, KeyEvent.VK_R);
+		input.mapToKey(f4, KeyEvent.VK_F4);
 		input.mapToKey(exit, KeyEvent.VK_ESCAPE);
 		// disable the cursor
 		input.setCursor(GInput.INVISIBLE_CURSOR);
@@ -117,6 +120,9 @@ public class PlatformTest extends Game implements MapLoader {
 		if (reset.isPressed()){
 			resetMap();
 		}
+		if (f4.isPressed()){
+			Global.FULLSCREEN = !Global.FULLSCREEN;
+		}
 		bouncy.update(elapsedTime);
 		// Update game objects
 		ArrayList<GObject> objects = map.getObjects();
@@ -153,7 +159,7 @@ public class PlatformTest extends Game implements MapLoader {
 	
 	// Start the game
 	public static void main(String[] args){
-		GWindow.setup(new PlatformTest(), "");
+		GWindow.setup(new PlatformTest());
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////
@@ -278,7 +284,7 @@ public class PlatformTest extends Game implements MapLoader {
 	public class Coin extends GObject {
 		
 		public Coin(int x, int y){
-			super(new Animation(ImageTool.splitImage(loadImage("resources/coin.png"), 1, 32), 150));
+			super(new Animation(ImageTool.splitImage(loadImage("resources/coin.png"), 1, 32), 100));
 			setX(x);
 			setY(y);
 		}

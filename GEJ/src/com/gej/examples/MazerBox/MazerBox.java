@@ -122,7 +122,7 @@ public class MazerBox extends Game implements MapLoader {
 	}
 	
 	public static void main(String[] args){
-		GWindow.setup(new MazerBox(), "");
+		GWindow.setup(new MazerBox());
 	}
 
 	@Override
