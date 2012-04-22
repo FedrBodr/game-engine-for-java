@@ -5,10 +5,11 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import com.gej.core.Global;
+import com.gej.core.Updateable;
 import com.gej.graphics.Animation;
 import com.gej.graphics.ImageTool;
 
-public class GObject {
+public class GObject implements Updateable {
 
     private Animation anim;
     protected float x;
@@ -20,10 +21,12 @@ public class GObject {
     private boolean alive = true;
 
     public GObject(Animation anim) {
+    	Global.UPDATEABLES.add(this);
         this.anim = anim;
     }
     
     public GObject(Image img){
+    	Global.UPDATEABLES.add(this);
     	this.anim = new Animation(new Image[]{img}, 100);
     }
 

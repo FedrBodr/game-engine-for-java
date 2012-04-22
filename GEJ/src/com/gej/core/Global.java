@@ -1,8 +1,6 @@
 package com.gej.core;
 
-import java.util.Vector;
-
-import com.gej.object.GObject;
+import java.util.ArrayList;
 
 /**
  * This class contains static fields which can be called by any
@@ -20,11 +18,11 @@ public class Global {
 	public static int     HEIGHT                     = 480;
 	/** The switch for pixel perfect collision detection */
 	public static boolean USE_PIXELPERFECT_COLLISION = false;
-	
-	public static Vector<GObject> OBJECTS            = new Vector<GObject>();
-	
+		
 	public static boolean FULLSCREEN                 = false;
 	
 	public static int     FRAMES_PER_SECOND          = 100;
-
+	
+	public static ArrayList<Updateable> UPDATEABLES  = new ArrayList<Updateable>();
+	
 }

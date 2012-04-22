@@ -1,8 +1,8 @@
 SIZE:48
 DDDDDDDDDDDDDDDDDDDDDDDDDDDD
-DC                   O ccc D
-DE                   O ccc D
-DDDDD       E    C   O ccc D
+DC                   O CCC D
+DE                   O CCC D
+DDDDD       E    C   O CCC D
 D           DDDDDDD  DDDDDDD
 D      C                   D
 D      DD                  D

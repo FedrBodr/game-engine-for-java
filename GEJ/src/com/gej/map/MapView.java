@@ -4,9 +4,10 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 import com.gej.core.Global;
+import com.gej.core.Updateable;
 import com.gej.object.GObject;
 
-public class MapView {
+public class MapView implements Updateable {
 	
 	Map map = null;
 	GObject follower = null;
@@ -16,6 +17,7 @@ public class MapView {
 
 	public MapView(Map map){
 		this.map = map;
+		Global.UPDATEABLES.add(this);
 	}
 	
 	public void follow(GObject obj){

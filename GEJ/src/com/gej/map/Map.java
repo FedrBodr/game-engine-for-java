@@ -31,8 +31,6 @@ public class Map {
 		this.TILE_SIZE = TILE_SIZE;
 		this.objects = objects;
 		this.tiles = tiles;
-		Global.OBJECTS.clear();
-		Global.OBJECTS.addAll(objects);
 	}
 	
 	public float toTileX(float x){

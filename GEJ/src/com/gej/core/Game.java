@@ -57,6 +57,10 @@ public abstract class Game extends JPanel implements Runnable {
 			long elapsedTime = currTime - startTime;
 			startTime = System.nanoTime()/1000000;
 			update(elapsedTime);
+			for (int i=0; i<Global.UPDATEABLES.size(); i++){
+				Updateable upd = Global.UPDATEABLES.get(i);
+				upd.update(elapsedTime);
+			}
 			repaint();
 			try {
 				Thread.sleep(1000/Global.FRAMES_PER_SECOND);
