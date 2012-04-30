@@ -9,6 +9,9 @@ import java.util.HashMap;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import com.gej.map.Tile;
+import com.gej.object.GObject;
+
 /**
  * This class is the main class for any game. You should extend this class
  * to write a game.
@@ -59,7 +62,18 @@ public abstract class Game extends JPanel implements Runnable {
 			update(elapsedTime);
 			for (int i=0; i<Global.UPDATEABLES.size(); i++){
 				Updateable upd = Global.UPDATEABLES.get(i);
-				upd.update(elapsedTime);
+				if (upd==null){
+					if (upd instanceof Tile){
+						Global.UPDATEABLES.remove(upd);
+					}
+					if (upd instanceof GObject){
+						if (!((GObject) upd).isAlive()){
+							Global.UPDATEABLES.remove(upd);
+						}
+					}
+				} else {
+					upd.update(elapsedTime);
+				}
 			}
 			repaint();
 			try {

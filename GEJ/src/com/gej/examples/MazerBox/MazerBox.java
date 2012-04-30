@@ -23,9 +23,7 @@ public class MazerBox extends Game implements MapLoader {
 	Image player_box = null;
 	Image wall_box = null;
 	Image background = null;
-	
-	Map map = null;
-	
+		
 	GObject player = null;
 	
 	GAction up    = null;
@@ -41,7 +39,7 @@ public class MazerBox extends Game implements MapLoader {
 		player_box = loadImage("resources/box.png");
 		wall_box   = loadImage("resources/box2.png");
 		// Map
-		map = Map.loadMap("resources/MazerBox.txt", this);
+		Map.loadMap("resources/MazerBox.txt", this);
 		// Actions
 		up    = new GAction("UP");
 		down  = new GAction("DOWN");
@@ -82,10 +80,10 @@ public class MazerBox extends Game implements MapLoader {
 			nx = nx + speed * elapsedTime;
 		}
 		// If the new position is collision free, move the player
-		if (map.isObjectCollisionFree(nx, player.getY(), player)){
+		if (Map.isObjectCollisionFree(nx, player.getY(), player)){
 			player.setX(nx);
 		}
-		if (map.isObjectCollisionFree(player.getX(), ny, player)){
+		if (Map.isObjectCollisionFree(player.getX(), ny, player)){
 			player.setY(ny);
 		}
 	}
@@ -95,7 +93,7 @@ public class MazerBox extends Game implements MapLoader {
 		// Draw the background
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
 		// Draw the map
-		map.renderMap(g);
+		Map.renderMap(g);
 		// Draw the player
 		g.drawImage(player.getImage(), Math.round(player.getX()), Math.round(player.getY()), null);
 	}

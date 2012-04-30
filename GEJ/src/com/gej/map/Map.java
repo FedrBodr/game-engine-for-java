@@ -1,6 +1,7 @@
 package com.gej.map;
 
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,80 +13,73 @@ import com.gej.object.GObject;
 
 public class Map {
 
-	char[][] mapdata = null;
+	private static char[][] mapdata = null;
 	
-	int TILE_SIZE = 0;
-	int MAP_WIDTH = 0;
-	int MAP_HEIGHT = 0;
+	public static int TILE_SIZE = 0;
+	private static int MAP_WIDTH = 0;
+	private static int MAP_HEIGHT = 0;
 	
-	ArrayList<GObject> objects = null;
-	ArrayList<Tile>    tiles   = null;
+	private static ArrayList<GObject> objects = null;
+	private static ArrayList<Tile>    tiles   = null;
 	
-	public Map(){
-	}
-	
-	public Map(char[][] mapdata, int MAP_WIDTH, int MAP_HEIGHT, int TILE_SIZE, ArrayList<GObject> objects, ArrayList<Tile> tiles){
-		this.mapdata = mapdata;
-		this.MAP_WIDTH = MAP_WIDTH;
-		this.MAP_HEIGHT = MAP_HEIGHT;
-		this.TILE_SIZE = TILE_SIZE;
-		this.objects = objects;
-		this.tiles = tiles;
-	}
-	
-	public float toTileX(float x){
+	public static float toTileX(float x){
 		return TILE_SIZE / x;
 	}
 	
-	public float toTileY(float y){
+	public static float toTileY(float y){
 		return TILE_SIZE / y;
 	}
 	
-	public Rectangle getTileBounds(int x, int y){
+	public static Rectangle getTileBounds(int x, int y){
 		return new Rectangle(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE);
 	}
 	
-	public char getTileAt(int x, int y){
+	public static char getTileAt(int x, int y){
 		return mapdata[x][y];
 	}
 	
-	public static Map loadMap(String mapname, MapLoader loader){
-		Map map = null;
+	public static void loadMap(String mapname, MapLoader loader){
 		BufferedReader reader = new BufferedReader(new InputStreamReader(Map.class.getClassLoader().getResourceAsStream(mapname)));
-		int tileSize = 32;
-		int mapHeight = 0;
-		int mapWidth = 0;
+		TILE_SIZE = 32;
+		MAP_HEIGHT = 0;
+		MAP_WIDTH = 0;
 		ArrayList<String> lines = new ArrayList<String>();
-		ArrayList<GObject> objs = new ArrayList<GObject>();
-		ArrayList<Tile> tiles = new ArrayList<Tile>();
+		if (objects!=null){
+			objects.clear();
+		} else {
+			objects = new ArrayList<GObject>();
+		}
+		if (tiles!=null){
+			tiles.clear();
+		} else {
+			tiles = new ArrayList<Tile>();
+		}
 		try {
 			String line = reader.readLine();
 			while (line!=null){
 				if (line.startsWith("SIZE:")){
-					tileSize = Integer.parseInt(line.split(":")[1]);
+					TILE_SIZE = Integer.parseInt(line.split(":")[1]);
 				} else {
 					lines.add(line);
-					mapHeight++;
-					mapWidth = Math.max(mapWidth, line.length());
+					MAP_HEIGHT++;
+					MAP_WIDTH = Math.max(MAP_WIDTH, line.length());
 				}
 				line = reader.readLine();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		char[][] mapData = new char[mapWidth][mapHeight];
+		mapdata = new char[MAP_WIDTH][MAP_HEIGHT];
 		for (int i=0; i<lines.size(); i++){
 			for (int j=0; j<lines.get(i).length(); j++){
-				mapData[j][i] = lines.get(i).charAt(j);
-				objs.add(loader.getObject(mapData[j][i], j*tileSize, i*tileSize));
-				tiles.add(loader.getTile(mapData[j][i], j*tileSize, i*tileSize));
+				mapdata[j][i] = lines.get(i).charAt(j);
+				objects.add(loader.getObject(mapdata[j][i], j*TILE_SIZE, i*TILE_SIZE));
+				tiles.add(loader.getTile(mapdata[j][i], j*TILE_SIZE, i*TILE_SIZE));
 			}
 		}
-		map = new Map(mapData, mapWidth, mapHeight, tileSize, objs, tiles);
-		return map;
 	}
 
-	public GObject getCollidingObject(float x, float y, int width, int height){
+	public static GObject getCollidingObject(float x, float y, int width, int height){
 		GObject obj = null;
 		Rectangle bounds = new Rectangle(Math.round(x), Math.round(y), width, height);
 		for (int i=0; i<objects.size(); i++){
@@ -99,7 +93,35 @@ public class Map {
 		return obj;
 	}
 	
-	public boolean isObjectCollisionFree(float x, float y, GObject object){
+	public static Tile getCollidingTile(float x, float y, int width, int height){
+		Tile tile = null;
+		Rectangle bounds = new Rectangle(Math.round(x), Math.round(y), width, height);
+		try {
+			for (int i=0; i<tiles.size(); i++){
+				Tile t = tiles.get(i);
+				if (bounds.intersects(t.getBounds())){
+					tile = t;
+				}
+			}
+		} catch (NullPointerException e){}
+		return tile;
+	}
+	
+	public static Point getTileCollidingPoint(float x, float y, int width, int height){
+		Point p = null;
+		Rectangle bounds = new Rectangle(Math.round(x), Math.round(y), width, height);
+		try {
+			for (int i=0; i<tiles.size(); i++){
+				Tile t = tiles.get(i);
+				if (bounds.intersects(t.getBounds())){
+					p = new Point(t.getX(), t.getY());
+				}
+			}
+		} catch (NullPointerException e){}
+		return p;
+	}
+	
+	public static boolean isObjectCollisionFree(float x, float y, GObject object){
 		boolean bool = true;
 		Rectangle bounds = new Rectangle(Math.round(x), Math.round(y), object.getWidth(), object.getHeight());
 		for (int i=0; i<objects.size(); i++){
@@ -123,7 +145,7 @@ public class Map {
 		return bool;
 	}
 	
-	public boolean isTileCollisionFree(float x, float y, GObject object){
+	public static boolean isTileCollisionFree(float x, float y, GObject object){
 		boolean bool = true;
 		Rectangle bounds = new Rectangle(Math.round(x), Math.round(y), object.getWidth(), object.getHeight());
 		for (int i=0; i<tiles.size(); i++){
@@ -137,11 +159,11 @@ public class Map {
 		return bool;
 	}
 	
-	public ArrayList<GObject> getObjects(){
+	public static ArrayList<GObject> getObjects(){
 		return objects;
 	}
 	
-	public void printMap(){
+	public static void printMap(){
 		for (int y=0; y<MAP_HEIGHT; y++){
 			for (int x=0; x<MAP_WIDTH; x++){
 				System.out.print(mapdata[x][y]+" ");
@@ -150,17 +172,19 @@ public class Map {
 		}
 	}
 	
-	public void renderMap(Graphics2D g){
+	public static void renderMap(Graphics2D g){
 		renderMap(g, 0, 0, new Rectangle(0, 0, Global.WIDTH, Global.HEIGHT));
 	}
 	
-	public void renderMap(Graphics2D g, int x, int y, Rectangle visibleRect){
+	public static void renderMap(Graphics2D g, int x, int y, Rectangle visibleRect){
 		for (int i=0; i<objects.size(); i++){
 			GObject obj = objects.get(i);
-			if (obj!=null){
+			if (obj!=null && obj.isAlive()){
 				int obj_x = Math.round(obj.getX()) + x;
 				int obj_y = Math.round(obj.getY()) + y;
 				g.drawImage(obj.getImage(), obj_x, obj_y, null);
+			} else {
+				removeObject(obj);
 			}
 		}
 		for (int i=0; i<tiles.size(); i++){
@@ -175,19 +199,19 @@ public class Map {
 		}
 	}
 	
-	public int getWidth(){
+	public static int getWidth(){
 		return MAP_WIDTH * TILE_SIZE;
 	}
 	
-	public int getHeight(){
+	public static int getHeight(){
 		return MAP_HEIGHT * TILE_SIZE;
 	}
 	
-	public void removeObject(GObject obj){
+	public static void removeObject(GObject obj){
 		objects.remove(obj);
 	}
 	
-	public void addObject(GObject obj){
+	public static void addObject(GObject obj){
 		objects.add(obj);
 	}
 	

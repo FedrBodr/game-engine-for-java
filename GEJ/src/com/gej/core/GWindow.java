@@ -90,7 +90,7 @@ public class GWindow extends JFrame implements ActionListener {
 		// Fix the repaint issue on some older machines
 		repaintFix();
 		// Create and start the timer
-		timer = new Timer(1000, this);
+		timer = new Timer(500, this);
 		timer.start();
 		addWindowListener(new WindowAdapter(){
 			@Override
