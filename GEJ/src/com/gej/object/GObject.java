@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import com.gej.core.Global;
 import com.gej.core.Updateable;
 import com.gej.graphics.Animation;
-import com.gej.graphics.ImageTool;
+import com.gej.util.ImageTool;
 
 public class GObject implements Updateable {
 

@@ -1,4 +1,4 @@
-package com.gej.graphics;
+package com.gej.util;
 
 import java.awt.Graphics2D;
 import java.awt.Image;

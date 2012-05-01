@@ -8,7 +8,6 @@ import com.gej.core.GWindow;
 import com.gej.core.Game;
 import com.gej.core.Global;
 import com.gej.graphics.Animation;
-import com.gej.graphics.ImageTool;
 import com.gej.input.GInput;
 import com.gej.map.Map;
 import com.gej.map.MapLoader;
@@ -16,6 +15,7 @@ import com.gej.map.MapView;
 import com.gej.map.Tile;
 import com.gej.object.GAction;
 import com.gej.object.GObject;
+import com.gej.util.ImageTool;
 
 public class PlatformTest extends Game implements MapLoader {
 
