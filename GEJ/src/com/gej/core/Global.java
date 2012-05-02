@@ -1,6 +1,7 @@
 package com.gej.core;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * This class contains static fields which can be called by any
@@ -18,11 +19,13 @@ public class Global {
 	public static int     HEIGHT                     = 480;
 	/** The switch for pixel perfect collision detection */
 	public static boolean USE_PIXELPERFECT_COLLISION = false;
-		
+	/** The switch for full screen mode */
 	public static boolean FULLSCREEN                 = false;
-	
+	/** The FPS of the game */
 	public static int     FRAMES_PER_SECOND          = 100;
-	
+	/** The list of the updateable objects */
 	public static ArrayList<Updateable> UPDATEABLES  = new ArrayList<Updateable>();
+	/** A map containing various properties */
+	public static HashMap<String, Object> PROPERTIES = new HashMap<String, Object>();
 	
 }

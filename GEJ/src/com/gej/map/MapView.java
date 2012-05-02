@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 import com.gej.core.Global;
+import com.gej.graphics.Background;
 import com.gej.object.GObject;
 
 public class MapView {
@@ -27,6 +28,7 @@ public class MapView {
 	
 	public static void render(Graphics2D g){
 		try {
+			Background.render(g);
 			Map.renderMap(g, OffSetX, OffSetY, getVisibleRect());
 		} catch (NullPointerException e){}
 	}

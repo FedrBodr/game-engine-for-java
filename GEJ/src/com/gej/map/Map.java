@@ -44,6 +44,7 @@ public class Map {
 		MAP_HEIGHT = 0;
 		MAP_WIDTH = 0;
 		ArrayList<String> lines = new ArrayList<String>();
+		Global.UPDATEABLES.clear();
 		if (objects!=null){
 			objects.clear();
 		} else {

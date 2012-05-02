@@ -108,7 +108,6 @@ public class GWindow extends JFrame implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// Get the game's global object
 		// Set it's properties and center the window on screen
 		setTitle(Global.TITLE);
 		if (!Global.FULLSCREEN){

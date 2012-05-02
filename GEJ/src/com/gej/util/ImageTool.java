@@ -1,5 +1,6 @@
 package com.gej.util;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -115,6 +116,33 @@ public class ImageTool {
 		// Convert and return the image
 		image = toImage(bimg);
 		return image;
+	}
+	
+	/**
+	 * Creates an empty image with transparency
+	 * @param width The width of required image
+	 * @param height The height of required image
+	 * @return The created image
+	 */
+	public static Image getEmptyImage(int width, int height){
+		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		return toImage(img);
+	}
+	
+	/**
+	 * Creates a colored image with a specified color
+	 * @param color The color to be filled with
+	 * @param width The width of the required image
+	 * @param height The height of the required image
+	 * @return The created image
+	 */
+	public static Image getColoredImage(Color color, int width, int height){
+		BufferedImage img = toBufferedImage(getEmptyImage(width, height));
+		Graphics2D g = img.createGraphics();
+		g.setColor(color);
+		g.fillRect(0, 0, width, height);
+		g.dispose();
+		return img;
 	}
 		
 }

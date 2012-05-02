@@ -8,6 +8,7 @@ import com.gej.core.GWindow;
 import com.gej.core.Game;
 import com.gej.core.Global;
 import com.gej.graphics.Animation;
+import com.gej.graphics.Background;
 import com.gej.input.GInput;
 import com.gej.map.Map;
 import com.gej.map.MapLoader;
@@ -24,8 +25,6 @@ public class PlatformTest extends Game implements MapLoader {
 	 */
 	private static final long serialVersionUID = 5231267119693208693L;
 	
-	// Game resources
-	Image   background = null;
 	Bouncy bouncy = null;
 	
 	// Input actions
@@ -39,7 +38,7 @@ public class PlatformTest extends Game implements MapLoader {
 	@Override
 	public void initResources(){
 		// load the background
-		background = loadImage("resources/back_water.png");
+		Background.setBackground(ImageTool.resize(loadImage("resources/back_water.png"), Global.WIDTH, Global.HEIGHT));
 		// load the Map and create a MapView
 		Map.loadMap("resources/PlatformTest.txt", this);
 		// Create the input actions
@@ -111,8 +110,6 @@ public class PlatformTest extends Game implements MapLoader {
 	
 	@Override
 	public void render(Graphics2D g){
-		// Draw the background
-		g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
 		// Draw the Map
 		MapView.render(g);
 		MapView.renderObject(g, bouncy);
@@ -120,7 +117,6 @@ public class PlatformTest extends Game implements MapLoader {
 	}
 	
 	public void resetMap(){
-		Global.UPDATEABLES.clear();
 		Map.loadMap("resources/PlatformTest.txt", this);
 	}
 	
