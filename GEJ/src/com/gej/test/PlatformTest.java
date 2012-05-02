@@ -59,6 +59,7 @@ public class PlatformTest extends Game implements MapLoader {
 		// disable the cursor
 		input.setCursor(GInput.INVISIBLE_CURSOR);
 		Global.FRAMES_PER_SECOND = 150;
+		Global.FULLSCREEN        = true;
 	}
 
 	@Override
@@ -128,6 +129,7 @@ public class PlatformTest extends Game implements MapLoader {
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////
+	
 	public class Bouncy extends GObject {
 		
 		// The time the player had jumped in the current jump

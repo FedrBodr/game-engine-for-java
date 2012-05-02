@@ -40,12 +40,20 @@ public class Animation {
 		}
 	}
 	
-	
+	/**
+	 * Add an image as a frame of this animation with a specific duration.
+	 * @param frame The frame image
+	 * @param duration The duration
+	 */
 	public void addFrame(Image frame, int duration){
 		images.add(frame);
 		durations.add(duration);
 	}
 	
+	/**
+	 * Updates the current animation object
+	 * @param elapsedTime The time spent in current frame
+	 */
 	public synchronized void update(long elapsedTime){
 		duration += elapsedTime;
 		if (duration>=durations.get(currFrameIndex)){
@@ -54,6 +62,10 @@ public class Animation {
 		}
 	}
 	
+	/**
+	 * Skip this frame and move to the next one.
+	 * Note that all the frames are looped constantly.
+	 */
 	public void nextFrame(){
 		currFrameIndex++;
 		if (currFrameIndex>=images.size()){
@@ -61,6 +73,10 @@ public class Animation {
 		}
 	}
 	
+	/**
+	 * Displays the previous frame. Note that
+	 * all the frames are looped constantly.
+	 */
 	public void previousFrame(){
 		currFrameIndex--;
 		if (currFrameIndex<0){
@@ -68,6 +84,11 @@ public class Animation {
 		}
 	}
 	
+	/**
+	 * Gets you the current frame image of this
+	 * animation object.
+	 * @return The current frame as an Image
+	 */
 	public synchronized Image getImage(){
 		return images.get(currFrameIndex);
 	}
