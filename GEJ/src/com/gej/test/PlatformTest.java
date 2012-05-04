@@ -9,7 +9,6 @@ import com.gej.core.Game;
 import com.gej.core.Global;
 import com.gej.graphics.Animation;
 import com.gej.graphics.Background;
-import com.gej.input.GInput;
 import com.gej.input.GKeyBoard;
 import com.gej.map.Map;
 import com.gej.map.MapLoader;
@@ -33,11 +32,11 @@ public class PlatformTest extends Game implements MapLoader {
 		Background.setBackground(ImageTool.resize(loadImage("resources/back_water.png"), Global.WIDTH, Global.HEIGHT));
 		// load the Map and create a MapView
 		Map.loadMap("resources/PlatformTest.txt", this);
-		GInput input = new GInput(this);
-		input.setCursor(GInput.INVISIBLE_CURSOR);
-		Global.FRAMES_PER_SECOND = 150;
+		// configure the game
+		Global.FRAMES_PER_SECOND          = 50;
 		Global.USE_PIXELPERFECT_COLLISION = true;
-		//Global.FULLSCREEN        = true;
+		Global.FULLSCREEN                 = true;
+		Global.HIDE_CURSOR                = true;
 	}
 
 	@Override

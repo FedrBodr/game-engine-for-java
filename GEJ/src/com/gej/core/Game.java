@@ -1,5 +1,6 @@
 package com.gej.core;
 
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -7,10 +8,11 @@ import java.awt.RenderingHints;
 import java.util.HashMap;
 
 import javax.swing.ImageIcon;
-import javax.swing.JPanel;
-
+import javax.swing.JApplet;
+import com.gej.input.GInput;
 import com.gej.map.Tile;
 import com.gej.object.GObject;
+import com.gej.util.ImageTool;
 
 /**
  * This class is the main class for any game. You should extend this class
@@ -18,7 +20,7 @@ import com.gej.object.GObject;
  * 
  * @author Sri Harsha Chilakapati
  */
-public abstract class Game extends JPanel implements Runnable {
+public abstract class Game extends JApplet implements Runnable {
 
 	/**
 	 * 
@@ -27,8 +29,11 @@ public abstract class Game extends JPanel implements Runnable {
 		
 	// Private variables
 	private boolean running = false;
-    	
+    private Image backImage    = null;
+    private Graphics2D    backGraphics = null;
 	private HashMap<String, Image> cache = null;
+	
+	private GInput input = null;
 	
 	/**
 	 * Constructs a new Game with default values.
@@ -37,15 +42,18 @@ public abstract class Game extends JPanel implements Runnable {
 	 * the sub classes.
 	 */
 	public Game(){
+		init();
+	}
+	
+	public void init(){
 		running = true;
 		cache = new HashMap<String, Image>();
 		setFocusTraversalKeysEnabled(false);
 		setFocusable(true);
-		setDoubleBuffered(true);
+		input = new GInput(this);
 		Thread th = new Thread(this);
 		th.start();
 	}
-	
 		
 	/**
 	 * Starts the game and acts as a game loop.
@@ -54,12 +62,17 @@ public abstract class Game extends JPanel implements Runnable {
 	 */
 	public void run(){
 		initResources();
-		long startTime = System.nanoTime()/1000000;
-		long currTime = startTime;
+		long startTime = System.currentTimeMillis();
+        long currTime = startTime;
 		while (running){
-			long elapsedTime = currTime - startTime;
-			startTime = System.nanoTime()/1000000;
+			long elapsedTime = System.currentTimeMillis() - currTime;
+	        currTime += elapsedTime;
 			update(elapsedTime);
+			if (Global.HIDE_CURSOR){
+				setCursor(GInput.INVISIBLE_CURSOR);
+			} else {
+				setCursor(Cursor.getDefaultCursor());
+			}
 			for (int i=0; i<Global.UPDATEABLES.size(); i++){
 				Updateable upd = Global.UPDATEABLES.get(i);
 				if (upd==null){
@@ -81,7 +94,6 @@ public abstract class Game extends JPanel implements Runnable {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			currTime = System.nanoTime()/1000000;
 		}
 	}
 	
@@ -89,11 +101,16 @@ public abstract class Game extends JPanel implements Runnable {
 		try {
 			Graphics2D g2D = (Graphics2D)g;
 			g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g2D.setColor(getBackground());
-			g2D.fillRect(0, 0, getWidth(), getHeight());
-			g2D.setColor(getForeground());
-			render(g2D);
-			paintComponents(g2D);
+			if (backImage==null){
+				backImage = ImageTool.getColoredImage(getBackground(), Global.WIDTH, Global.HEIGHT);
+			}
+			backGraphics = (Graphics2D) backImage.getGraphics();
+			backGraphics.setColor(getBackground());
+			backGraphics.fillRect(0, 0, getWidth(), getHeight());
+			backGraphics.setColor(getForeground());
+			render(backGraphics);
+			backGraphics.dispose();
+			g2D.drawImage(backImage, 0, 0, getWidth(), getHeight(), null);
 			g2D.dispose();
 		} catch(NullPointerException e){
 			
@@ -134,6 +151,10 @@ public abstract class Game extends JPanel implements Runnable {
 			cache.put(name, img);
 		}
 		return img;
+	}
+	
+	public GInput getInput(){
+		return input;
 	}
 		
 }

@@ -18,14 +18,21 @@ import java.util.ArrayList;
 import javax.swing.SwingUtilities;
 
 import com.gej.object.GAction;
+import com.gej.util.ImageTool;
 
+/**
+ * Constitutes all the information to take input polling
+ * for a game. You 
+ * 
+ * @author Sri Harsha Chilakapati
+ */
 public class GInput implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 	
 	public static GInput install(Component c){
 		return new GInput(c);
 	}
 	
-	public static final Cursor INVISIBLE_CURSOR = Toolkit.getDefaultToolkit().createCustomCursor(Toolkit.getDefaultToolkit().getImage(""), new Point(0,0), "Invisible");
+	public static final Cursor INVISIBLE_CURSOR = Toolkit.getDefaultToolkit().createCustomCursor(ImageTool.getEmptyImage(1, 1), new Point(0, 0), "Invisible Cursor");
 	
 	public static final int MOUSE_MOVE_LEFT  = 0;
     public static final int MOUSE_MOVE_RIGHT = 1;

@@ -19,6 +19,8 @@ public class Global {
 	public static int     HEIGHT                     = 480;
 	/** The switch for pixel perfect collision detection */
 	public static boolean USE_PIXELPERFECT_COLLISION = false;
+	/** The property to show or hide cursor */
+	public static boolean HIDE_CURSOR                = false;
 	/** The switch for full screen mode */
 	public static boolean FULLSCREEN                 = false;
 	/** The FPS of the game */

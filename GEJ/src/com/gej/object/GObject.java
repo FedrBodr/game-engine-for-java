@@ -31,9 +31,16 @@ public class GObject implements Updateable {
     }
 
     public void update(long elapsedTime) {
-        x += dx * elapsedTime;
-        y += dy * elapsedTime;
+        float nx = x + dx * elapsedTime;
+        float ny = y + dy * elapsedTime;
+        if (check(nx, ny)){
+        	x = nx;   y = ny;
+        }
         anim.update(elapsedTime);
+    }
+    
+    public boolean check(float nx, float ny){
+    	return true;
     }
     
     public Rectangle getBounds(){
