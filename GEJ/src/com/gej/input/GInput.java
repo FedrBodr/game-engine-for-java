@@ -205,6 +205,7 @@ public class GInput implements KeyListener, MouseListener, MouseMotionListener, 
     }
     
     public void keyPressed(KeyEvent e) {
+    	GKeyBoard.KeyPress(e.getKeyCode());
         GAction gameAction = getKeyAction(e);
         if (gameAction != null) {
             gameAction.press();
@@ -213,6 +214,7 @@ public class GInput implements KeyListener, MouseListener, MouseMotionListener, 
     }
 
     public void keyReleased(KeyEvent e) {
+    	GKeyBoard.KeyReleased(e.getKeyCode());
         GAction gameAction = getKeyAction(e);
         if (gameAction != null) {
             gameAction.release();

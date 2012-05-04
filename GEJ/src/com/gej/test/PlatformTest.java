@@ -10,11 +10,11 @@ import com.gej.core.Global;
 import com.gej.graphics.Animation;
 import com.gej.graphics.Background;
 import com.gej.input.GInput;
+import com.gej.input.GKeyBoard;
 import com.gej.map.Map;
 import com.gej.map.MapLoader;
 import com.gej.map.MapView;
 import com.gej.map.Tile;
-import com.gej.object.GAction;
 import com.gej.object.GObject;
 import com.gej.util.ImageTool;
 
@@ -27,39 +27,17 @@ public class PlatformTest extends Game implements MapLoader {
 	
 	Bouncy bouncy = null;
 	
-	// Input actions
-	GAction left  = null;
-	GAction right = null;
-	GAction space = null;
-	GAction reset = null;
-	GAction f4    = null;
-	GAction exit  = null;
-		
 	@Override
 	public void initResources(){
 		// load the background
 		Background.setBackground(ImageTool.resize(loadImage("resources/back_water.png"), Global.WIDTH, Global.HEIGHT));
 		// load the Map and create a MapView
 		Map.loadMap("resources/PlatformTest.txt", this);
-		// Create the input actions
-		space = new GAction("SPACE");
-		left  = new GAction("LEFT");
-		right = new GAction("RIGHT");
-		reset = new GAction("RESET");
-		f4    = new GAction("F4");
-		exit  = new GAction("EXIT");
-		// register them
 		GInput input = new GInput(this);
-		input.mapToKey(space, KeyEvent.VK_SPACE);
-		input.mapToKey(left, KeyEvent.VK_LEFT);
-		input.mapToKey(right, KeyEvent.VK_RIGHT);
-		input.mapToKey(reset, KeyEvent.VK_R);
-		input.mapToKey(f4, KeyEvent.VK_F4);
-		input.mapToKey(exit, KeyEvent.VK_ESCAPE);
-		// disable the cursor
 		input.setCursor(GInput.INVISIBLE_CURSOR);
 		Global.FRAMES_PER_SECOND = 150;
-		Global.FULLSCREEN        = true;
+		Global.USE_PIXELPERFECT_COLLISION = true;
+		//Global.FULLSCREEN        = true;
 	}
 
 	@Override
@@ -98,13 +76,13 @@ public class PlatformTest extends Game implements MapLoader {
 	@Override
 	public void update(long elapsedTime){
 		// If exit is pressed, quit the game
-		if (exit.isPressed()){
+		if (GKeyBoard.isPressed(KeyEvent.VK_ESCAPE)){
 			System.exit(0);
 		}
-		if (reset.isPressed()){
+		if (GKeyBoard.isPressed(KeyEvent.VK_R)){
 			resetMap();
 		}
-		if (f4.isPressed()){
+		if (GKeyBoard.isPressed(KeyEvent.VK_F4)){
 			Global.FULLSCREEN = !Global.FULLSCREEN;
 		}
 	}
@@ -166,7 +144,7 @@ public class PlatformTest extends Game implements MapLoader {
 			}
 			// If space is pressed and the player is not in any jump,
 			// and there is a wall below the player, start the jump
-			if (space.isPressed() && !jump_started){
+			if (GKeyBoard.isPressed(KeyEvent.VK_SPACE) && !jump_started){
 				if (!Map.isTileCollisionFree(nx, ny+5, bouncy)){
 					jump_time = 0;
 					jump_started = true;
@@ -174,11 +152,11 @@ public class PlatformTest extends Game implements MapLoader {
 				}
 			}
 			// If the left has been pressed, move the player left
-			if (left.isPressed()){
+			if (GKeyBoard.isPressed(KeyEvent.VK_LEFT)){
 				nx = nx - 0.15f * elapsedTime;
 			}
 			// If he pressed right, move him right
-			if (right.isPressed()){
+			if (GKeyBoard.isPressed(KeyEvent.VK_RIGHT)){
 				nx = nx + 0.15f * elapsedTime;
 			}
 			// Move to the new x-position only if the position is collision free
@@ -198,7 +176,7 @@ public class PlatformTest extends Game implements MapLoader {
 				}
 			}
 			// Check collisions
-			GObject colliding_obj = Map.getCollidingObject(nx, ny, getWidth(), getHeight());
+			GObject colliding_obj = Map.getCollidingObject(getX(), getY(), getWidth(), getHeight());
 			if (colliding_obj!=null){
 				collision(colliding_obj);
 			}
