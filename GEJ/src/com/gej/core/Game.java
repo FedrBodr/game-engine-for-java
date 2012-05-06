@@ -4,13 +4,18 @@ import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.RenderingHints;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JApplet;
+import javax.swing.JComponent;
+
 import com.gej.input.GInput;
-import com.gej.map.Tile;
+import com.gej.object.GAction;
 import com.gej.object.GObject;
 import com.gej.util.ImageTool;
 
@@ -32,6 +37,9 @@ public abstract class Game extends JApplet implements Runnable {
     private Image backImage    = null;
     private Graphics2D    backGraphics = null;
 	private HashMap<String, Image> cache = null;
+	private LinkedList<JComponent> components = null;
+	private LinkedList<Point> comp_points = null;
+	private GAction click = null;
 	
 	private GInput input = null;
 	
@@ -45,12 +53,16 @@ public abstract class Game extends JApplet implements Runnable {
 		init();
 	}
 	
-	public void init(){
+	public final void init(){
 		running = true;
 		cache = new HashMap<String, Image>();
+		components = new LinkedList<JComponent>();
+		comp_points = new LinkedList<Point>();
 		setFocusTraversalKeysEnabled(false);
 		setFocusable(true);
 		input = new GInput(this);
+		click = new GAction("CLICK", GAction.INITIAL_KEY_PRESS_ONLY);
+		input.mapToMouse(click, GInput.MOUSE_BUTTON_1);
 		Thread th = new Thread(this);
 		th.start();
 	}
@@ -60,7 +72,7 @@ public abstract class Game extends JApplet implements Runnable {
 	 * The default FPS value is 100. But you can
 	 * change it in your code by using the Global class.
 	 */
-	public void run(){
+	public final void run(){
 		initResources();
 		long startTime = System.currentTimeMillis();
         long currTime = startTime;
@@ -73,31 +85,31 @@ public abstract class Game extends JApplet implements Runnable {
 			} else {
 				setCursor(Cursor.getDefaultCursor());
 			}
-			for (int i=0; i<Global.UPDATEABLES.size(); i++){
-				Updateable upd = Global.UPDATEABLES.get(i);
-				if (upd==null){
-					if (upd instanceof Tile){
-						Global.UPDATEABLES.remove(upd);
-					}
+			try {
+				Iterator<Updateable> i = Global.UPDATEABLES.iterator();
+				while (i.hasNext()){
+					Updateable upd = i.next();
 					if (upd instanceof GObject){
 						if (!((GObject) upd).isAlive()){
-							Global.UPDATEABLES.remove(upd);
+							i.remove();
 						}
 					}
-				} else {
 					upd.update(elapsedTime);
 				}
-			}
-			repaint();
-			try {
+				Iterator<JComponent> i2 = components.iterator();
+				while (i2.hasNext()){
+					JComponent comp = i2.next();
+					if (comp.getBounds().contains(input.getMouseX(), input.getMouseY()) && click.isPressed()){
+						componentClicked(comp);
+					}
+				}
+				repaint();
 				Thread.sleep(1000/Global.FRAMES_PER_SECOND);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			} catch (Exception e) {}
 		}
 	}
 	
-	public void paint(Graphics g){
+	public final void paint(Graphics g){
 		try {
 			Graphics2D g2D = (Graphics2D)g;
 			g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -109,12 +121,41 @@ public abstract class Game extends JApplet implements Runnable {
 			backGraphics.fillRect(0, 0, getWidth(), getHeight());
 			backGraphics.setColor(getForeground());
 			render(backGraphics);
+			renderComponents(backGraphics);
 			backGraphics.dispose();
 			g2D.drawImage(backImage, 0, 0, getWidth(), getHeight(), null);
 			g2D.dispose();
-		} catch(NullPointerException e){
-			
+		} catch(NullPointerException e){}
+	}
+	
+	public final void renderComponents(Graphics2D g){
+		Iterator<JComponent> i = components.iterator();
+		while (i.hasNext()){
+			JComponent comp = i.next();
+			Point p = comp_points.get(components.indexOf(comp));
+			g.translate(p.x, p.y);
+			comp.paint(g);
 		}
+	}
+	
+	public void componentClicked(JComponent comp){};
+	
+	public final void addComponent(JComponent comp, int x, int y){
+		comp.setBounds(x, y, comp.getPreferredSize().width, comp.getPreferredSize().height);
+		comp.setLocation(x, y);
+		components.add(comp);
+		comp_points.add(new Point(x, y));
+	}
+	
+	public final void clearComponents(){
+		components.clear();
+		comp_points.clear();
+	}
+	
+	public final void removeComponent(JComponent comp){
+		int index = components.indexOf(comp);
+		components.remove(index);
+		comp_points.remove(index);
 	}
 	
 	/**

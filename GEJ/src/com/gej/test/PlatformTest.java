@@ -33,7 +33,7 @@ public class PlatformTest extends Game implements MapLoader {
 		// load the Map and create a MapView
 		Map.loadMap("resources/PlatformTest.txt", this);
 		// configure the game
-		Global.FRAMES_PER_SECOND          = 50;
+		Global.FRAMES_PER_SECOND          = 150;
 		Global.USE_PIXELPERFECT_COLLISION = true;
 		Global.FULLSCREEN                 = true;
 		Global.HIDE_CURSOR                = true;
