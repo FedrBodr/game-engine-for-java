@@ -2,6 +2,7 @@ package com.gej.graphics;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 
 import com.gej.util.ImageTool;
 
@@ -13,8 +14,10 @@ import com.gej.util.ImageTool;
  */
 public class GFont {
 	
-	private Image[] images    = null;
-	private char[]  alphabets = null;
+	/** The array of split images */
+	private BufferedImage[] imgs;
+	/** The array of the order of characters */
+	private char[] characters;
 	
 	/**
 	 * Constructs a GFont object with a main image, numRows,
@@ -26,38 +29,57 @@ public class GFont {
 	 * @param order The order of alphabets in the image
 	 */
 	public GFont(Image img, int rows, int cols, char[] order){
-		images = ImageTool.splitImage(img, rows, cols);
-		alphabets = order;
+		imgs = ImageTool.splitImage(img, rows, cols);
+		characters = order;
 	}
 	
 	/**
-	 * Renders the images to form the letters in the given string
-	 * on to a graphic context with a 2D position. Note that '\n'
-	 * could be used to represent a new line.
-	 * @param text The string to be drawn
-	 * @param x The starting x-coordinate
-	 * @param y The starting y-coordinate
-	 * @param g The graphic context
+	 * Constructs a GFont object with a main image, numRows,
+	 * numColumns and the order of alphabets in the image.
+	 * @see ImageTool
+	 * @param img The main image
+	 * @param rows The number of rows
+	 * @param cols The number of columns
+	 * @param order The order of alphabets in the image
 	 */
-	public void renderText(String text, int x, int y, Graphics2D g){
-		try {
-			for (int i=0; i<text.length(); i++){
-				if (text.charAt(i)=='\n'){
-					y += images[0].getHeight(null) + 4;
-				} else {
-					Image alphabet = null;
-					for (int j=0; j<alphabets.length; j++){
-						if (alphabets[j]==text.charAt(i)){
-							alphabet = images[i];
-						}
+	public GFont(Image img, int rows, int cols, String order){
+		this(img, rows, cols, order.toCharArray());
+	}
+	
+	/**
+	 * This is the method which we use to draw text on the window
+	 * 
+	 * @param txt	- The text to be drawn
+	 * @param g	    - The Graphics2D object
+	 * @param x		- The starting x position
+	 * @param y		- The starting y position
+	 */
+	public void renderText(String txt, Graphics2D g, int x, int y){
+		// The x value of the character
+		int x_pos = x;
+		// The y value of the character
+		int y_pos = y;
+		// Start looping and draw the text
+		for (int i=0; i<txt.length(); i++){
+			if (txt.charAt(i)!=' '){
+				// If the character is not a space, we'll draw it
+				for (int j=0; j<characters.length; j++){
+					// Check for the right image
+					if (txt.charAt(i)==characters[j]){
+						// Draw the image
+						g.drawImage(imgs[j], x_pos, y_pos, null);
+						// Increase the x position
+						x_pos += imgs[j].getWidth(null);
 					}
-					g.drawImage(alphabet, x, y, null);
-					x += alphabet.getWidth(null) + 1;
 				}
+			} else if (txt.charAt(i)=='\n'){
+				y_pos = y_pos + imgs[i].getHeight(null);
+			} else {
+				// If the character is a space, we'll just increase
+				// x position so we don't waste any memory
+				x_pos = x_pos + imgs[i].getWidth(null);
 			}
-		} catch (Exception e){
-			// Do nothing
 		}
 	}
-
+	
 }

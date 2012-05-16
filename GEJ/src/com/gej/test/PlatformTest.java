@@ -9,6 +9,7 @@ import com.gej.core.Game;
 import com.gej.core.Global;
 import com.gej.graphics.Animation;
 import com.gej.graphics.Background;
+import com.gej.graphics.GFont;
 import com.gej.input.GKeyBoard;
 import com.gej.map.Map;
 import com.gej.map.MapLoader;
@@ -25,17 +26,20 @@ public class PlatformTest extends Game implements MapLoader {
 	private static final long serialVersionUID = 5231267119693208693L;
 	
 	Bouncy bouncy = null;
+	GFont fpsfont = null;
 	
 	@Override
 	public void initResources(){
 		// load the background
 		Background.setBackground(ImageTool.resize(loadImage("resources/back_water.png"), Global.WIDTH, Global.HEIGHT));
+		// load the font
+		fpsfont = new GFont(loadImage("ImageFonts/font_brown.png"), 3, 20, " !            .,0123456789:   -? ABCDEFGHIJKLMNOPQRSTUVWXYZ ");
 		// load the Map and create a MapView
 		Map.loadMap("resources/PlatformTest.txt", this);
 		// configure the game
 		Global.FRAMES_PER_SECOND          = 150;
 		Global.USE_PIXELPERFECT_COLLISION = true;
-		Global.FULLSCREEN                 = true;
+		//Global.FULLSCREEN                 = true;
 		Global.HIDE_CURSOR                = true;
 	}
 
@@ -91,7 +95,7 @@ public class PlatformTest extends Game implements MapLoader {
 		// Draw the Map
 		MapView.render(g);
 		MapView.renderObject(g, bouncy);
-		g.drawString("FPS: " + Global.FRAMES_PER_SECOND, 15, 15);
+		fpsfont.renderText("FPS: " + Global.FRAMES_PER_SECOND, g, 15, 15);
 	}
 	
 	public void resetMap(){

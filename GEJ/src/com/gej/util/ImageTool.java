@@ -30,32 +30,32 @@ public class ImageTool {
 		return bimage;
 	}
 		
-	public static Image[] splitImage(Image img, int rows, int cols){
-		// Create the arrays
-		Image[] images = new Image[rows*cols];
-		BufferedImage[] bimages = new BufferedImage[rows*cols];
-		// The count
-		int count = 0;
-		// Width and height of each sub image
+	public static BufferedImage[] splitImage(Image img, int rows, int cols){
+		// Determine the width of each part
 		int w = img.getWidth(null)/cols;
+		// Determine the height of each part
 		int h = img.getHeight(null)/rows;
-		// Start splitting
+		// Determine the number of BufferedImages to be created
+		int num = rows * cols;	    
+		// The count of images we'll use in looping
+		int count = 0;  
+		// Create the BufferedImage array
+		BufferedImage[] imgs = new BufferedImage[num];
+		// Start looping and creating images [splitting]
 		for (int x = 0; x < rows; x++) {  
-	        for (int y = 0; y < cols; y++) {  
-	            bimages[count] = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-	            // Get the Graphics2D object of the split part of the image
-	            Graphics2D g = bimages[count++].createGraphics();  
-	            // Draw only the required portion of the main image on to the split image
-	            g.drawImage(img, 0, 0, w, h, w * y, h * x, w * y + w, h * x + h, null);
-	            // Now Dispose the Graphics2D class
-	            g.dispose();  
-	        }  
-	    }
-		// Now convert the images
-		for (int i=0; i<bimages.length; i++){
-			images[i] = toImage(bimages[i]);
+		    for (int y = 0; y < cols; y++) {  
+		       	// The BITMASK type allows us to use bmp images with coloured text
+		      	// and any background
+		        imgs[count] = new BufferedImage(w, h, BufferedImage.BITMASK);
+		        // Get the Graphics2D object of the split part of the image
+		        Graphics2D g = imgs[count++].createGraphics();  
+		        // Draw only the required portion of the main image on to the split image
+		        g.drawImage(img, 0, 0, w, h, w * y, h * x, w * y + w, h * x + h, null);
+		        // Now Dispose the Graphics2D class
+		        g.dispose();  
+		    }  
 		}
-		return images;
+		return imgs;
 	}
 	
 	/**
