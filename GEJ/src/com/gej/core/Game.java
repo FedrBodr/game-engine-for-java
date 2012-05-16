@@ -41,7 +41,7 @@ public abstract class Game extends JApplet implements Runnable {
 	private LinkedList<Point> comp_points = null;
 	private GAction click = null;
 	
-	private GInput input = null;
+	protected GInput input = null;
 	
 	/**
 	 * Constructs a new Game with default values.

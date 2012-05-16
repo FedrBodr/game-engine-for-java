@@ -148,6 +148,34 @@ public class GObject implements Updateable {
     
     public void collision(GObject other){}
     
+    public boolean moveTo(float nx, float ny, float speed, long elapsedTime){
+    	boolean _x = false;
+    	boolean _y = false;
+    	if (x>nx){
+    		// We should move left
+    		x -= speed * elapsedTime;
+    	} else if (x<nx){
+    		// We should move right
+    		x += speed * elapsedTime;
+    	} else {
+    		_x = true;
+    	}
+    	if (y>ny){
+    		// We should move up
+    		y -= speed * elapsedTime;
+    	} else if (y<ny){
+    		// We should move down
+    		y += speed * elapsedTime;
+    	} else {
+    		_y = true;
+    	}
+    	return (_x && _y);
+    }
+    
+    public boolean moveTo(int nx, int ny, float speed, long elapsedTime){
+    	return moveTo((float)nx, (float)ny, speed, elapsedTime);
+    }
+    
     public void bounce(GObject other){
     	if (isTopCollision(other)||isBottomCollision(other)){
     		dy = -dy;
