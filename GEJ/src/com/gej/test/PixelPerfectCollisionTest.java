@@ -8,6 +8,8 @@ import com.gej.core.GWindow;
 import com.gej.core.Game;
 import com.gej.core.Global;
 import com.gej.graphics.Background;
+import com.gej.graphics.GFont;
+import com.gej.graphics.GFontAdvanced;
 import com.gej.input.GKeyBoard;
 import com.gej.object.GObject;
 import com.gej.util.ImageTool;
@@ -22,8 +24,11 @@ public class PixelPerfectCollisionTest extends Game {
 	GObject obj1 = null;
 	GObject obj2 = null;
 	
+	GFont font = null;
+	
 	@Override
 	public void initResources(){
+		font = GFontAdvanced.getFont(loadImage("ImageFonts/font_blue.png"), "ImageFonts/DefFontDescriptor.txt");
 		obj1 = new GObject(loadImage("resources/bouncy_ball.png"));
 		obj2 = new GObject(loadImage("resources/enemy_ball.png"));
 		obj2.setX(150);
@@ -32,10 +37,12 @@ public class PixelPerfectCollisionTest extends Game {
 		///////////////////////////////////////////////////////////////////
 		Global.USE_PIXELPERFECT_COLLISION = true;
 		Global.TITLE                      = "Pixel Perfect Collision Test";
+		Global.HIDE_CURSOR                = true;
 	}
 	
 	@Override
 	public void update(long elapsedTime){
+		Global.TITLE = "Pixel perfect collision detection : FPS : " + Global.FRAMES_PER_SECOND;
 		if (GKeyBoard.isPressed(KeyEvent.VK_ESCAPE)){
 			System.exit(0);
 		}
@@ -44,6 +51,7 @@ public class PixelPerfectCollisionTest extends Game {
 		}
 		obj1.setX(input.getMouseX());
 		obj1.setY(input.getMouseY());
+		obj2.moveTo(obj1.getX(), obj1.getY(), 0.15f, elapsedTime);
 	}
 	
 	@Override
@@ -51,13 +59,17 @@ public class PixelPerfectCollisionTest extends Game {
 		Background.render(g);
 		obj1.render(g);
 		obj2.render(g);
-		g.drawString("Collision :  " + obj1.isCollidingWith(obj2), 15, 15);
+		String status = "OFF";
 		if (Global.USE_PIXELPERFECT_COLLISION){
-			g.drawString("Pixel Perfect collision detection is on", 15, 30);
-		} else {
-			g.drawString("Pixel Perfect collision detection is off", 15, 30);
+			status = "ON";
 		}
-		g.drawString("Press 'T' to toggle", 15, 45);
+		String status2 = "FALSE";
+		if (obj1.isCollidingWith(obj2)){
+			status2 = "TRUE";
+		}
+		font.renderText("COLLISION : " + status2, g, 15, 15);
+		font.renderText("PPCD IS " + status, g, 15, 45);
+		font.renderText("PRESS T TO TOGGLE", g, 15, 75);
 	}
 	
 	public static void main(String[] args){

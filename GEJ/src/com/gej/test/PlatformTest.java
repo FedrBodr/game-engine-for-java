@@ -10,6 +10,7 @@ import com.gej.core.Global;
 import com.gej.graphics.Animation;
 import com.gej.graphics.Background;
 import com.gej.graphics.GFont;
+import com.gej.graphics.GFontAdvanced;
 import com.gej.input.GKeyBoard;
 import com.gej.map.Map;
 import com.gej.map.MapLoader;
@@ -33,11 +34,10 @@ public class PlatformTest extends Game implements MapLoader {
 		// load the background
 		Background.setBackground(ImageTool.resize(loadImage("resources/back_water.png"), Global.WIDTH, Global.HEIGHT));
 		// load the font
-		fpsfont = new GFont(loadImage("ImageFonts/font_brown.png"), 3, 20, " !            .,0123456789:   -? ABCDEFGHIJKLMNOPQRSTUVWXYZ ");
+		fpsfont = GFontAdvanced.getFont(loadImage("ImageFonts/font_blue.png"), "ImageFonts/DefFontDescriptor.txt");
 		// load the Map and create a MapView
 		Map.loadMap("resources/PlatformTest.txt", this);
 		// configure the game
-		Global.FRAMES_PER_SECOND          = 150;
 		Global.USE_PIXELPERFECT_COLLISION = true;
 		//Global.FULLSCREEN                 = true;
 		Global.HIDE_CURSOR                = true;
@@ -147,7 +147,7 @@ public class PlatformTest extends Game implements MapLoader {
 			}
 			// If space is pressed and the player is not in any jump,
 			// and there is a wall below the player, start the jump
-			if (GKeyBoard.isPressed(KeyEvent.VK_SPACE) && !jump_started){
+			if ((GKeyBoard.isPressed(KeyEvent.VK_SPACE) || GKeyBoard.isPressed(KeyEvent.VK_UP)) && !jump_started){
 				if (!Map.isTileCollisionFree(nx, ny+5, bouncy)){
 					jump_time = 0;
 					jump_started = true;
@@ -181,7 +181,9 @@ public class PlatformTest extends Game implements MapLoader {
 			// Check collisions
 			GObject colliding_obj = Map.getCollidingObject(getX(), getY(), getWidth(), getHeight());
 			if (colliding_obj!=null){
-				collision(colliding_obj);
+				if (isCollidingWith(colliding_obj)){
+					collision(colliding_obj);
+				}
 			}
 		}
 		

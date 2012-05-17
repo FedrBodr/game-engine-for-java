@@ -76,9 +76,21 @@ public abstract class Game extends JApplet implements Runnable {
 		initResources();
 		long startTime = System.currentTimeMillis();
         long currTime = startTime;
+    	int frames = 0;
+    	int frame_time = 0;
 		while (running){
 			long elapsedTime = System.currentTimeMillis() - currTime;
 	        currTime += elapsedTime;
+	        frame_time += elapsedTime;
+	        frames++;
+	        if (frame_time>=1000){
+	        	Global.FRAMES_PER_SECOND = frames;
+	        	frames = 0;
+	        	frame_time = (int) elapsedTime;
+	        }
+	        if (Global.FRAMES_PER_SECOND > 150){
+	        	Global.FRAMES_PER_SECOND = 150;
+	        }
 			update(elapsedTime);
 			if (Global.HIDE_CURSOR){
 				setCursor(GInput.INVISIBLE_CURSOR);
@@ -104,7 +116,6 @@ public abstract class Game extends JApplet implements Runnable {
 					}
 				}
 				repaint();
-				Thread.sleep(1000/Global.FRAMES_PER_SECOND);
 			} catch (Exception e) {}
 		}
 	}
