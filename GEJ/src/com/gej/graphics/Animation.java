@@ -1,7 +1,10 @@
 package com.gej.graphics;
 
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
+import com.gej.util.ImageTool;
 
 /**
  * Contains a list of images and frame timing information
@@ -14,6 +17,8 @@ public class Animation {
 	private ArrayList<Image> images = null;
 	private ArrayList<Integer> durations = null;
 	
+	private ArrayList<BufferedImage> bimages = null;
+	
 	private int currFrameIndex = 0;
 	private int duration = 0;
 	
@@ -25,6 +30,7 @@ public class Animation {
 	public Animation(){
 		images = new ArrayList<Image>();
 		durations = new ArrayList<Integer>();
+		bimages = new ArrayList<BufferedImage>();
 	}
 	
 	/**
@@ -47,6 +53,7 @@ public class Animation {
 	 */
 	public void addFrame(Image frame, int duration){
 		images.add(frame);
+		bimages.add(ImageTool.toBufferedImage(frame));
 		durations.add(duration);
 	}
 	
@@ -91,6 +98,15 @@ public class Animation {
 	 */
 	public synchronized Image getImage(){
 		return images.get(currFrameIndex);
+	}
+	
+	/**
+	 * Gets you the current frame image of this
+	 * animation object.
+	 * @return The current frame as an Image
+	 */
+	public synchronized BufferedImage getBufferedImage(){
+		return bimages.get(currFrameIndex);
 	}
 	
 }

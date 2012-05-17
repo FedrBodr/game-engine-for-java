@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import com.gej.core.Global;
 import com.gej.object.GObject;
+import com.gej.util.GUtil;
 
 public class Map {
 
@@ -134,7 +135,7 @@ public class Map {
 							bool = false;
 						}
 						if (bool && Global.USE_PIXELPERFECT_COLLISION){
-							bool = GObject.isPixelPerfectCollision(obj, Math.round(obj.getX()), Math.round(obj.getY()), object);
+							bool = GUtil.isPixelPerfectCollision(x, y, object.getAnimation().getBufferedImage(), obj.getX(), obj.getY(), obj.getAnimation().getBufferedImage());
 							if (bool){
 								bool = false;
 							}
