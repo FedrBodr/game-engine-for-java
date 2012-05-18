@@ -91,33 +91,35 @@ public abstract class Game extends JApplet implements Runnable {
 	        if (Global.FRAMES_PER_SECOND > 150){
 	        	Global.FRAMES_PER_SECOND = 150;
 	        }
-			update(elapsedTime);
-			if (Global.HIDE_CURSOR){
-				setCursor(GInput.INVISIBLE_CURSOR);
-			} else {
-				setCursor(Cursor.getDefaultCursor());
-			}
-			try {
-				Iterator<Updateable> i = Global.UPDATEABLES.iterator();
-				while (i.hasNext()){
-					Updateable upd = i.next();
-					if (upd instanceof GObject){
-						if (!((GObject) upd).isAlive()){
-							i.remove();
-						}
-					}
-					upd.update(elapsedTime);
-				}
-				Iterator<JComponent> i2 = components.iterator();
-				while (i2.hasNext()){
-					JComponent comp = i2.next();
-					if (comp.getBounds().contains(input.getMouseX(), input.getMouseY()) && click.isPressed()){
-						componentClicked(comp);
-					}
-				}
-				repaint();
-			} catch (Exception e) {}
-		}
+	        if (Global.FRAMES_PER_SECOND>=50){
+	        	update(elapsedTime);
+	        	if (Global.HIDE_CURSOR){
+	        		setCursor(GInput.INVISIBLE_CURSOR);
+	        	} else {
+	        		setCursor(Cursor.getDefaultCursor());
+	        	}
+	        	try {
+	        		Iterator<Updateable> i = Global.UPDATEABLES.iterator();
+	        		while (i.hasNext()){
+	        			Updateable upd = i.next();
+	        			if (upd instanceof GObject){
+	        				if (!((GObject) upd).isAlive()){
+	        					i.remove();
+	        				}
+	        			}
+	        			upd.update(elapsedTime);
+	        		}
+	        		Iterator<JComponent> i2 = components.iterator();
+	        		while (i2.hasNext()){
+	        			JComponent comp = i2.next();
+	        			if (comp.getBounds().contains(input.getMouseX(), input.getMouseY()) && click.isPressed()){
+	        				componentClicked(comp);
+	        			}
+	        		}	        	
+	        		repaint();
+	        	} catch (Exception e) {}
+	        }
+	    }
 	}
 	
 	public final void paint(Graphics g){
