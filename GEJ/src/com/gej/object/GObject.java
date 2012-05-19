@@ -20,12 +20,10 @@ public class GObject implements Updateable {
     private boolean alive = true;
 
     public GObject(Animation anim) {
-    	Global.UPDATEABLES.add(this);
         this.anim = anim;
     }
     
     public GObject(Image img){
-    	Global.UPDATEABLES.add(this);
     	this.anim = new Animation(new Image[]{img}, 100);
     }
 

@@ -25,8 +25,7 @@ public class PlatformTest extends Game implements MapLoader {
 	 * 
 	 */
 	private static final long serialVersionUID = 5231267119693208693L;
-	
-	Bouncy bouncy = null;
+
 	GFont fpsfont = null;
 	
 	@Override
@@ -47,9 +46,10 @@ public class PlatformTest extends Game implements MapLoader {
 	public GObject getObject(char c, int x, int y) {
 		if (c=='B'){
 			// B is the player
-			bouncy = new Bouncy(loadImage("resources/bouncy_ball.png"));
+			Bouncy bouncy = new Bouncy(loadImage("resources/bouncy_ball.png"));
 			bouncy.setX(x);
 			bouncy.setY(y);
+			return bouncy;
 		} else if (c=='E'){
 			// It's the enemy
 			Enemy enemy = new Enemy(loadImage("resources/enemy_ball.png"));
@@ -94,7 +94,6 @@ public class PlatformTest extends Game implements MapLoader {
 	public void render(Graphics2D g){
 		// Draw the Map
 		MapView.render(g);
-		MapView.renderObject(g, bouncy);
 		fpsfont.renderText("FPS: " + Global.FRAMES_PER_SECOND, g, 15, 15);
 	}
 	
@@ -127,8 +126,8 @@ public class PlatformTest extends Game implements MapLoader {
 		public void update(long elapsedTime){
 			MapView.follow(this);
 			// The present positions of the player
-			float nx = bouncy.getX();
-			float ny = bouncy.getY();
+			float nx = getX();
+			float ny = getY();
 			// If the jump has been started and till not yet completed
 			// move the player up
 			if (jump_started && jump_time<=1000){
@@ -136,7 +135,7 @@ public class PlatformTest extends Game implements MapLoader {
 				// Increase the jump time
 				jump_time += elapsedTime;
 				// If there is a wall in the jump path, end the jump
-				if (!Map.isTileCollisionFree(nx, ny, bouncy)){
+				if (!Map.isTileCollisionFree(nx, ny, this)){
 					jump_started = false;
 				}
 			} else if (!onGround){
@@ -148,7 +147,7 @@ public class PlatformTest extends Game implements MapLoader {
 			// If space is pressed and the player is not in any jump,
 			// and there is a wall below the player, start the jump
 			if ((GKeyBoard.isPressed(KeyEvent.VK_SPACE) || GKeyBoard.isPressed(KeyEvent.VK_UP)) && !jump_started){
-				if (!Map.isTileCollisionFree(nx, ny+5, bouncy)){
+				if (!Map.isTileCollisionFree(nx, ny+5, this)){
 					jump_time = 0;
 					jump_started = true;
 					onGround = false;
@@ -163,11 +162,11 @@ public class PlatformTest extends Game implements MapLoader {
 				nx = nx + 0.15f * elapsedTime;
 			}
 			// Move to the new x-position only if the position is collision free
-			if (Map.isTileCollisionFree(nx, bouncy.getY(), this)){
+			if (Map.isTileCollisionFree(nx, getY(), this)){
 				setX(nx);
 			}
 			// Move to the new y-position only if the position is collision free
-			if (Map.isTileCollisionFree(bouncy.getX(), ny, this)){
+			if (Map.isTileCollisionFree(getX(), ny, this)){
 				setY(ny);
 			} else {
 				// We move down. Line the player with the bottom tile
@@ -176,13 +175,6 @@ public class PlatformTest extends Game implements MapLoader {
 						setY(Map.getTileCollidingPoint(getX(), ny, getWidth(), getHeight()).y - getHeight() + 1);
 						onGround = true;
 					} catch (Exception e){}
-				}
-			}
-			// Check collisions
-			GObject colliding_obj = Map.getCollidingObject(getX(), getY(), getWidth(), getHeight());
-			if (colliding_obj!=null){
-				if (isCollidingWith(colliding_obj)){
-					collision(colliding_obj);
 				}
 			}
 		}

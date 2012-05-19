@@ -1,7 +1,6 @@
 package com.gej.core;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 
 /**
  * This class contains static fields which can be called by any
@@ -25,8 +24,6 @@ public class Global {
 	public static boolean FULLSCREEN                 = false;
 	/** The FPS of the game */
 	public static int     FRAMES_PER_SECOND          = 100;
-	/** The list of the updateable objects */
-	public static LinkedList<Updateable> UPDATEABLES  = new LinkedList<Updateable>();
 	/** A map containing various properties */
 	public static HashMap<String, Object> PROPERTIES = new HashMap<String, Object>();
 	

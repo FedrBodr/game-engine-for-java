@@ -45,7 +45,6 @@ public class Map {
 		MAP_HEIGHT = 0;
 		MAP_WIDTH = 0;
 		ArrayList<String> lines = new ArrayList<String>();
-		Global.UPDATEABLES.clear();
 		if (objects!=null){
 			objects.clear();
 		} else {
@@ -198,6 +197,33 @@ public class Map {
 					g.drawImage(tile.getImage(), tileX, tileY, null);
 				}
 			}
+		}
+	}
+	
+	public static void updateObjects(long elapsedTime){
+		for (int i=0; i<objects.size(); i++){
+			try {
+				if (objects.get(i).isAlive()){
+					objects.get(i).update(elapsedTime);
+					if (MapView.isVisible(objects.get(i))){
+						checkCollisions(objects.get(i));
+					}
+				} else {
+					objects.remove(i);
+				}
+			} catch (Exception e){
+				objects.remove(i);
+			}
+		}
+	}
+	
+	private static void checkCollisions(GObject obj){
+		for (int i=0; i<objects.size(); i++){
+			try {
+				if (objects.get(i).isCollidingWith(obj) && objects.get(i)!=obj && objects.get(i).isAlive()){
+					obj.collision(objects.get(i));
+				}
+			} catch (Exception e){}
 		}
 	}
 	
