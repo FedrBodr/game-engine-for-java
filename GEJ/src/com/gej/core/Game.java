@@ -36,7 +36,7 @@ public abstract class Game extends JApplet implements Runnable {
 	private boolean running = false;
     private Image backImage    = null;
     private Graphics2D    backGraphics = null;
-	private HashMap<String, Image> cache = null;
+	private static HashMap<String, Image> cache = null;
 	private LinkedList<JComponent> components = null;
 	private LinkedList<Point> comp_points = null;
 	private GAction click = null;
@@ -185,12 +185,12 @@ public abstract class Game extends JApplet implements Runnable {
 	 * @param name The name of your image
 	 * @return The loaded image.
 	 */
-	public Image loadImage(String name){
+	public static Image loadImage(String name){
 		Image img = null;
 		if (cache.containsKey(name)){
 			img = cache.get(name);
 		} else {
-			img =  new ImageIcon(this.getClass().getClassLoader().getResource(name)).getImage();
+			img =  new ImageIcon(Game.class.getClassLoader().getResource(name)).getImage();
 			cache.put(name, img);
 		}
 		return img;
