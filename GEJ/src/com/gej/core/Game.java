@@ -91,7 +91,8 @@ public abstract class Game extends JApplet implements Runnable {
 	        if (Global.FRAMES_PER_SECOND > 150){
 	        	Global.FRAMES_PER_SECOND = 150;
 	        }
-	        update(elapsedTime);
+	        update(elapsedTime);	        	
+        	repaint();
 	        if (Global.HIDE_CURSOR){
 	        	setCursor(GInput.INVISIBLE_CURSOR);
 	        } else {
@@ -105,8 +106,7 @@ public abstract class Game extends JApplet implements Runnable {
 	        		if (comp.getBounds().contains(input.getMouseX(), input.getMouseY()) && click.isPressed()){
 	        			componentClicked(comp);
 	        		}
-	        	}	        	
-	        	repaint();
+	        	}
 	        } catch (Exception e) {}
 	    }
 	}
