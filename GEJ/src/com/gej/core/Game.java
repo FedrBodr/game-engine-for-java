@@ -11,8 +11,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
-import javax.swing.JApplet;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 
 import com.gej.input.GInput;
 import com.gej.map.Map;
@@ -25,7 +25,7 @@ import com.gej.util.ImageTool;
  * 
  * @author Sri Harsha Chilakapati
  */
-public abstract class Game extends JApplet implements Runnable {
+public abstract class Game extends JPanel implements Runnable {
 
 	/**
 	 * 
@@ -59,6 +59,7 @@ public abstract class Game extends JApplet implements Runnable {
 		components = new LinkedList<JComponent>();
 		comp_points = new LinkedList<Point>();
 		setFocusTraversalKeysEnabled(false);
+		setDoubleBuffered(true);
 		setFocusable(true);
 		input = new GInput(this);
 		click = new GAction("CLICK", GAction.INITIAL_KEY_PRESS_ONLY);
@@ -74,12 +75,12 @@ public abstract class Game extends JApplet implements Runnable {
 	 */
 	public final void run(){
 		initResources();
-		long startTime = System.currentTimeMillis();
+		long startTime = System.nanoTime() / 1000000;
         long currTime = startTime;
     	int frames = 0;
     	int frame_time = 0;
 		while (running){
-			long elapsedTime = System.currentTimeMillis() - currTime;
+			long elapsedTime = (System.nanoTime()/1000000) - currTime;
 	        currTime += elapsedTime;
 	        frame_time += elapsedTime;
 	        frames++;
@@ -108,6 +109,9 @@ public abstract class Game extends JApplet implements Runnable {
 	        		}
 	        	}
 	        } catch (Exception e) {}
+	        try {
+	        	Thread.sleep(Math.min(1000l/Global.FRAMES_PER_SECOND, 10));
+	        } catch (Exception e){}
 	    }
 	}
 	

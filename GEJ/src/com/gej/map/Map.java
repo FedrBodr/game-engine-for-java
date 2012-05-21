@@ -79,6 +79,11 @@ public class Map {
 			}
 		}
 	}
+	
+	public static void clearObjects(){
+		objects.clear();
+		tiles.clear();
+	}
 
 	public static GObject getCollidingObject(float x, float y, int width, int height){
 		GObject obj = null;
