@@ -106,7 +106,6 @@ public class GWindow extends JFrame implements ActionListener {
 		});
 	}
 	
-	@Override
 	public void actionPerformed(ActionEvent e) {
 		// Set it's properties and center the window on screen
 		setTitle(Global.TITLE);

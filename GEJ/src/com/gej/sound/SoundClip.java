@@ -1,11 +1,7 @@
 package com.gej.sound;
 
-import java.io.IOException;
-
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class SoundClip {
 	
@@ -23,7 +19,7 @@ public class SoundClip {
 				loop = Clip.LOOP_CONTINUOUSLY;
 			}
 			this.loop = loop;
-		} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

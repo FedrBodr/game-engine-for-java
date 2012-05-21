@@ -98,7 +98,6 @@ public class MazerBox extends Game implements MapLoader {
 		g.drawImage(player.getImage(), Math.round(player.getX()), Math.round(player.getY()), null);
 	}
 
-	@Override
 	public GObject getObject(char c, int x, int y) {
 		// MapLoader interface. Return the new GObject
 		// based on the char present in the map
@@ -123,7 +122,6 @@ public class MazerBox extends Game implements MapLoader {
 		GWindow.setup(new MazerBox());
 	}
 
-	@Override
 	public Tile getTile(char c, int x, int y) {
 		// It won't use tiles
 		return null;

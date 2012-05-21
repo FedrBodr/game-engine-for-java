@@ -42,7 +42,6 @@ public class PlatformTest extends Game implements MapLoader {
 		Global.HIDE_CURSOR                = true;
 	}
 
-	@Override
 	public GObject getObject(char c, int x, int y) {
 		if (c=='B'){
 			// B is the player
@@ -64,7 +63,6 @@ public class PlatformTest extends Game implements MapLoader {
 		return null;
 	}
 
-	@Override
 	public Tile getTile(char c, int x, int y) {
 		if (c=='D'){
 			// The D and G are walls but with different sprites
