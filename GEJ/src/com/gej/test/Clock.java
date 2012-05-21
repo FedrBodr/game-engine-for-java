@@ -1,9 +1,16 @@
 package com.gej.test;
 
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+
 import com.gej.core.GWindow;
 import com.gej.core.Game;
 import com.gej.core.Global;
+import com.gej.graphics.Background;
+import com.gej.graphics.GFont;
+import com.gej.graphics.GFontAdvanced;
+import com.gej.util.ImageTool;
 
 public class Clock extends Game {
 
@@ -17,10 +24,14 @@ public class Clock extends Game {
 	long minutes      = 0;
 	long hours        = 0;
 	
+	GFont font = null;
+	
 	@Override
 	public void initResources(){
-		Global.HEIGHT = 30;
 		Global.WIDTH = 400;
+		Global.HEIGHT = 50;
+		Background.setBackground(ImageTool.getColoredImage(Color.GRAY, Global.WIDTH, Global.HEIGHT));
+		font = GFontAdvanced.getFont(loadImage("ImageFonts/font_blue.png"), "ImageFonts/DefFontDescriptor.txt");
 	}
 	
 	@Override
@@ -29,16 +40,23 @@ public class Clock extends Game {
 		milliseconds += elapsedTime;
 		if (milliseconds >= 1000){
 			seconds++;
-			milliseconds = 0;
+			Global.HEIGHT = 150;
+			milliseconds -= 1000;
 		}
 		if (seconds >= 60){
 			minutes++;
-			seconds = 0;
+			seconds -= 60;
 		}
 		if (minutes >= 60){
 			hours++;
-			minutes = 0;
+			minutes -= 60;
 		}
+	}
+	
+	@Override
+	public void render(Graphics2D g){
+		Background.render(g);
+		font.renderText(Global.TITLE, g, 15, 15);
 	}
 	
 	public static void main(String[] args){
