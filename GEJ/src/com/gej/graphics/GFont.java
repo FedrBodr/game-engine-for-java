@@ -8,7 +8,13 @@ import com.gej.util.ImageTool;
 
 /**
  * Represents a game font made from a single sprite sheet.
- * Uses Images to represent alphabets
+ * Uses Images to represent alphabets. You can use the
+ * GFontAdvanced class to load the fonts from the font
+ * descriptors like this.
+ * 
+ * <pre>
+ * GFont font = GFontAdvenced.getFont(Game.loadImage("&lt;path-to-image&gt;"), "&lt;path-to-descriptor&gt;");
+ * </pre>
  * 
  * @author Sri Harsha Chilakapati
  */
@@ -47,7 +53,8 @@ public class GFont {
 	}
 	
 	/**
-	 * This is the method which we use to draw text on the window
+	 * This is the method which we use to draw text on the window.
+	 * Note that the maximum length of the string is 40 cols.
 	 * 
 	 * @param txt	- The text to be drawn
 	 * @param g	    - The Graphics2D object

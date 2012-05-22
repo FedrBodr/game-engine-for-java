@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 import com.gej.core.GWindow;
 import com.gej.core.Game;
 import com.gej.input.GInput;
-import com.gej.object.GAction;
+import com.gej.input.GMouse;
 import com.gej.object.GObject;
 
 public class GObjectTest extends Game {
@@ -16,22 +16,17 @@ public class GObjectTest extends Game {
 	private static final long serialVersionUID = -3353991379735524005L;
 	
 	GObject box = null;
-	
-	GAction mouse_1 = null;
-	
+		
 	@Override
 	public void initResources(){
 		box = new GObject(loadImage("resources/box.png"));
 		box.setVelocityX(0.08f);
         box.setVelocityY(0.08f);
-        mouse_1 = new GAction("MOUSE1");
-        GInput input = new GInput(this);
-        input.mapToMouse(mouse_1, GInput.MOUSE_BUTTON_1);
 	}
 	
 	@Override
 	public void update(long elapsedTime){
-		if (mouse_1.isPressed()){
+		if (GMouse.isMouseClicked(GInput.MOUSE_BUTTON_1)){
 			System.exit(0);
 		}
 	    if (box.getX() < 0) {

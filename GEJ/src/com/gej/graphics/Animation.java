@@ -14,13 +14,21 @@ import com.gej.util.ImageTool;
  */
 public class Animation {
 
+	// Collection of frames in the animation
 	private ArrayList<Image> images = null;
 	private ArrayList<Integer> durations = null;
 	
+	// Collection of frames in the BufferedImage format
+	// Used for pixel-perfect collision detection.
 	private ArrayList<BufferedImage> bimages = null;
 	
+	// The index of current frame
 	private int currFrameIndex = 0;
+	// The duration spent in the current frame
 	private int duration = 0;
+	
+	// The paused property
+	private boolean paused = false;
 	
 	/**
 	 * This default constructor could be used to create
@@ -62,7 +70,9 @@ public class Animation {
 	 * @param elapsedTime The time spent in current frame
 	 */
 	public synchronized void update(long elapsedTime){
-		duration += elapsedTime;
+		if (!paused){
+			duration += elapsedTime;
+		}
 		if (duration>=durations.get(currFrameIndex)){
 			duration = 0;
 			nextFrame();
@@ -107,6 +117,28 @@ public class Animation {
 	 */
 	public synchronized BufferedImage getBufferedImage(){
 		return bimages.get(currFrameIndex);
+	}
+	
+	/**
+	 * Pause this animation
+	 */
+	public synchronized void pause(){
+		paused = true;
+	}
+	
+	/**
+	 * Resume this animation
+	 */
+	public synchronized void resume(){
+		paused = false;
+	}
+	
+	/**
+	 * Returns whether the animation is paused or not.
+	 * @return The paused state.
+	 */
+	public synchronized boolean isPaused(){
+		return paused;
 	}
 	
 }

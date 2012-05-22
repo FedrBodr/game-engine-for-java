@@ -24,7 +24,10 @@ import javax.swing.Timer;
  * It can be configured to start as a full screen application, or a windowed application.
  * It is invoked like this.<br>
  * 
- * <pre>GWindow.setup(Game game, String title);</pre>
+ * <pre>
+ * GWindow.setup(Game game, String title);
+ * 
+ * GWindow.setup(Game game);</pre>
  * 
  * where the values provided are the default ones. The constructors are discussed again
  * at their respective positions.<br><br>
@@ -57,7 +60,7 @@ public class GWindow extends JFrame implements ActionListener {
 
 	/** This method fixes the repaint issue (flickering) on old machines with
 	 *  latest JRE. It is called automatically by the timer */
-	public void repaintFix(){
+	public final void repaintFix(){
 		setIgnoreRepaint(true);
 	}
 	
@@ -106,7 +109,12 @@ public class GWindow extends JFrame implements ActionListener {
 		});
 	}
 	
-	public void actionPerformed(ActionEvent e) {
+	/**
+	 * Called by the timer each second to update the window state,
+	 * such as title, window size, resolution in full-screen state
+	 * etc.,
+	 */
+	public final void actionPerformed(ActionEvent e) {
 		// Set it's properties and center the window on screen
 		setTitle(Global.TITLE);
 		if (!Global.FULLSCREEN){
@@ -125,7 +133,7 @@ public class GWindow extends JFrame implements ActionListener {
 	 * 
 	 * @param bool The boolean value which is used to switch full screen state.
 	 */
-	public void setFullScreen(boolean bool){
+	public final void setFullScreen(boolean bool){
 		// Get the graphics device
 		GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		// If true, switch to FullScreen
@@ -159,11 +167,22 @@ public class GWindow extends JFrame implements ActionListener {
 		}
 	}
 	
-	public static GWindow setup(Game game, String title){
+	/**
+	 * Creates a new GWindow instance and packs a game into it.
+	 * @param game The game to be packed.
+	 * @param title The title of the quit confirmation box.
+	 * @return The GWindow instance.
+	 */
+	public static final GWindow setup(Game game, String title){
 		return new GWindow(game, title, Global.WIDTH, Global.HEIGHT);
 	}
 	
-	public static GWindow setup(Game game){
+	/**
+	 * Creates a new GWindow instance and packs a game into it.
+	 * @param game The game to be packed.
+	 * @return The GWindow instance.
+	 */
+	public static final GWindow setup(Game game){
 		return setup(game, Global.TITLE);
 	}
 

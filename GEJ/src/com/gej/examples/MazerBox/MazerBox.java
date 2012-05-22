@@ -6,11 +6,10 @@ import java.awt.event.KeyEvent;
 
 import com.gej.core.GWindow;
 import com.gej.core.Game;
-import com.gej.input.GInput;
+import com.gej.input.GKeyBoard;
 import com.gej.map.Map;
 import com.gej.map.MapLoader;
 import com.gej.map.Tile;
-import com.gej.object.GAction;
 import com.gej.object.GObject;
 
 public class MazerBox extends Game implements MapLoader {
@@ -26,12 +25,6 @@ public class MazerBox extends Game implements MapLoader {
 		
 	GObject player = null;
 	
-	GAction up    = null;
-	GAction down  = null;
-	GAction left  = null;
-	GAction right = null;
-	GAction exit  = null;
-	
 	@Override
 	public void initResources(){
 		// Images
@@ -40,25 +33,12 @@ public class MazerBox extends Game implements MapLoader {
 		wall_box   = loadImage("resources/box2.png");
 		// Map
 		Map.loadMap("resources/MazerBox.txt", this);
-		// Actions
-		up    = new GAction("UP");
-		down  = new GAction("DOWN");
-		left  = new GAction("LEFT");
-		right = new GAction("RIGHT");
-		exit  = new GAction("EXIT");
-		// Input
-		GInput input = new GInput(this);
-		input.mapToKey(up, KeyEvent.VK_UP);
-		input.mapToKey(down, KeyEvent.VK_DOWN);
-		input.mapToKey(left, KeyEvent.VK_LEFT);
-		input.mapToKey(right, KeyEvent.VK_RIGHT);
-		input.mapToKey(exit, KeyEvent.VK_ESCAPE);
 	}
 	
 	@Override
 	public void update(long elapsedTime){
 		// Check if exit is pressed
-		if (exit.isPressed()){
+		if (GKeyBoard.isPressed(KeyEvent.VK_ESCAPE)){
 			System.exit(0);
 		}
 		// The position of the player
@@ -67,16 +47,16 @@ public class MazerBox extends Game implements MapLoader {
 		// The constant speed
 		float speed = 0.15f;
 		// Check the new positions
-		if (up.isPressed()){
+		if (GKeyBoard.isPressed(KeyEvent.VK_UP)){
 			ny = ny - speed * elapsedTime;
 		}
-		if (down.isPressed()){
+		if (GKeyBoard.isPressed(KeyEvent.VK_DOWN)){
 			ny = ny + speed * elapsedTime;
 		}
-		if (left.isPressed()){
+		if (GKeyBoard.isPressed(KeyEvent.VK_LEFT)){
 			nx = nx - speed * elapsedTime;
 		}
-		if (right.isPressed()){
+		if (GKeyBoard.isPressed(KeyEvent.VK_RIGHT)){
 			nx = nx + speed * elapsedTime;
 		}
 		// If the new position is collision free, move the player
