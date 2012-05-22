@@ -49,21 +49,11 @@ public class CollisionTest extends Game {
 	@Override
 	public void update(long elapsedTime){
 		for (GObject object : objects){
-			if (object.getX() < 0) {
-				object.setVelocityX(Math.abs(object.getVelocityX()));
-			} else if (object.getX() + object.getWidth() >= getWidth()){
-				object.setVelocityX(-Math.abs(object.getVelocityX()));
-			}
-			if (object.getY() < 0) {
-				object.setVelocityY(Math.abs(object.getVelocityY()));
-			} else if (object.getY() + object.getHeight() >= getHeight()){
-				object.setVelocityY(-Math.abs(object.getVelocityY()));
-			}
 			object.update(elapsedTime);
 			for (GObject object2 : objects){
 				if (object.isCollidingWith(object2) && object!=object2){
 					object.bounce(object2);
-					object2.bounce(object);
+					//object2.bounce(object);
 				}
 			}
 		}

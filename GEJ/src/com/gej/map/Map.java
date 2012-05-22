@@ -39,6 +39,27 @@ public class Map {
 		return mapdata[x][y];
 	}
 	
+	public static void loadMap(MapInfo info){
+		String[] lines = info.MapData.split("\n");
+		TILE_SIZE = info.tileSize;
+		loadMap(lines, info.loader);
+	}
+	
+	public static void loadMap(String[] lines, MapLoader loader){
+		for (int i=0; i<lines.length; i++){
+			MAP_HEIGHT++;
+			MAP_WIDTH = Math.max(MAP_WIDTH, lines[i].length());
+		}
+		mapdata = new char[MAP_WIDTH][MAP_HEIGHT];
+		for (int i=0; i<lines.length; i++){
+			for (int j=0; j<lines[i].length(); j++){
+				mapdata[j][i] = lines[i].charAt(j);
+				objects.add(loader.getObject(mapdata[j][i], j*TILE_SIZE, i*TILE_SIZE));
+				tiles.add(loader.getTile(mapdata[j][i], j*TILE_SIZE, i*TILE_SIZE));
+			}
+		}
+	}
+	
 	public static void loadMap(String mapname, MapLoader loader){
 		BufferedReader reader = new BufferedReader(new InputStreamReader(Map.class.getClassLoader().getResourceAsStream(mapname)));
 		TILE_SIZE = 32;

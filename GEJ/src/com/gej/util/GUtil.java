@@ -1,6 +1,9 @@
 package com.gej.util;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class GUtil {
 	
@@ -30,6 +33,29 @@ public class GUtil {
 		    	}
 		    }
 		return bool;
+	}
+	
+	public static void runInSeperateThread(Runnable r){
+		Thread th = new Thread(r);
+		th.start();
+	}
+	
+	public static String[] loadLinesFromFile(String FileName){
+		String[] strs = null;
+		BufferedReader reader = new BufferedReader(new InputStreamReader(GUtil.class.getClassLoader().getResourceAsStream(FileName)));
+		ArrayList<String> lines = new ArrayList<String>();
+		try {
+			String line = reader.readLine();
+			while (line!=null){
+				lines.add(line);
+				line = reader.readLine();
+			}
+			strs = new String[lines.size()];
+			for (int i=0; i<lines.size(); i++){
+				strs[i] = lines.get(i);
+			}
+		} catch (Exception e){}		
+		return strs;
 	}
 		  
 }

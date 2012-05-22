@@ -6,16 +6,16 @@ public abstract class GKeyBoard {
 	
 	private static HashMap<Integer, Boolean> keys = new HashMap<Integer, Boolean>();
 	
-	private static boolean inKeyPress = false;
+	private static int keysPressed = 0;
 	
 	public static void KeyPress(int keyCode){
 		keys.put(keyCode, true);
-		inKeyPress = true;
+		keysPressed++;
 	}
 	
 	public static void KeyReleased(int keyCode){
 		keys.put(keyCode, false);
-		inKeyPress = false;
+		keysPressed--;
 	}
 	
 	public static boolean isPressed(int keyCode){
@@ -27,7 +27,7 @@ public abstract class GKeyBoard {
 	}
 	
 	public static boolean isNoKeyPressed(){
-		return !inKeyPress;
+		return (keysPressed==0);
 	}
 
 }

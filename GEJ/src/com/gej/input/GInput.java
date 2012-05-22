@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import javax.swing.SwingUtilities;
 
 import com.gej.object.GAction;
+import com.gej.util.GUtil;
 import com.gej.util.ImageTool;
 
 /**
@@ -43,6 +44,7 @@ public class GInput implements KeyListener, MouseListener, MouseMotionListener, 
     public static final int MOUSE_BUTTON_1   = 6;
     public static final int MOUSE_BUTTON_2   = 7;
     public static final int MOUSE_BUTTON_3   = 8;
+    public static final int MOUSE_MOVED      = 9;
     
     private static final int NUM_MOUSE_CODES = 9;
 
@@ -234,6 +236,7 @@ public class GInput implements KeyListener, MouseListener, MouseMotionListener, 
     }
 
     public void mousePressed(MouseEvent e) {
+    	GMouse.setID(getMouseButtonCode(e), true);
         GAction gameAction = getMouseButtonAction(e);
         if (gameAction != null) {
             gameAction.press();
@@ -241,6 +244,7 @@ public class GInput implements KeyListener, MouseListener, MouseMotionListener, 
     }
 
     public void mouseReleased(MouseEvent e) {
+    	GMouse.setID(getMouseButtonCode(e), false);
         GAction gameAction = getMouseButtonAction(e);
         if (gameAction != null) {
             gameAction.release();
@@ -262,6 +266,15 @@ public class GInput implements KeyListener, MouseListener, MouseMotionListener, 
     }
 
     public synchronized void mouseMoved(MouseEvent e) {
+    	GUtil.runInSeperateThread(new Runnable(){
+    		public void run(){
+    			try {
+    				GMouse.setID(GInput.MOUSE_MOVED, true);
+    				Thread.sleep(150);
+    				GMouse.setID(GInput.MOUSE_MOVED, false);
+    			} catch (Exception e){}
+    		}
+    	});
         if (isRecentering && centerLocation.x == e.getX() && centerLocation.y == e.getY()) {
             isRecentering = false;
         } else {

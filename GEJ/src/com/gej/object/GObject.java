@@ -139,11 +139,40 @@ public class GObject implements Updateable {
     }
     
     public void bounce(GObject other){
-    	if (isTopCollision(other)||isBottomCollision(other)){
-    		dy = -dy;
+    	if (getX() < other.getX() + other.getWidth()){
+            setVelocityX(Math.abs(getVelocityX()));
+        } else if (getX() + getWidth() >= other.getX()){
+            setVelocityX(-Math.abs(getVelocityX()));
+        }
+        if (getY() < other.getY() + other.getHeight()) {
+            setVelocityY(Math.abs(getVelocityY()));
+        } else if (getY() + getHeight() >= other.getY()){
+            setVelocityY(-Math.abs(getVelocityY()));
+        }
+    }
+    
+    public void moveToContact(GObject other){
+    	if (isLeftCollision(other)){
+    		setX(other.getX()+other.getWidth());
+    		while(!isCollidingWith(other)){
+    			setX(getX()-1);
+    		}
+    	} else if (isRightCollision(other)){
+    		setX(other.getX()-getWidth());
+    		while(!isCollidingWith(other)){
+    			setX(getX()+1);
+    		}
     	}
-    	if (isLeftCollision(other)||isRightCollision(other)){
-    		dx = -dx;
+    	if (isTopCollision(other)){
+    		setY(other.getY()+other.getHeight());
+    		while(!isCollidingWith(other)){
+    			setY(getY()-1);
+    		}
+    	} else if (isBottomCollision(other)){
+    		setY(other.getY()-getHeight());
+    		while(!isCollidingWith(other)){
+    			setY(getY()+1);
+    		}
     	}
     }
       
