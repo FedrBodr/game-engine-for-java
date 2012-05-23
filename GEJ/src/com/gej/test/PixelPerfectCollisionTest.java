@@ -51,8 +51,9 @@ public class PixelPerfectCollisionTest extends Game {
 		}
 		obj1.setX(input.getMouseX());
 		obj1.setY(input.getMouseY());
-		obj2.moveTo(obj1.getX(), obj1.getY(), 0.15f, elapsedTime);
-		obj2.moveToContact(obj1);
+		if (obj1.isCollidingWith(obj2)){
+			obj2.moveToContact(obj1);
+		}
 	}
 	
 	@Override
