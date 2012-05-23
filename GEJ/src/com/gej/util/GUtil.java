@@ -5,8 +5,26 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-public class GUtil {
+/**
+ * Some of the utilities needed by the engine. Note that all
+ * the utility methods are static. This class is necessary
+ * for the engine to run. The class is made abstract to prevent
+ * the user from instantiation.
+ * 
+ * @author Sri Harsha Chilakapati
+ */
+public abstract class GUtil {
 	
+	/**
+	 * Check's for pixel-perfect collision between two buffered images.
+	 * @param x1 The x-position of the first object
+	 * @param y1 The y-position of the first object
+	 * @param image1 The buffered image of first object
+	 * @param x2 The x-position of the second object
+	 * @param y2 The y-position of the second object
+	 * @param image2 The buffered image of second object
+	 * @return True if a collision has been found
+	 */
 	public static boolean isPixelPerfectCollision(float x1, float y1, BufferedImage image1, float x2, float y2, BufferedImage image2){
 		boolean bool = false;
 		double width1 = x1 + image1.getWidth() -1,
@@ -35,11 +53,20 @@ public class GUtil {
 		return bool;
 	}
 	
+	/**
+	 * Runs a task in a separate thread. The task here is a Runnable object.
+	 * @param r The Runnable object.
+	 */
 	public static void runInSeperateThread(Runnable r){
 		Thread th = new Thread(r);
 		th.start();
 	}
 	
+	/**
+	 * Loads a file from the root of the jar-file into an array of strings
+	 * @param FileName The name of the file.
+	 * @return The String[] array containing all the lines in the file.
+	 */
 	public static String[] loadLinesFromFile(String FileName){
 		String[] strs = null;
 		BufferedReader reader = new BufferedReader(new InputStreamReader(GUtil.class.getClassLoader().getResourceAsStream(FileName)));

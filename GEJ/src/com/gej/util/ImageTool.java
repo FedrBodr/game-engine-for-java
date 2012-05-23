@@ -30,6 +30,13 @@ public class ImageTool {
 		return bimage;
 	}
 		
+	/**
+	 * Splits an image into a number of rows and columns
+	 * @param img The image to be split
+	 * @param rows The number of rows
+	 * @param cols The number of columns
+	 * @return The array of split images in the vertical order
+	 */
 	public static BufferedImage[] splitImage(Image img, int rows, int cols){
 		// Determine the width of each part
 		int w = img.getWidth(null)/cols;
