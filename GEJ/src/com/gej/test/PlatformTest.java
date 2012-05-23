@@ -91,6 +91,7 @@ public class PlatformTest extends Game implements MapLoader {
 	@Override
 	public void render(Graphics2D g){
 		// Draw the Map
+		Background.render(g);
 		MapView.render(g);
 		fpsfont.renderText("FPS: " + Global.FRAMES_PER_SECOND, g, 15, 15);
 	}
