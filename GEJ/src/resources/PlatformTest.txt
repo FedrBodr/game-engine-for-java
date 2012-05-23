@@ -1,4 +1,3 @@
-SIZE:48
 DDDDDDDDDDDDDDDDDDDDDDDDDDDD
 DC                   O CCC D
 DE                   O CCC D

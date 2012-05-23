@@ -35,7 +35,7 @@ public class PlatformTest extends Game implements MapLoader {
 		// load the font
 		fpsfont = GFontAdvanced.getFont(loadImage("ImageFonts/font_blue.png"), "ImageFonts/DefFontDescriptor.txt");
 		// load the Map and create a MapView
-		Map.loadMap("resources/PlatformTest.txt", this);
+		Map.loadMap(48, "resources/PlatformTest.txt", this);
 		// configure the game
 		Global.USE_PIXELPERFECT_COLLISION = true;
 		//Global.FULLSCREEN                 = true;
@@ -96,7 +96,7 @@ public class PlatformTest extends Game implements MapLoader {
 	}
 	
 	public void resetMap(){
-		Map.loadMap("resources/PlatformTest.txt", this);
+		Map.loadMap(48, "resources/PlatformTest.txt", this);
 	}
 	
 	// Start the game

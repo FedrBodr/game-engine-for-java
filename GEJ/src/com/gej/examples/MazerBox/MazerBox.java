@@ -32,7 +32,7 @@ public class MazerBox extends Game implements MapLoader {
 		player_box = loadImage("resources/box.png");
 		wall_box   = loadImage("resources/box2.png");
 		// Map
-		Map.loadMap("resources/MazerBox.txt", this);
+		Map.loadMap(64, "resources/MazerBox.txt", this);
 	}
 	
 	@Override

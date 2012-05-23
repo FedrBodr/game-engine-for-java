@@ -13,7 +13,7 @@ import com.gej.util.ImageTool;
  * descriptors like this.
  * 
  * <pre>
- * GFont font = GFontAdvenced.getFont(Game.loadImage("&lt;path-to-image&gt;"), "&lt;path-to-descriptor&gt;");
+ * GFont font = GFontAdvanced.getFont(Game.loadImage("&lt;path-to-image&gt;"), "&lt;path-to-descriptor&gt;");
  * </pre>
  * 
  * @author Sri Harsha Chilakapati
