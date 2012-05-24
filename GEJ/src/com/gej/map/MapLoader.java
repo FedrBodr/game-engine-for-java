@@ -1,6 +1,7 @@
 package com.gej.map;
 
 import com.gej.object.GObject;
+import com.gej.object.Tile;
 
 /**
  * This interface is used by the Map class to load

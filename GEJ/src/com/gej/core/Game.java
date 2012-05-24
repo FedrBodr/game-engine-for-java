@@ -177,7 +177,7 @@ public abstract class Game extends JPanel implements Runnable {
 			renderComponents(backGraphics);
 			// Dispose the graphics and flip the display
 			backGraphics.dispose();
-			g2D.drawImage(backImage, 0, 0, getWidth(), getHeight(), null);
+			g2D.drawImage(backImage, 0, 0, Global.WIDTH, Global.HEIGHT, null);
 			g2D.dispose();
 		} catch(NullPointerException e){}
 	}

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import com.gej.core.Global;
 import com.gej.object.GObject;
+import com.gej.object.Tile;
 import com.gej.util.GUtil;
 
 /**

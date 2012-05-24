@@ -26,5 +26,7 @@ public class Global {
 	public static int     FRAMES_PER_SECOND          = 100;
 	/** A map containing various properties */
 	public static HashMap<String, Object> PROPERTIES = new HashMap<String, Object>();
+	/** Variable containing the current GEJ version */
+	public static String GEJ_VERSION                 = "GEJ V0.4 R1";
 	
 }

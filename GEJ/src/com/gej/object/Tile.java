@@ -1,4 +1,4 @@
-package com.gej.map;
+package com.gej.object;
 
 import java.awt.Image;
 import java.awt.Rectangle;

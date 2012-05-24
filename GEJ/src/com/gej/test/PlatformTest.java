@@ -15,8 +15,8 @@ import com.gej.input.GKeyBoard;
 import com.gej.map.Map;
 import com.gej.map.MapLoader;
 import com.gej.map.MapView;
-import com.gej.map.Tile;
 import com.gej.object.GObject;
+import com.gej.object.Tile;
 import com.gej.util.ImageTool;
 
 public class PlatformTest extends Game implements MapLoader {
