@@ -37,7 +37,7 @@ public class MapManager {
 	 * @return Whether a map is present to be loaded next
 	 */
 	public static boolean hasNextMap(){
-		if (maps.size()>currentMap){
+		if (maps.size()>currentMap+1){
 			return true;
 		}
 		return false;
