@@ -101,6 +101,9 @@ public class Map {
 		} else {
 			tiles = new ArrayList<Tile>();
 		}
+		// Reset the map view
+		MapView.OffSetX = 0;
+		MapView.OffSetY = 0;
 		// Try parsing the file
 		try {
 			for (int i=0; i<lines.length; i++){
