@@ -104,6 +104,9 @@ public class Map {
 		// Reset the map view
 		MapView.OffSetX = 0;
 		MapView.OffSetY = 0;
+		// Reset the map's height and width
+		MAP_WIDTH = 0;
+		MAP_HEIGHT = 0;
 		// Try parsing the file
 		try {
 			for (int i=0; i<lines.length; i++){
