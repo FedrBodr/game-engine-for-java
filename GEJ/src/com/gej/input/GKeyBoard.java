@@ -21,8 +21,10 @@ public abstract class GKeyBoard {
 	 * @param keyCode The key code.
 	 */
 	public static void KeyPress(int keyCode){
-		keys.put(keyCode, true);
-		keysPressed++;
+		if (!isPressed(keyCode)){
+			keys.put(keyCode, true);
+			keysPressed++;
+		}
 	}
 	
 	/**
@@ -30,8 +32,10 @@ public abstract class GKeyBoard {
 	 * @param keyCode The key code.
 	 */
 	public static void KeyReleased(int keyCode){
-		keys.put(keyCode, false);
-		keysPressed--;
+		if (isPressed(keyCode)){
+			keys.put(keyCode, false);
+			keysPressed--;
+		}
 	}
 	
 	/**
