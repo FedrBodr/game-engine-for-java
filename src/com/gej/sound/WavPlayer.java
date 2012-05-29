@@ -65,7 +65,6 @@ public class WavPlayer extends Thread {
 	/**
 	 * Constructs a new player with a sound and with an optional looping
 	 * @param s The WavSound object
-	 * @param l If true the sound is looped continuously
 	 */
 	public WavPlayer(WavSound s){
 		sound = s;
