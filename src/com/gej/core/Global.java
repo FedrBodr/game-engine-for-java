@@ -27,6 +27,6 @@ public class Global {
 	/** A map containing various properties */
 	public static HashMap<String, Object> PROPERTIES = new HashMap<String, Object>();
 	/** Variable containing the current GEJ version */
-	public static String GEJ_VERSION                 = "GEJ V0.4 R3";
+	public static String GEJ_VERSION                 = "GEJ V0.5";
 	
 }
