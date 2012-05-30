@@ -322,23 +322,31 @@ public class GObject implements Updateable {
     public boolean moveTo(float nx, float ny, float speed, long elapsedTime){
     	boolean _x = false;
     	boolean _y = false;
+    	int distance = (int) Math.sqrt((double)((x-nx)*(x-nx) + (y-ny)*(y-ny)));
+    	float vel = Math.min(distance, speed);
+    	float newx = x;
+    	float newy = y;
     	if (x>nx){
     		// We should move left
-    		x -= speed * elapsedTime;
+    		newx -= vel * elapsedTime;
     	} else if (x<nx){
     		// We should move right
-    		x += speed * elapsedTime;
+    		newx += vel * elapsedTime;
     	} else {
     		_x = true;
     	}
     	if (y>ny){
     		// We should move up
-    		y -= speed * elapsedTime;
+    		newy -= vel * elapsedTime;
     	} else if (y<ny){
     		// We should move down
-    		y += speed * elapsedTime;
+    		newy += vel * elapsedTime;
     	} else {
     		_y = true;
+    	}
+    	if (check(newx, newy)){
+    		x = newx;
+    		y = newy;
     	}
     	return (_x && _y);
     }
