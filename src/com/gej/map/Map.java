@@ -338,6 +338,7 @@ public class Map {
 					checkCollisions(obj, true, false);
 					obj.moveVertically(elapsedTime);
 					checkCollisions(obj, false, true);
+					checkCollisions(obj, false, false);
 				} else {
 					objects.remove(i);
 				}
@@ -352,12 +353,14 @@ public class Map {
 			for (int i=0; i<objects.size(); i++){
 				try {
 					if (objects.get(i).isCollidingWith(obj) && objects.get(i)!=obj && objects.get(i).isAlive()){
-						obj.collision(objects.get(i));
 						if (horizontal){
-							obj.HorizontalCollision(obj);
+							obj.HorizontalCollision(objects.get(i));
 						}
 						if (vertical){
-							obj.VerticalCollision(obj);
+							obj.VerticalCollision(objects.get(i));
+						}
+						if (!horizontal && !vertical){
+							obj.collision(objects.get(i));
 						}
 					}
 				} catch (Exception e){}

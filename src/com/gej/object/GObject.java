@@ -359,21 +359,35 @@ public class GObject implements Updateable {
     
     /**
      * Changes the velocities of this object in order to get a bounce
-     * effect over the object. Note that this method is not accurate
-     * for now and may be updated in future releases.
-     * @param other The other object
+     * effect over the object.
      */
-    public void bounce(GObject other){
-    	if (getX() < other.getX() + other.getWidth()){
-            setVelocityX(Math.abs(getVelocityX()));
-        } else if (getX() + getWidth() >= other.getX()){
-            setVelocityX(-Math.abs(getVelocityX()));
-        }
-        if (getY() < other.getY() + other.getHeight()) {
-            setVelocityY(Math.abs(getVelocityY()));
-        } else if (getY() + getHeight() >= other.getY()){
-            setVelocityY(-Math.abs(getVelocityY()));
-        }
+    public void bounce(){
+    	boolean left = false;
+    	boolean right = false;
+    	boolean up = false;
+    	boolean down = false;
+    	if (dx<0){
+    		left = true;
+    	} else if (dx>0){
+    		right = true;
+    	}
+    	if (dy<0){
+    		up = true;
+    	} else if (dy>0){
+    		down = true;
+    	}
+    	if (left && up){
+    		dx = -dx;
+    	}
+    	if (left && down){
+    		dy = -dy;
+    	}
+    	if (right && up){
+    		dx = -dx;
+    	}
+    	if (right && down){
+    		dy = -dy;
+    	}
     }
     
     /**
@@ -427,8 +441,6 @@ public class GObject implements Updateable {
       
     /**
      * Set's the solid state of this object.
-     * This method has been kept to support
-     * old versions. May be removed in the future releases.
      * @param value The solid value.
      */
     public void setSolid(boolean value){
@@ -437,7 +449,6 @@ public class GObject implements Updateable {
     
     /**
      * Checks the solid state of this object.
-     * Only kept to support old versions.
      * @return True if solid.
      */
     public boolean isSolid(){
