@@ -216,6 +216,38 @@ public class Map {
 	 * Checks if a specific position is collision free in the map.
 	 * @param x The x-position of the object
 	 * @param y The y-position of the object
+	 * @param solid Whether to check only for solid object
+	 * @param object The object ( uses image for pixel-perfect collision detection )
+	 * @return True if no-collision and false if it collides.
+	 */
+	public static boolean isObjectCollisionFree(float x, float y, boolean solid, GObject object){
+		boolean bool = true;
+		Rectangle bounds = new Rectangle(Math.round(x), Math.round(y), object.getWidth(), object.getHeight());
+		for (int i=0; i<objects.size(); i++){
+			GObject obj = objects.get(i);
+			if (object!=obj && (obj.isSolid()==solid)){
+				try {
+					if (bounds.intersects(obj.getBounds())){
+						if (obj.isAlive()){
+							bool = false;
+						}
+						if (bool && Global.USE_PIXELPERFECT_COLLISION){
+							bool = GUtil.isPixelPerfectCollision(x, y, object.getAnimation().getBufferedImage(), obj.getX(), obj.getY(), obj.getAnimation().getBufferedImage());
+							if (bool){
+								bool = false;
+							}
+						}
+					}
+				} catch (NullPointerException e){}
+			}
+		}
+		return bool;
+	}
+	
+	/**
+	 * Checks if a specific position is collision free in the map.
+	 * @param x The x-position of the object
+	 * @param y The y-position of the object
 	 * @param object The object ( uses image for pixel-perfect collision detection )
 	 * @return True if no-collision and false if it collides.
 	 */

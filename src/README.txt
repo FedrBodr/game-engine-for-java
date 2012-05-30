@@ -6,5 +6,4 @@ AUTHOR      : Sri Harsha Chilakapati
 LINK        : http://game-engine-for-java.googlecode.com/
 
 TODO :
- > Separate isObjectCollisionFree() method for solid and non-solid objects
  > GameStateManager for inbuilt-game-states such as loading, in-game, game-end etc.,
