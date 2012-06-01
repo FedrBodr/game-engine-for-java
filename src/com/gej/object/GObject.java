@@ -49,7 +49,7 @@ public class GObject implements Updateable {
     protected float x;
     protected float y;
     protected float dx;
-    private float dy;
+    protected float dy;
     
     // If this object is solid and alive
     private boolean solid = false;
@@ -396,6 +396,24 @@ public class GObject implements Updateable {
     	if (right && down){
     		dy = -dy;
     	}
+    }
+    
+    /**
+     * Predicts the next x-position based on the velocity
+     * @param elapsedTime The time elapsed in the current frame
+     * @return The next x-position
+     */
+    public float getNextX(long elapsedTime){
+    	return x + dx * elapsedTime;
+    }
+    
+    /**
+     * Predicts the next y-position based on the velocity
+     * @param elapsedTime The time elapsed in the current frame
+     * @return The next y-position
+     */
+    public float getNextY(long elapsedTime){
+    	return y + dy * elapsedTime;
     }
     
     /**
