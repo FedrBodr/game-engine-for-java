@@ -357,26 +357,37 @@ public class Map {
 			try {
 				if (obj!=null && obj.isAlive()){
 					obj.superUpdate(elapsedTime);
+					float oldX = obj.getX();
+					float oldY = obj.getY();
 					obj.moveHorizontally(elapsedTime);
-					checkCollisions(obj, true, false);
+					checkCollisions(obj, oldX, oldY, true, false);
+					oldX = obj.getX();
 					obj.moveVertically(elapsedTime);
-					checkCollisions(obj, false, true);
-					checkCollisions(obj, false, false);
+					checkCollisions(obj, oldX, oldY, false, true);
+					oldY = obj.getY();
+					checkCollisions(obj, oldX, oldY, false, false);
 				} else {
 					// Remove the dead object
 					objects.remove(i);
 				}
-			} catch (NullPointerException e){
-				//objects.remove(obj);
-			}
+			} catch (NullPointerException e){}
 		}
 	}
 	
-	private static void checkCollisions(GObject obj, boolean horizontal, boolean vertical){
+	/*
+	 * Checks for collisions for an object. Helper method.
+	 */
+	private static final void checkCollisions(GObject obj, float oldx, float oldy, boolean horizontal, boolean vertical){
 		if (MapView.isVisible(obj)){
 			for (int i=0; i<objects.size(); i++){
 				try {
-					if (objects.get(i).isCollidingWith(obj) && objects.get(i)!=obj && objects.get(i).isAlive()){
+					GObject other = objects.get(i);
+					if (other.isCollidingWith(obj) && other!=obj && other.isAlive()){
+						if (other.isSolid()){
+							// Don't move into solid objects
+							obj.setX(oldx);
+							obj.setY(oldy);
+						}
 						if (horizontal){
 							obj.HorizontalCollision(objects.get(i));
 						}
