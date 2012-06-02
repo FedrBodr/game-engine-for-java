@@ -50,8 +50,6 @@ public class GObject implements Updateable {
     protected float y;
     protected float dx;
     protected float dy;
-    // The direction (in degrees)
-    protected int direction;
     
     // If this object is solid and alive
     private boolean solid = false;
@@ -85,7 +83,6 @@ public class GObject implements Updateable {
     public final void superUpdate(long elapsedTime){
     	update(elapsedTime);
     	anim.update(elapsedTime);
-    	direction = (int) Math.toDegrees(Math.atan2(dy, dx));
     }
     
     /**

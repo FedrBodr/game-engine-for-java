@@ -325,24 +325,26 @@ public class Map {
 	 * @param visibleRect The Rectangle object of the visible area.
 	 */
 	public static void renderMap(Graphics2D g, int x, int y, Rectangle visibleRect){
-		for (int i=0; i<objects.size(); i++){
-			GObject obj = objects.get(i);
-			if (obj!=null && obj.isAlive()){
-				int obj_x = Math.round(obj.getX()) + x;
-				int obj_y = Math.round(obj.getY()) + y;
-				g.drawImage(obj.getImage(), obj_x, obj_y, null);
-			}
-		}
-		for (int i=0; i<tiles.size(); i++){
-			Tile tile = tiles.get(i);
-			if (tile!=null){
-				int tileX = tile.getX() + x;
-				int tileY = tile.getY() + y;
-				if (visibleRect.intersects(new Rectangle(tileX, tileY, tile.getImage().getWidth(null), tile.getImage().getHeight(null)))){
-					g.drawImage(tile.getImage(), tileX, tileY, null);
+		try {
+			for (int i=0; i<objects.size(); i++){
+				GObject obj = objects.get(i);
+				if (obj!=null && obj.isAlive()){
+					int obj_x = Math.round(obj.getX()) + x;
+					int obj_y = Math.round(obj.getY()) + y;
+					g.drawImage(obj.getImage(), obj_x, obj_y, null);
 				}
 			}
-		}
+			for (int i=0; i<tiles.size(); i++){
+				Tile tile = tiles.get(i);
+				if (tile!=null){
+					int tileX = tile.getX() + x;
+					int tileY = tile.getY() + y;
+					if (visibleRect.intersects(new Rectangle(tileX, tileY, tile.getImage().getWidth(null), tile.getImage().getHeight(null)))){
+						g.drawImage(tile.getImage(), tileX, tileY, null);
+					}
+				}
+			}
+		} catch (Exception e){e.printStackTrace();}
 	}
 	
 	/**
@@ -351,8 +353,8 @@ public class Map {
 	 */
 	public static void updateObjects(long elapsedTime){
 		for (int i=0; i<objects.size(); i++){
+			GObject obj = objects.get(i);
 			try {
-				GObject obj = objects.get(i);
 				if (obj.isAlive()){
 					obj.superUpdate(elapsedTime);
 					obj.moveHorizontally(elapsedTime);
@@ -364,7 +366,9 @@ public class Map {
 					// Remove the dead object
 					objects.remove(i);
 				}
-			} catch (Exception e){}
+			} catch (NullPointerException e){
+				objects.remove(obj);
+			}
 		}
 	}
 	
