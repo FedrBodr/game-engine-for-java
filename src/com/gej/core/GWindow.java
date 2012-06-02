@@ -181,20 +181,10 @@ public class GWindow extends JFrame implements ActionListener {
 	/**
 	 * Creates a new GWindow instance and packs a game into it.
 	 * @param game The game to be packed.
-	 * @param title The title of the quit confirmation box.
-	 * @return The GWindow instance.
-	 */
-	public static final GWindow setup(Game game, String title){
-		return new GWindow(game, title, Global.WIDTH, Global.HEIGHT);
-	}
-	
-	/**
-	 * Creates a new GWindow instance and packs a game into it.
-	 * @param game The game to be packed.
 	 * @return The GWindow instance.
 	 */
 	public static final GWindow setup(Game game){
-		return setup(game, Global.TITLE);
+		return new GWindow(game, Global.TITLE, Global.WIDTH, Global.HEIGHT);
 	}
 
 }

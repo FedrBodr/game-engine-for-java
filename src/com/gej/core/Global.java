@@ -18,6 +18,9 @@ public class Global {
 	public static int     HEIGHT                     = 480;
 	/** The switch for pixel perfect collision detection */
 	public static boolean USE_PIXELPERFECT_COLLISION = false;
+	/** If disabled, collision detection is only done for objects which are visible in the view.
+	 *  This is disabled by default. You may want to enable this feature for some games. */
+	public static boolean ENABLE_COLLISION_DETECTION_FOR_ALL_OBJECTS = false;
 	/** The property to show or hide cursor */
 	public static boolean HIDE_CURSOR                = false;
 	/** The switch for full screen mode */
@@ -27,6 +30,6 @@ public class Global {
 	/** A map containing various properties */
 	public static HashMap<String, Object> PROPERTIES = new HashMap<String, Object>();
 	/** Variable containing the current GEJ version */
-	public static String GEJ_VERSION                 = "GEJ V0.5 R2";
+	public static String GEJ_VERSION                 = "GEJ V0.5 R3";
 	
 }

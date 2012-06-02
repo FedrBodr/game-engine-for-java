@@ -4,19 +4,14 @@ import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Point;
 import java.awt.RenderingHints;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import com.gej.input.GInput;
-import com.gej.input.GMouse;
 import com.gej.map.Map;
+import com.gej.util.GUtil;
 import com.gej.util.ImageTool;
 
 /**
@@ -58,8 +53,8 @@ public abstract class Game extends JPanel implements Runnable {
     private Image backImage    = null;
     private Graphics2D    backGraphics = null;
 	private static HashMap<String, Image> cache = null;
-	private LinkedList<JComponent> components = null;
-	private LinkedList<Point> comp_points = null;
+	
+	public static long elapsedTime = 0;
 	
 	protected GInput input = null;
 	
@@ -81,8 +76,6 @@ public abstract class Game extends JPanel implements Runnable {
 	public final void init(){
 		running = true;
 		cache = new HashMap<String, Image>();
-		components = new LinkedList<JComponent>();
-		comp_points = new LinkedList<Point>();
 		setFocusTraversalKeysEnabled(false);
 		setDoubleBuffered(true);
 		setFocusable(true);
@@ -106,10 +99,27 @@ public abstract class Game extends JPanel implements Runnable {
         // Variables used in counting the frame rate
     	int frames = 0;
     	int frame_time = 0;
+    	// Use separate thread to update map objects
+    	GUtil.runInSeperateThread(new Runnable(){
+    		public void run(){
+    			while (running){
+    	        	// Show or hide the cursor
+    		        if (Global.HIDE_CURSOR){
+    		        	setCursor(GInput.INVISIBLE_CURSOR);
+    		        } else {
+    		        	setCursor(Cursor.getDefaultCursor());
+    		        }
+    				try {
+    					Thread.sleep(Math.min(1000/Global.FRAMES_PER_SECOND, 10));
+    				} catch (Exception e){}
+    	        	repaint();
+    			}
+    		}
+    	});
     	// The actual game loop
 		while (running){
 			// Calculate the time
-			long elapsedTime = (System.nanoTime()/1000000) - currTime;
+			elapsedTime = (System.nanoTime()/1000000) - currTime;
 	        currTime += elapsedTime;
 	        frame_time += elapsedTime;
 	        frames++;
@@ -125,26 +135,8 @@ public abstract class Game extends JPanel implements Runnable {
 	        	Global.FRAMES_PER_SECOND = 150;
 	        }
 	        // Update and render the game
-	        update(elapsedTime);	        	
-        	repaint();
-        	// Show or hide the cursor
-	        if (Global.HIDE_CURSOR){
-	        	setCursor(GInput.INVISIBLE_CURSOR);
-	        } else {
-	        	setCursor(Cursor.getDefaultCursor());
-	        }
-	        // If a map is loaded, update all the objects in the map
-	        try {
-	        	Map.updateObjects(elapsedTime);
-	        	// Update any components if added.
-	        	Iterator<JComponent> i2 = components.iterator();
-	        	while (i2.hasNext()){
-	        		JComponent comp = i2.next();
-	        		if (comp.getBounds().contains(input.getMouseX(), input.getMouseY()) && GMouse.isMouseClicked(GInput.MOUSE_BUTTON_1)){
-	        			componentClicked(comp);
-	        		}
-	        	}
-	        } catch (Exception e) {}
+	        update(elapsedTime);
+			Map.updateObjects(elapsedTime);
 	        try {
 	        	// Sleep for a maximum of 10 milliseconds, so that
 	        	// we won't waste any cpu cycles
@@ -173,8 +165,6 @@ public abstract class Game extends JPanel implements Runnable {
 			backGraphics.setColor(getForeground());
 			// Render the game on to the back buffer
 			render(backGraphics);
-			// Render any of the components
-			renderComponents(backGraphics);
 			// Dispose the graphics and flip the display
 			backGraphics.dispose();
 			if (Global.FULLSCREEN){
@@ -184,61 +174,6 @@ public abstract class Game extends JPanel implements Runnable {
 			}
 			g2D.dispose();
 		} catch(NullPointerException e){}
-	}
-	
-	/**
-	 * Render's the components on this component
-	 * @param g The Graphics context on which we have to draw
-	 */
-	public final void renderComponents(Graphics2D g){
-		Iterator<JComponent> i = components.iterator();
-		// Iterate through and draw all the components
-		while (i.hasNext()){
-			JComponent comp = i.next();
-			Point p = comp_points.get(components.indexOf(comp));
-			g.translate(p.x, p.y);
-			comp.paint(g);
-		}
-	}
-	
-	/**
-	 * Called when a component is added to this game. If a
-	 * visible component is clicked, the component is sent
-	 * as a parameter to this method.
-	 * @param comp The component which is clicked
-	 */
-	public void componentClicked(JComponent comp){};
-	
-	/**
-	 * Adds a component to the game. The component is already visible.
-	 * @param comp The component to be added.
-	 * @param x The x-coordinate of the component
-	 * @param y The y-coordinate of the component
-	 */
-	public final void addComponent(JComponent comp, int x, int y){
-		comp.setBounds(x, y, comp.getPreferredSize().width, comp.getPreferredSize().height);
-		comp.setLocation(x, y);
-		components.add(comp);
-		comp_points.add(new Point(x, y));
-	}
-	
-	/**
-	 * Clears all the components from this game.
-	 */
-	public final void clearComponents(){
-		components.clear();
-		comp_points.clear();
-	}
-	
-	/**
-	 * Removes the specified component from the components list
-	 * The component is made inaccessible from now.
-	 * @param comp The component to be removed.
-	 */
-	public final void removeComponent(JComponent comp){
-		int index = components.indexOf(comp);
-		components.remove(index);
-		comp_points.remove(index);
 	}
 	
 	/**

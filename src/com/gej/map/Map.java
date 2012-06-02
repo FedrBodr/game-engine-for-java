@@ -352,42 +352,33 @@ public class Map {
 	 * @param elapsedTime The time elapsed in the current frame.
 	 */
 	public static void updateObjects(long elapsedTime){
-		for (int i=0; i<objects.size(); i++){
-			GObject obj = objects.get(i);
-			try {
-				if (obj!=null && obj.isAlive()){
-					obj.superUpdate(elapsedTime);
-					float oldX = obj.getX();
-					float oldY = obj.getY();
-					obj.moveHorizontally(elapsedTime);
-					checkCollisions(obj, oldX, oldY, true, false);
-					oldX = obj.getX();
-					obj.moveVertically(elapsedTime);
-					checkCollisions(obj, oldX, oldY, false, true);
-					oldY = obj.getY();
-					checkCollisions(obj, oldX, oldY, false, false);
-				} else {
-					// Remove the dead object
-					objects.remove(i);
-				}
-			} catch (NullPointerException e){}
-		}
+		try {
+			for (int i=0; i<objects.size(); i++){
+				GObject obj = objects.get(i);
+					if (obj!=null && obj.isAlive()){
+						obj.superUpdate(elapsedTime);
+						obj.moveHorizontally(elapsedTime);
+						checkCollisions(obj, true, false);
+						obj.moveVertically(elapsedTime);
+						checkCollisions(obj, false, true);
+						checkCollisions(obj, false, false);
+					} else {
+						// Remove the dead object
+						objects.remove(i);
+					}
+			}
+		} catch (NullPointerException e){}
 	}
 	
 	/*
 	 * Checks for collisions for an object. Helper method.
 	 */
-	private static final void checkCollisions(GObject obj, float oldx, float oldy, boolean horizontal, boolean vertical){
-		if (MapView.isVisible(obj)){
+	private static final void checkCollisions(GObject obj, boolean horizontal, boolean vertical){
+		if (MapView.isVisible(obj) || Global.ENABLE_COLLISION_DETECTION_FOR_ALL_OBJECTS){
 			for (int i=0; i<objects.size(); i++){
 				try {
 					GObject other = objects.get(i);
 					if (other.isCollidingWith(obj) && other!=obj && other.isAlive()){
-						if (other.isSolid()){
-							// Don't move into solid objects
-							obj.setX(oldx);
-							obj.setY(oldy);
-						}
 						if (horizontal){
 							obj.HorizontalCollision(objects.get(i));
 						}
