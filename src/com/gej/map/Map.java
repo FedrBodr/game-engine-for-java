@@ -252,27 +252,7 @@ public class Map {
 	 * @return True if no-collision and false if it collides.
 	 */
 	public static boolean isObjectCollisionFree(float x, float y, GObject object){
-		boolean bool = true;
-		Rectangle bounds = new Rectangle(Math.round(x), Math.round(y), object.getWidth(), object.getHeight());
-		for (int i=0; i<objects.size(); i++){
-			GObject obj = objects.get(i);
-			if (object!=obj){
-				try {
-					if (bounds.intersects(obj.getBounds())){
-						if (obj.isAlive()){
-							bool = false;
-						}
-						if (bool && Global.USE_PIXELPERFECT_COLLISION){
-							bool = GUtil.isPixelPerfectCollision(x, y, object.getAnimation().getBufferedImage(), obj.getX(), obj.getY(), obj.getAnimation().getBufferedImage());
-							if (bool){
-								bool = false;
-							}
-						}
-					}
-				} catch (NullPointerException e){}
-			}
-		}
-		return bool;
+		return (isObjectCollisionFree(x, y, true, object) || isObjectCollisionFree(x, y, false, object));
 	}
 	
 	/**
@@ -309,12 +289,23 @@ public class Map {
 	 * while loading maps
 	 */
 	public static void printMap(){
+		System.out.println(asString());
+	}
+	
+	/**
+	 * Returns the current map as a string. Used
+	 * to debug while loading maps
+	 * @return The string representation of this map
+	 */
+	public static String asString(){
+		String mp = "";
 		for (int y=0; y<MAP_HEIGHT; y++){
 			for (int x=0; x<MAP_WIDTH; x++){
-				System.out.print(mapdata[x][y]+" ");
+				mp += mapdata[x][y] + " ";
 			}
-			System.out.print("\n");
+			mp += "\n";
 		}
+		return mp;
 	}
 	
 	/**
@@ -340,8 +331,6 @@ public class Map {
 				int obj_x = Math.round(obj.getX()) + x;
 				int obj_y = Math.round(obj.getY()) + y;
 				g.drawImage(obj.getImage(), obj_x, obj_y, null);
-			} else {
-				removeObject(obj);
 			}
 		}
 		for (int i=0; i<tiles.size(); i++){
@@ -372,11 +361,10 @@ public class Map {
 					checkCollisions(obj, false, true);
 					checkCollisions(obj, false, false);
 				} else {
+					// Remove the dead object
 					objects.remove(i);
 				}
-			} catch (Exception e){
-				objects.remove(i);
-			}
+			} catch (Exception e){}
 		}
 	}
 	
@@ -430,6 +418,26 @@ public class Map {
 	 */
 	public static void addObject(GObject obj){
 		objects.add(obj);
+	}
+	
+	/**
+	 * Checks if an object is aligned to the grid
+	 * @param obj The object to be checked
+	 * @return True if the object is positioned exactly at the
+	 * left corner of the grid
+	 */
+	public static boolean isAlignedToGrid(GObject obj){
+		return isAlignedToGrid(obj.getX(), obj.getY());
+	}
+	
+	/**
+	 * Checks if a position is aligned to the grid
+	 * @param x The x-position
+	 * @param y The y-position
+	 * @return True if the point is left corner of any cell in the grid.
+	 */
+	public static boolean isAlignedToGrid(float x, float y){
+		return (x%TILE_SIZE==0) && (y%TILE_SIZE==0);
 	}
 	
 }
