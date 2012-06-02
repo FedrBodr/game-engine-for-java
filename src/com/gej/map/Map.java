@@ -344,7 +344,7 @@ public class Map {
 					}
 				}
 			}
-		} catch (Exception e){e.printStackTrace();}
+		} catch (Exception e){}
 	}
 	
 	/**
@@ -355,7 +355,7 @@ public class Map {
 		for (int i=0; i<objects.size(); i++){
 			GObject obj = objects.get(i);
 			try {
-				if (obj.isAlive()){
+				if (obj!=null && obj.isAlive()){
 					obj.superUpdate(elapsedTime);
 					obj.moveHorizontally(elapsedTime);
 					checkCollisions(obj, true, false);
@@ -367,7 +367,7 @@ public class Map {
 					objects.remove(i);
 				}
 			} catch (NullPointerException e){
-				objects.remove(obj);
+				//objects.remove(obj);
 			}
 		}
 	}
