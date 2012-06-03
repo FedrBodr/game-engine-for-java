@@ -15,6 +15,8 @@ import java.util.ArrayList;
  */
 public abstract class GUtil {
 	
+	private GUtil(){}
+	
 	/**
 	 * Check's for pixel-perfect collision between two buffered images.
 	 * @param x1 The x-position of the first object

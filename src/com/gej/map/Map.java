@@ -19,7 +19,7 @@ import com.gej.util.GUtil;
  * 
  * @author Sri Harsha Chilakapati
  */
-public class Map {
+public abstract class Map {
 
 	// The map data (used for debugging)
 	private static char[][] mapdata = null;
@@ -33,6 +33,17 @@ public class Map {
 	// Collection of all the game objects and tiles
 	private static ArrayList<GObject> objects = null;
 	private static ArrayList<Tile>    tiles   = null;
+	
+	// prevent instantiation
+	private Map(){}
+	
+	/**
+	 * Initializes the map. Called by the game class.
+	 */
+	public static void initMap(){
+		objects = new ArrayList<GObject>();
+		tiles = new ArrayList<Tile>();
+	}
 	
 	/** 
 	 * Returns a tile number containing the following pixel
@@ -90,17 +101,8 @@ public class Map {
 	 * @param loader The MapLoader to be used
 	 */
 	public static void loadMap(String[] lines, MapLoader loader){
-		// Clear all the objects used before
-		if (objects!=null){
-			objects.clear();
-		} else {
-			objects = new ArrayList<GObject>();
-		}
-		if (tiles!=null){
-			tiles.clear();
-		} else {
-			tiles = new ArrayList<Tile>();
-		}
+		// clear objects
+		clearObjects();
 		// Reset the map view
 		MapView.OffSetX = 0;
 		MapView.OffSetY = 0;
@@ -352,10 +354,11 @@ public class Map {
 	 * @param elapsedTime The time elapsed in the current frame.
 	 */
 	public static void updateObjects(long elapsedTime){
-		try {
-			for (int i=0; i<objects.size(); i++){
+		for (int i=0; i<objects.size(); i++){
+			try {
 				GObject obj = objects.get(i);
-					if (obj!=null && obj.isAlive()){
+				if (obj!=null){
+					if (obj.isAlive()){
 						obj.superUpdate(elapsedTime);
 						obj.moveHorizontally(elapsedTime);
 						checkCollisions(obj, true, false);
@@ -366,8 +369,11 @@ public class Map {
 						// Remove the dead object
 						objects.remove(i);
 					}
-			}
-		} catch (NullPointerException e){}
+				} else {
+					objects.remove(i);
+				}
+			} catch (NullPointerException e){}
+		}
 	}
 	
 	/*
@@ -378,16 +384,24 @@ public class Map {
 			for (int i=0; i<objects.size(); i++){
 				try {
 					GObject other = objects.get(i);
-					if (other.isCollidingWith(obj) && other!=obj && other.isAlive()){
-						if (horizontal){
-							obj.HorizontalCollision(objects.get(i));
+					if (other.isAlive()){
+						if (other.isCollidingWith(obj) && other!=obj){
+							if (horizontal){
+								obj.HorizontalCollision(other);
+								return;
+							}
+							if (vertical){
+								obj.VerticalCollision(other);
+								return;
+							}
+							if (!horizontal && !vertical){
+								obj.collision(other);
+								return;
+							}
 						}
-						if (vertical){
-							obj.VerticalCollision(objects.get(i));
-						}
-						if (!horizontal && !vertical){
-							obj.collision(objects.get(i));
-						}
+					} else {
+						// Remove other
+						objects.remove(i);
 					}
 				} catch (Exception e){}
 			}
@@ -408,6 +422,24 @@ public class Map {
 	 */
 	public static int getHeight(){
 		return MAP_HEIGHT * TILE_SIZE;
+	}
+	
+	/**
+	 * Removes all objects of a class from this map.
+	 * Useful to destroy all bombs etc.,
+	 * Example:
+	 * <pre>
+	 * Map.removeObjectsOfType(Bomb.class);
+	 * </pre>
+	 * @param c The class of the object
+	 */
+	public static void removeObjectsOfType(Class<GObject> c){
+		for (int i=0; i<objects.size(); i++){
+			GObject obj = objects.get(i);
+			if (c.isInstance(obj)){
+				objects.remove(i);
+			}
+		}
 	}
 	
 	/**

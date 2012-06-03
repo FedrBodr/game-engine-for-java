@@ -8,7 +8,9 @@ import com.gej.core.Updateable;
 import com.gej.graphics.Animation;
 import com.gej.input.GInput;
 import com.gej.input.GMouse;
+import com.gej.map.Map;
 import com.gej.util.GUtil;
+import com.gej.util.ImageTool;
 
 /**
  * This class represents objects in a game. Any object must extend
@@ -56,6 +58,48 @@ public class GObject implements Updateable {
     // If this object is solid and alive
     private boolean solid = false;
     private boolean alive = true;
+    
+    /**
+     * Constructs an object which is invisible
+     */
+    public GObject(){
+    	this(ImageTool.getEmptyImage(1, 1));
+    }
+    
+    /**
+     * Constructs an invisible object at a position x,y
+     * @param x The x-coordinate
+     * @param y The y-coordinate
+     */
+    public GObject(float x, float y){
+    	this();
+    	setX(x);
+    	setY(y);
+    }
+    
+    /**
+     * Constructs an object with an image at a position x,y
+     * @param img The image of the object
+     * @param x The x-coordinate
+     * @param y The y-coordinate
+     */
+    public GObject(Image img, float x, float y){
+    	this(img);
+    	setX(x);
+    	setY(y);
+    }
+    
+    /**
+     * Constructs an object with an animation at a position x,y
+     * @param anim The animation object
+     * @param x The x-coordinate
+     * @param y The y-coordinate
+     */
+    public GObject (Animation anim, float x, float y){
+    	this(anim);
+    	setX(x);
+    	setY(y);
+    }
 
     /**
      * Constructs an object with an animation object.
@@ -83,9 +127,14 @@ public class GObject implements Updateable {
      * @param elapsedTime
      */
     public final void superUpdate(long elapsedTime){
-    	update(elapsedTime);
-    	anim.update(elapsedTime);
-    	direction = (int)Math.atan2(dy, dx);
+    	if (isAlive()){
+    		update(elapsedTime);
+    		anim.update(elapsedTime);
+    		direction = (int) (Math.toDegrees(Math.PI + Math.atan2(getNextY(elapsedTime)-y, getNextX(elapsedTime)-x)));
+    	} else {
+    		// Try to remove from the map
+    		Map.removeObject(this);
+    	}
     }
     
     /**
@@ -185,6 +234,8 @@ public class GObject implements Updateable {
      */
     public void destroy(){
     	alive = false;
+    	// Try to remove from map
+    	Map.removeObject(this);
     }
     
     /**
@@ -546,6 +597,15 @@ public class GObject implements Updateable {
      */
     public float getVelocityY() {
         return dy;
+    }
+    
+    /**
+     * Returns the direction of this object in degrees
+     * with the horizontal. (clockwise)
+     * @return The direction of this object
+     */
+    public int getDirection(){
+    	return direction;
     }
 
     /**

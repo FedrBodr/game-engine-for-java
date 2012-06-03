@@ -41,8 +41,8 @@ public class GObjectTest extends Game {
 	    } else if (box.getY() + box.getHeight() >= getHeight()){
 	        box.setVelocityY(-Math.abs(box.getVelocityY()));
 	    }
+	    box.superUpdate(elapsedTime);
 	    box.move(elapsedTime);
-	    box.update(elapsedTime);
 	}
 	
 	@Override
@@ -54,6 +54,7 @@ public class GObjectTest extends Game {
 		if (box.isClicked()){
 			g.drawString("on object", 100, 15);
 		}
+		g.drawString(box.getDirection() + "", 15, 30);
 	}
 	
 	public static void main(String[] args){

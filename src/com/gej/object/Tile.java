@@ -33,8 +33,8 @@ public class Tile {
 	public Tile(Image img, int x, int y){
 		this.img = img;
 		bimg = ImageTool.toBufferedImage(img);
-		this.x   = x;
-		this.y   = y;
+		this.x = x;
+		this.y = y;
 	}
 	
 	/**

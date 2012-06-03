@@ -12,7 +12,9 @@ import java.awt.image.BufferedImage;
  * 
  * @author Sri Harsha Chilakapati
  */
-public class ImageTool {
+public abstract class ImageTool {
+	
+	private ImageTool(){}
 
 	/**
 	 * Converts a given Image into a BufferedImage

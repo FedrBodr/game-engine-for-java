@@ -41,7 +41,7 @@ import com.gej.util.ImageTool;
  * 
  * @author Sri Harsha Chilakapati
  */
-public abstract class Game extends JPanel implements Runnable {
+public abstract class Game extends JPanel implements Runnable, Updateable {
 
 	/**
 	 * 
@@ -54,8 +54,10 @@ public abstract class Game extends JPanel implements Runnable {
     private Graphics2D    backGraphics = null;
 	private static HashMap<String, Image> cache = null;
 	
+	/** The time elapsed in the current frame */
 	public static long elapsedTime = 0;
 	
+	// Input manager
 	protected GInput input = null;
 	
 	/**
@@ -80,26 +82,7 @@ public abstract class Game extends JPanel implements Runnable {
 		setDoubleBuffered(true);
 		setFocusable(true);
 		input = new GInput(this);
-		Thread th = new Thread(this);
-		th.start();
-	}
-		
-	/**
-	 * Starts the game and acts as a game loop.
-	 * The FPS value is calculated automatically
-	 * every second and can be known by using
-	 * Global.FRAMES_PER_SECOND variable.
-	 */
-	public final void run(){
-		// Initialize the resources
-		initResources();
-		// Note the current time
-		long startTime = System.nanoTime() / 1000000;
-        long currTime = startTime;
-        // Variables used in counting the frame rate
-    	int frames = 0;
-    	int frame_time = 0;
-    	// Use separate thread to update map objects
+    	// Use separate thread to render the game
     	GUtil.runInSeperateThread(new Runnable(){
     		public void run(){
     			while (running){
@@ -116,6 +99,28 @@ public abstract class Game extends JPanel implements Runnable {
     			}
     		}
     	});
+    	// Start the game thread to process game updates.
+		Thread th = new Thread(this);
+		th.setPriority(Thread.MAX_PRIORITY);
+		th.start();
+	}
+		
+	/**
+	 * Starts the game and acts as a game loop.
+	 * The FPS value is calculated automatically
+	 * every second and can be known by using
+	 * Global.FRAMES_PER_SECOND variable.
+	 */
+	public final void run(){
+		// Initialize the resources
+		Map.initMap();
+		initResources();
+		// Note the current time
+		long startTime = System.nanoTime() / 1000000;
+        long currTime = startTime;
+        // Variables used in counting the frame rate
+    	int frames = 0;
+    	int frame_time = 0;
     	// The actual game loop
 		while (running){
 			// Calculate the time

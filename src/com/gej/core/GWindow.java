@@ -1,6 +1,5 @@
 package com.gej.core;
 
-import java.awt.AWTException;
 import java.awt.Dimension;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
@@ -65,7 +64,7 @@ public class GWindow extends JFrame implements ActionListener {
 	GraphicsDevice device = null;
 	
 	boolean fullscreen = false;
-
+	
 	/** This method fixes the repaint issue (flickering) on old machines with
 	 *  latest JRE. It is called automatically by the timer */
 	public final void repaintFix(){
@@ -73,7 +72,7 @@ public class GWindow extends JFrame implements ActionListener {
 	}
 	
 	/**
-	 * This is our default constructor. It can be used to create a GWindow instance.
+	 * This is our default constructor. Create instances by using the setup() method.
 	 * The arguments to be passed except the Game are just the default one's. They can be
 	 * changed during the game play. (use global.HEIGHT = 240;)
 	 * 
@@ -82,7 +81,7 @@ public class GWindow extends JFrame implements ActionListener {
 	 * @param width    The default window width
 	 * @param height   The default window height
 	 */
-	public GWindow(Game game, String title, int width, int height){
+	private GWindow(Game game, String title, int width, int height){
 		// Configure and create the title bar
 		super(title);
 		setUndecorated(true);
@@ -167,9 +166,7 @@ public class GWindow extends JFrame implements ActionListener {
 				Robot robot = new Robot();
 				robot.mouseMove(dim.width/4, dim.height/4);
 				fullscreen = true;
-			} catch (AWTException e) {
-				e.printStackTrace();
-			}
+			} catch (Exception e) {}
 		} else if (bool==false&&fullscreen==true){
 			// else change to windowed mode
 			getRootPane().setWindowDecorationStyle(JRootPane.PLAIN_DIALOG);

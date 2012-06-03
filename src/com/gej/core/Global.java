@@ -8,7 +8,7 @@ import java.util.HashMap;
  * 
  * @author Sri Harsha Chilakapati
  */
-public class Global {
+public abstract class Global {
 	
 	/** The window title */
 	public static String  TITLE                      = "GEJ - The simplest GameEngine for Java";
@@ -30,6 +30,6 @@ public class Global {
 	/** A map containing various properties */
 	public static HashMap<String, Object> PROPERTIES = new HashMap<String, Object>();
 	/** Variable containing the current GEJ version */
-	public static String GEJ_VERSION                 = "GEJ V0.5 R3";
+	public static String GEJ_VERSION                 = "GEJ V0.6";
 	
 }
