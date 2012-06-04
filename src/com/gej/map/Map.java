@@ -393,7 +393,7 @@ public abstract class Map {
 			for (int i=0; i<objects.size(); i++){
 				try {
 					GObject other = objects.get(i);
-					if (other.isAlive()){
+					if (other.isAlive() && other!=null){
 						if (other.isCollidingWith(obj) && other!=obj){
 							if (horizontal){
 								obj.HorizontalCollision(other);
@@ -407,9 +407,17 @@ public abstract class Map {
 								obj.collision(other);
 								return;
 							}
+						} else {
+							objects.remove(i);
 						}
 					}
-				} catch (Exception e){}
+				} catch (Exception e){
+					if (e instanceof NullPointerException){
+						objects.remove(i);
+					} else {
+						e.printStackTrace();
+					}
+				}
 			}
 		}
 	}
