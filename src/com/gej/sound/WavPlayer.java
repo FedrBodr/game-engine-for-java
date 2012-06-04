@@ -54,7 +54,6 @@ public class WavPlayer extends Thread {
 		    return sound;
 		} catch (Exception e){
 			// An error. Mustn't happen
-			e.printStackTrace();
 		}
 		return null;
 	}

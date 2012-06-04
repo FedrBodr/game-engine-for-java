@@ -33,6 +33,8 @@ public abstract class Map {
 	// Collection of all the game objects and tiles
 	private static ArrayList<GObject> objects = null;
 	private static ArrayList<Tile>    tiles   = null;
+
+	private static ArrayList<Integer> removeIndexes = null;
 	
 	// prevent instantiation
 	private Map(){}
@@ -43,6 +45,7 @@ public abstract class Map {
 	public static void initMap(){
 		objects = new ArrayList<GObject>();
 		tiles = new ArrayList<Tile>();
+		removeIndexes = new ArrayList<Integer>();
 	}
 	
 	/** 
@@ -145,6 +148,7 @@ public abstract class Map {
 	public static void clearObjects(){
 		objects.clear();
 		tiles.clear();
+		removeIndexes.clear();
 	}
 
 	/**
@@ -334,6 +338,8 @@ public abstract class Map {
 					int obj_x = Math.round(obj.getX()) + x;
 					int obj_y = Math.round(obj.getY()) + y;
 					g.drawImage(obj.getImage(), obj_x, obj_y, null);
+				} else {
+					objects.remove(i);
 				}
 			}
 			for (int i=0; i<tiles.size(); i++){
@@ -366,14 +372,17 @@ public abstract class Map {
 						checkCollisions(obj, false, true);
 						checkCollisions(obj, false, false);
 					} else {
-						// Remove the dead object
-						objects.remove(i);
+						removeIndexes.add(i);
 					}
 				} else {
-					objects.remove(i);
+					removeIndexes.add(i);
 				}
 			} catch (NullPointerException e){}
 		}
+		for (int i=0; i<removeIndexes.size(); i++){
+			objects.remove(removeIndexes.get(i));
+		}
+		removeIndexes.clear();
 	}
 	
 	/*
@@ -399,9 +408,6 @@ public abstract class Map {
 								return;
 							}
 						}
-					} else {
-						// Remove other
-						objects.remove(i);
 					}
 				} catch (Exception e){}
 			}
@@ -437,7 +443,7 @@ public abstract class Map {
 		for (int i=0; i<objects.size(); i++){
 			GObject obj = objects.get(i);
 			if (c.isInstance(obj)){
-				objects.remove(i);
+				removeIndexes.add(i);
 			}
 		}
 	}
