@@ -33,8 +33,6 @@ public abstract class Map {
 	// Collection of all the game objects and tiles
 	private static ArrayList<GObject> objects = null;
 	private static ArrayList<Tile>    tiles   = null;
-
-	private static ArrayList<Integer> removeIndexes = null;
 	
 	// prevent instantiation
 	private Map(){}
@@ -45,7 +43,6 @@ public abstract class Map {
 	public static void initMap(){
 		objects = new ArrayList<GObject>();
 		tiles = new ArrayList<Tile>();
-		removeIndexes = new ArrayList<Integer>();
 	}
 	
 	/** 
@@ -148,7 +145,6 @@ public abstract class Map {
 	public static void clearObjects(){
 		objects.clear();
 		tiles.clear();
-		removeIndexes.clear();
 	}
 
 	/**
@@ -372,17 +368,13 @@ public abstract class Map {
 						checkCollisions(obj, false, true);
 						checkCollisions(obj, false, false);
 					} else {
-						removeIndexes.add(i);
+						objects.remove(i);
 					}
 				} else {
-					removeIndexes.add(i);
+					objects.remove(i);
 				}
 			} catch (NullPointerException e){}
 		}
-		for (int i=0; i<removeIndexes.size(); i++){
-			objects.remove(removeIndexes.get(i));
-		}
-		removeIndexes.clear();
 	}
 	
 	/*
@@ -393,7 +385,7 @@ public abstract class Map {
 			for (int i=0; i<objects.size(); i++){
 				try {
 					GObject other = objects.get(i);
-					if (other.isAlive() && other!=null){
+					if (other.isAlive()){
 						if (other.isCollidingWith(obj) && other!=obj){
 							if (horizontal){
 								obj.HorizontalCollision(other);
@@ -407,13 +399,14 @@ public abstract class Map {
 								obj.collision(other);
 								return;
 							}
-						} else {
-							objects.remove(i);
 						}
+					} else {
+						objects.remove(i);
 					}
 				} catch (Exception e){
 					if (e instanceof NullPointerException){
-						objects.remove(i);
+						//objects.remove(i);
+						//e.printStackTrace();
 					} else {
 						e.printStackTrace();
 					}
@@ -451,7 +444,7 @@ public abstract class Map {
 		for (int i=0; i<objects.size(); i++){
 			GObject obj = objects.get(i);
 			if (c.isInstance(obj)){
-				removeIndexes.add(i);
+				objects.remove(i);
 			}
 		}
 	}
