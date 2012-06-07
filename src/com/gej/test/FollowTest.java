@@ -18,30 +18,31 @@ public class FollowTest extends Game {
 	 * 
 	 */
 	private static final long serialVersionUID = -3729401998330195025L;
-	
+
 	GObject obj1 = null;
-	
+
 	@Override
-	public void initResources(){
-		Background.setBackground(ImageTool.getColoredImage(Color.GRAY, Global.WIDTH, Global.HEIGHT));
+	public void initResources() {
+		Background.setBackground(ImageTool.getColoredImage(Color.GRAY,
+		        Global.WIDTH, Global.HEIGHT));
 		obj1 = new GObject(loadImage("resources/box.png"));
 	}
-	
+
 	@Override
-	public void update(long elapsedTime){
-		if (GKeyBoard.isPressed(KeyEvent.VK_ESCAPE)){
+	public void update(long elapsedTime) {
+		if (GKeyBoard.isPressed(KeyEvent.VK_ESCAPE)) {
 			System.exit(0);
 		}
 		obj1.moveTo(input.getMouseX(), input.getMouseY(), 0.15f, elapsedTime);
 	}
-	
+
 	@Override
-	public void render(Graphics2D g){
+	public void render(Graphics2D g) {
 		Background.render(g);
 		obj1.render(g);
 	}
-	
-	public static void main(String[] args){
+
+	public static void main(String[] args) {
 		GWindow.setup(new FollowTest());
 	}
 

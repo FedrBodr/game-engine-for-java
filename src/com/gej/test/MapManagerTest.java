@@ -20,46 +20,48 @@ public class MapManagerTest extends Game implements MapLoader {
 	 * 
 	 */
 	private static final long serialVersionUID = -925136059688114213L;
-	
+
 	Image box_img = null;
-	
-	public void initResources(){
+
+	public void initResources() {
 		box_img = loadImage("resources/box.png");
-		MapManager.addMap(MapInfo.LoadFromFile("resources/MazerBox.txt", this, 64));
-		MapManager.addMap(MapInfo.LoadFromFile("resources/PlatformTest.txt", this, 64));
+		MapManager.addMap(MapInfo.LoadFromFile("resources/MazerBox.txt", this,
+		        64));
+		MapManager.addMap(MapInfo.LoadFromFile("resources/PlatformTest.txt",
+		        this, 64));
 		MapManager.startFirstMap();
 	}
-	
-	public void update(long elapsedTime){
-		if (GKeyBoard.isPressed(KeyEvent.VK_ESCAPE)){
+
+	public void update(long elapsedTime) {
+		if (GKeyBoard.isPressed(KeyEvent.VK_ESCAPE)) {
 			System.exit(0);
 		}
-		if (GKeyBoard.isPressed(KeyEvent.VK_RIGHT)){
+		if (GKeyBoard.isPressed(KeyEvent.VK_RIGHT)) {
 			loadNextMap();
 		}
-		if (GKeyBoard.isPressed(KeyEvent.VK_LEFT)){
+		if (GKeyBoard.isPressed(KeyEvent.VK_LEFT)) {
 			loadPrevMap();
 		}
 	}
-	
-	public void loadNextMap(){
-		if (MapManager.hasNextMap()){
+
+	public void loadNextMap() {
+		if (MapManager.hasNextMap()) {
 			MapManager.loadNextMap();
 		}
 	}
-	
-	public void loadPrevMap(){
-		if (MapManager.hasPreviousMap()){
+
+	public void loadPrevMap() {
+		if (MapManager.hasPreviousMap()) {
 			MapManager.loadPreviousMap();
 		}
 	}
-	
-	public void render(Graphics2D g){
+
+	public void render(Graphics2D g) {
 		Map.renderMap(g);
 	}
 
 	public GObject getObject(char c, int x, int y) {
-		if (c!=' '){
+		if (c != ' ') {
 			GObject obj = new GObject(box_img);
 			obj.setX(x);
 			obj.setY(y);
@@ -71,8 +73,8 @@ public class MapManagerTest extends Game implements MapLoader {
 	public Tile getTile(char c, int x, int y) {
 		return null;
 	}
-	
-	public static void main(String[] args){
+
+	public static void main(String[] args) {
 		GWindow.setup(new MapManagerTest());
 	}
 

@@ -6,24 +6,26 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 /**
- * This class can be used to convert images.
- * Note that all the methods of this class
- * are declared as static.
+ * This class can be used to convert images. Note that all the methods of this
+ * class are declared as static.
  * 
  * @author Sri Harsha Chilakapati
  */
 public abstract class ImageTool {
-	
-	private ImageTool(){}
+
+	private ImageTool() {
+	}
 
 	/**
 	 * Converts a given Image into a BufferedImage
+	 * 
 	 * @param img The Image to be converted
 	 * @return The converted BufferedImage
 	 */
-	public static BufferedImage toBufferedImage(Image img){
+	public static BufferedImage toBufferedImage(Image img) {
 		// Create a buffered image with transparency
-		BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bimage = new BufferedImage(img.getWidth(null),
+		        img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 		// Draw the image on to the buffered image
 		Graphics2D bGr = bimage.createGraphics();
 		bGr.drawImage(img, 0, 0, null);
@@ -31,65 +33,72 @@ public abstract class ImageTool {
 		// Return the buffered image
 		return bimage;
 	}
-		
+
 	/**
 	 * Splits an image into a number of rows and columns
+	 * 
 	 * @param img The image to be split
 	 * @param rows The number of rows
 	 * @param cols The number of columns
 	 * @return The array of split images in the vertical order
 	 */
-	public static BufferedImage[] splitImage(Image img, int rows, int cols){
+	public static BufferedImage[] splitImage(Image img, int rows, int cols) {
 		// Determine the width of each part
-		int w = img.getWidth(null)/cols;
+		int w = img.getWidth(null) / cols;
 		// Determine the height of each part
-		int h = img.getHeight(null)/rows;
+		int h = img.getHeight(null) / rows;
 		// Determine the number of BufferedImages to be created
-		int num = rows * cols;	    
+		int num = rows * cols;
 		// The count of images we'll use in looping
-		int count = 0;  
+		int count = 0;
 		// Create the BufferedImage array
 		BufferedImage[] imgs = new BufferedImage[num];
 		// Start looping and creating images [splitting]
-		for (int x = 0; x < rows; x++) {  
-		    for (int y = 0; y < cols; y++) {  
-		       	// The BITMASK type allows us to use bmp images with coloured text
-		      	// and any background
-		        imgs[count] = new BufferedImage(w, h, BufferedImage.BITMASK);
-		        // Get the Graphics2D object of the split part of the image
-		        Graphics2D g = imgs[count++].createGraphics();  
-		        // Draw only the required portion of the main image on to the split image
-		        g.drawImage(img, 0, 0, w, h, w * y, h * x, w * y + w, h * x + h, null);
-		        // Now Dispose the Graphics2D class
-		        g.dispose();  
-		    }  
+		for (int x = 0; x < rows; x++) {
+			for (int y = 0; y < cols; y++) {
+				// The BITMASK type allows us to use bmp images with coloured
+				// text
+				// and any background
+				imgs[count] = new BufferedImage(w, h, BufferedImage.BITMASK);
+				// Get the Graphics2D object of the split part of the image
+				Graphics2D g = imgs[count++].createGraphics();
+				// Draw only the required portion of the main image on to the
+				// split image
+				g.drawImage(img, 0, 0, w, h, w * y, h * x, w * y + w,
+				        h * x + h, null);
+				// Now Dispose the Graphics2D class
+				g.dispose();
+			}
 		}
 		return imgs;
 	}
-	
+
 	/**
 	 * Converts a given BufferedImage into an Image
+	 * 
 	 * @param bimage The BufferedImage to be converted
 	 * @return The converted Image
 	 */
-	public static Image toImage(BufferedImage bimage){
+	public static Image toImage(BufferedImage bimage) {
 		// Casting is enough to convert from BufferedImage to Image
 		Image img = (Image)bimage;
 		return img;
 	}
-	
+
 	/**
 	 * Resizes a given image to given width and height
+	 * 
 	 * @param img The image to be resized
 	 * @param width The new width
 	 * @param height The new height
 	 * @return The resized image
 	 */
-	public static Image resize(Image img, int width, int height){
+	public static Image resize(Image img, int width, int height) {
 		// Create a null image
 		Image image = null;
 		// Resize into a BufferedImage
-		BufferedImage bimg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bimg = new BufferedImage(width, height,
+		        BufferedImage.TYPE_INT_ARGB);
 		Graphics2D bGr = bimg.createGraphics();
 		bGr.drawImage(img, 0, 0, width, height, null);
 		bGr.dispose();
@@ -97,55 +106,60 @@ public abstract class ImageTool {
 		image = toImage(bimg);
 		return image;
 	}
-		
+
 	/**
-	 * Creates a tiled image with an image upto given width and height 
+	 * Creates a tiled image with an image upto given width and height
+	 * 
 	 * @param img The source image
 	 * @param width The width of image to be created
 	 * @param height The height of the image to be created
 	 * @return The created image
 	 */
-	public static Image createTiledImage(Image img, int width, int height){
+	public static Image createTiledImage(Image img, int width, int height) {
 		// Create a null image
 		Image image = null;
-		BufferedImage bimg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bimg = new BufferedImage(width, height,
+		        BufferedImage.TYPE_INT_ARGB);
 		// The width and height of the given image
 		int imageWidth = img.getWidth(null);
 		int imageHeight = img.getHeight(null);
 		// Start the counting
 		int numX = (width / imageWidth) + 2;
-		int numY = (height/ imageHeight) + 2;
+		int numY = (height / imageHeight) + 2;
 		// Create the graphics context
 		Graphics2D bGr = bimg.createGraphics();
-		for (int y=0; y<numY; y++){
-			for (int x=0; x<numX; x++){
-				bGr.drawImage(img, x*imageWidth, y*imageHeight, null);
+		for (int y = 0; y < numY; y++) {
+			for (int x = 0; x < numX; x++) {
+				bGr.drawImage(img, x * imageWidth, y * imageHeight, null);
 			}
 		}
 		// Convert and return the image
 		image = toImage(bimg);
 		return image;
 	}
-	
+
 	/**
 	 * Creates an empty image with transparency
+	 * 
 	 * @param width The width of required image
 	 * @param height The height of required image
 	 * @return The created image
 	 */
-	public static Image getEmptyImage(int width, int height){
-		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+	public static Image getEmptyImage(int width, int height) {
+		BufferedImage img = new BufferedImage(width, height,
+		        BufferedImage.TYPE_INT_ARGB);
 		return toImage(img);
 	}
-	
+
 	/**
 	 * Creates a colored image with a specified color
+	 * 
 	 * @param color The color to be filled with
 	 * @param width The width of the required image
 	 * @param height The height of the required image
 	 * @return The created image
 	 */
-	public static Image getColoredImage(Color color, int width, int height){
+	public static Image getColoredImage(Color color, int width, int height) {
 		BufferedImage img = toBufferedImage(getEmptyImage(width, height));
 		Graphics2D g = img.createGraphics();
 		g.setColor(color);
@@ -153,13 +167,14 @@ public abstract class ImageTool {
 		g.dispose();
 		return img;
 	}
-	
+
 	/**
 	 * Flips an image horizontally. (Mirrors it)
+	 * 
 	 * @param img The source image
 	 * @return The image after flip
 	 */
-	public static Image flipImageHorizontally(Image img){
+	public static Image flipImageHorizontally(Image img) {
 		int w = img.getWidth(null);
 		int h = img.getHeight(null);
 		BufferedImage bimg = toBufferedImage(getEmptyImage(w, h));
@@ -168,13 +183,14 @@ public abstract class ImageTool {
 		g.dispose();
 		return toImage(bimg);
 	}
-	
+
 	/**
 	 * Flips an image vertically. (Mirrors it)
+	 * 
 	 * @param img The source image
 	 * @return The image after flip
 	 */
-	public static Image flipImageVertically(Image img){
+	public static Image flipImageVertically(Image img) {
 		int w = img.getWidth(null);
 		int h = img.getHeight(null);
 		BufferedImage bimg = toBufferedImage(getEmptyImage(w, h));
@@ -183,5 +199,5 @@ public abstract class ImageTool {
 		g.dispose();
 		return toImage(bimg);
 	}
-		
+
 }

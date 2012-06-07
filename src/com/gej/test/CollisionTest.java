@@ -15,23 +15,23 @@ public class CollisionTest extends Game {
 	 * 
 	 */
 	private static final long serialVersionUID = -8609095432386666625L;
-	
+
 	ArrayList<GObject> objects = null;
-	
+
 	Image background = null;
-	
+
 	@Override
-	public void initResources(){
+	public void initResources() {
 		// Create the game resources
 		objects = new ArrayList<GObject>();
 		// Create the objects
 		GObject object = new GObject(loadImage("resources/box.png"));
-		GObject object2 =new GObject(loadImage("resources/box2.png"));
+		GObject object2 = new GObject(loadImage("resources/box2.png"));
 		// Set their positions
 		object.setX(0f);
 		object.setY(0f);
-		object2.setX(getWidth()-object2.getWidth());
-		object2.setY(getHeight()-object2.getHeight());
+		object2.setX(getWidth() - object2.getWidth());
+		object2.setY(getHeight() - object2.getHeight());
 		// Set their velocities
 		object.setVelocityX(0.25f);
 		object.setVelocityY(0.25f);
@@ -45,29 +45,30 @@ public class CollisionTest extends Game {
 		// Setting the frame rate
 		Global.FRAMES_PER_SECOND = 150;
 	}
-	
+
 	@Override
-	public void update(long elapsedTime){
-		for (GObject object : objects){
+	public void update(long elapsedTime) {
+		for (GObject object : objects) {
 			object.update(elapsedTime);
 			object.move(elapsedTime);
-			for (GObject object2 : objects){
-				if (object.isCollidingWith(object2) && object!=object2){
+			for (GObject object2 : objects) {
+				if (object.isCollidingWith(object2) && object != object2) {
 					object.bounce();
 				}
 			}
 		}
 	}
-	
+
 	@Override
-	public void render(Graphics2D g){
+	public void render(Graphics2D g) {
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
-		for (GObject object : objects){
-			g.drawImage(object.getImage(), Math.round(object.getX()), Math.round(object.getY()), null);
+		for (GObject object : objects) {
+			g.drawImage(object.getImage(), Math.round(object.getX()),
+			        Math.round(object.getY()), null);
 		}
 	}
-	
-	public static void main(String[] args){
+
+	public static void main(String[] args) {
 		GWindow.setup(new CollisionTest());
 	}
 

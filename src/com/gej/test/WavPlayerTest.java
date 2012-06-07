@@ -14,26 +14,26 @@ public class WavPlayerTest extends Game {
 	 * 
 	 */
 	private static final long serialVersionUID = -7593536027988708002L;
-	
+
 	WavSound mysound = null;
-	
-	public void initResources(){
+
+	public void initResources() {
 		mysound = WavPlayer.loadSound("resources/prize.wav");
 	}
-	
-	public void update(long elapsedTime){
-		if (GKeyBoard.isPressed(KeyEvent.VK_ESCAPE)){
+
+	public void update(long elapsedTime) {
+		if (GKeyBoard.isPressed(KeyEvent.VK_ESCAPE)) {
 			System.exit(0);
-		} else if (GKeyBoard.isPressed(KeyEvent.VK_P)){
+		} else if (GKeyBoard.isPressed(KeyEvent.VK_P)) {
 			mysound.play();
-		} else if (GKeyBoard.isPressed(KeyEvent.VK_SPACE)){
+		} else if (GKeyBoard.isPressed(KeyEvent.VK_SPACE)) {
 			mysound.setLooping(!mysound.isLooping());
-		} else if (GKeyBoard.isPressed(KeyEvent.VK_S)){
+		} else if (GKeyBoard.isPressed(KeyEvent.VK_S)) {
 			mysound.stop();
 		}
 	}
-	
-	public static void main(String[] args){
+
+	public static void main(String[] args) {
 		GWindow.setup(new WavPlayerTest());
 	}
 
