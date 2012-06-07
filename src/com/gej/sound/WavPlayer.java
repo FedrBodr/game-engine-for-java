@@ -1,5 +1,6 @@
 package com.gej.sound;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.InputStream;
@@ -35,8 +36,10 @@ public class WavPlayer extends Thread {
 		InputStream is = WavPlayer.class.getClassLoader().getResourceAsStream(s);
 		AudioInputStream audioStream;
 		try {
+			// Buffer the input stream
+			BufferedInputStream bis = new BufferedInputStream(is);
 			// Create the audio input stream and audio format
-			audioStream = AudioSystem.getAudioInputStream(is);
+			audioStream = AudioSystem.getAudioInputStream(bis);
 			AudioFormat format = audioStream.getFormat();
 			// The length of the audio file
 			int length = (int)(audioStream.getFrameLength() * format.getFrameSize());

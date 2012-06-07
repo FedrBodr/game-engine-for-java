@@ -52,8 +52,6 @@ public class GObject implements Updateable {
     protected float y;
     protected float dx;
     protected float dy;
-    // The direction
-    protected int direction = 0;
     
     // If this object is solid and alive
     private boolean solid = false;
@@ -130,7 +128,6 @@ public class GObject implements Updateable {
     	if (isAlive()){
     		update(elapsedTime);
     		anim.update(elapsedTime);
-    		direction = (int) (Math.toDegrees(Math.PI + Math.atan2(getNextY(elapsedTime)-y, getNextX(elapsedTime)-x)));
     	} else {
     		// Try to remove from the map
     		Map.removeObject(this);
@@ -153,7 +150,7 @@ public class GObject implements Updateable {
     public void moveHorizontally(long elapsedTime){
     	float nx = x + dx * elapsedTime;
     	if (check(nx, getY())){
-    		x = nx;
+    		setX(nx);
     	}
     }
     
@@ -164,7 +161,7 @@ public class GObject implements Updateable {
     public void moveVertically(long elapsedTime){
     	float ny = y + dy * elapsedTime;
     	if (check(getX(), ny)){
-    		y = ny;
+    		setY(ny);
     	}
     }
     
@@ -213,7 +210,26 @@ public class GObject implements Updateable {
      * @return True if a collision has been found.
      */
     public boolean isCollidingWith(GObject other){
-    	boolean bool = getBounds().intersects(other.getBounds());
+    	if (this==other){
+    		return false;
+    	}
+    	if (!isAlive() || !other.isAlive()){
+    		return false;
+    	}
+    	int x1 = (int)getX();
+    	int y1 = (int)getY();
+    	int x2 = (int)other.getX();
+    	int y2 = (int)other.getY();
+    	boolean bool = false;
+    	if (x1 < x2 + other.getWidth()){
+    		if (x2 < x1 + getWidth()){
+    			if (y1 < y2 + other.getHeight()){
+    				if (y2 < y1 + getHeight()){
+    					bool = true;
+    				}
+    			}
+    		}
+    	}
     	if (bool && Global.USE_PIXELPERFECT_COLLISION){
     		bool = GUtil.isPixelPerfectCollision(x, y, getAnimation().getBufferedImage(), other.getX(), other.getY(), other.getAnimation().getBufferedImage());
     	}
@@ -350,18 +366,6 @@ public class GObject implements Updateable {
      * @param other The object which has been collided.
      */
     public void collision(GObject other){}
-    
-    /**
-     * Called by the map automatically if an object has been collided horizontally
-     * @param other The object which has been collided
-     */
-    public void HorizontalCollision(GObject other){}
-    
-    /**
-     * Called by the map automatically if an object has been collided vertically
-     * @param other The object which has been collided
-     */
-    public void VerticalCollision(GObject other){}
     
     /**
      * Moves this object to a specified point with a specific speed.
@@ -599,15 +603,6 @@ public class GObject implements Updateable {
         return dy;
     }
     
-    /**
-     * Returns the direction of this object in degrees
-     * with the horizontal. (clockwise)
-     * @return The direction of this object
-     */
-    public int getDirection(){
-    	return direction;
-    }
-
     /**
      * Sets the horizontal velocity of this object
      * @param dx The new horizontal velocity

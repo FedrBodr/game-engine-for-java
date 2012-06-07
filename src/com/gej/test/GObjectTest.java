@@ -54,7 +54,6 @@ public class GObjectTest extends Game {
 		if (box.isClicked()){
 			g.drawString("on object", 100, 15);
 		}
-		g.drawString(box.getDirection() + "", 15, 30);
 	}
 	
 	public static void main(String[] args){

@@ -1,7 +1,6 @@
 package com.gej.map;
 
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
@@ -23,6 +22,8 @@ public abstract class Map {
 
 	// The map data (used for debugging)
 	private static char[][] mapdata = null;
+	// The array of tiles (used to decorate the map)
+	private static Tile[][] _tiles = null;
 	
 	/** The tile-size of this map */
 	public static int TILE_SIZE = 0;
@@ -32,7 +33,6 @@ public abstract class Map {
 	
 	// Collection of all the game objects and tiles
 	private static ArrayList<GObject> objects = null;
-	private static ArrayList<Tile>    tiles   = null;
 	
 	// prevent instantiation
 	private Map(){}
@@ -42,7 +42,6 @@ public abstract class Map {
 	 */
 	public static void initMap(){
 		objects = new ArrayList<GObject>();
-		tiles = new ArrayList<Tile>();
 	}
 	
 	/** 
@@ -116,12 +115,13 @@ public abstract class Map {
 				MAP_WIDTH = Math.max(MAP_WIDTH, lines[i].length());
 			}
 			mapdata = new char[MAP_WIDTH][MAP_HEIGHT];
+			_tiles = new Tile[MAP_WIDTH][MAP_HEIGHT];
 			// Iterate and add all the objects and tiles
 			for (int i=0; i<lines.length; i++){
 				for (int j=0; j<lines[i].length(); j++){
 					mapdata[j][i] = lines[i].charAt(j);
 					objects.add(loader.getObject(mapdata[j][i], j*TILE_SIZE, i*TILE_SIZE));
-					tiles.add(loader.getTile(mapdata[j][i], j*TILE_SIZE, i*TILE_SIZE));
+					_tiles[j][i] = loader.getTile(mapdata[j][i], j*TILE_SIZE, i*TILE_SIZE);
 				}
 			}
 		} catch (Exception e){}
@@ -144,7 +144,6 @@ public abstract class Map {
 	 */
 	public static void clearObjects(){
 		objects.clear();
-		tiles.clear();
 	}
 
 	/**
@@ -167,51 +166,6 @@ public abstract class Map {
 			} catch (NullPointerException e){}
 		}
 		return obj;
-	}
-	
-	/**
-	 * Returns a Tile object which is colliding at a specific position, width and height
-	 * @param x The x-position
-	 * @param y The y-position
-	 * @param width The width
-	 * @param height The height
-	 * @return A Tile object which is colliding. Null if nothing is found.
-	 */
-	public static Tile getCollidingTile(float x, float y, int width, int height){
-		Tile tile = null;
-		Rectangle bounds = new Rectangle(Math.round(x), Math.round(y), width, height);
-		try {
-			for (int i=0; i<tiles.size(); i++){
-				Tile t = tiles.get(i);
-				if (bounds.intersects(t.getBounds())){
-					tile = t;
-				}
-			}
-		} catch (NullPointerException e){}
-		return tile;
-	}
-	
-	/**
-	 * Returns the point position of the tile which is colliding
-	 * at a position, width and height.
-	 * @param x The x-position
-	 * @param y The y-position
-	 * @param width The width
-	 * @param height The height
-	 * @return The Point object of the colliding tile. Null if none collides.
-	 */
-	public static Point getTileCollidingPoint(float x, float y, int width, int height){
-		Point p = null;
-		Rectangle bounds = new Rectangle(Math.round(x), Math.round(y), width, height);
-		try {
-			for (int i=0; i<tiles.size(); i++){
-				Tile t = tiles.get(i);
-				if (bounds.intersects(t.getBounds())){
-					p = new Point(t.getX(), t.getY());
-				}
-			}
-		} catch (NullPointerException e){}
-		return p;
 	}
 	
 	/**
@@ -255,27 +209,6 @@ public abstract class Map {
 	 */
 	public static boolean isObjectCollisionFree(float x, float y, GObject object){
 		return (isObjectCollisionFree(x, y, true, object) || isObjectCollisionFree(x, y, false, object));
-	}
-	
-	/**
-	 * Checks if a specific position is collision free in the map.
-	 * @param x The x-position of the object
-	 * @param y The y-position of the object
-	 * @param object The object ( uses image for pixel-perfect collision detection )
-	 * @return True if no-collision and false if it collides.
-	 */
-	public static boolean isTileCollisionFree(float x, float y, GObject object){
-		boolean bool = true;
-		Rectangle bounds = new Rectangle(Math.round(x), Math.round(y), object.getWidth(), object.getHeight());
-		for (int i=0; i<tiles.size(); i++){
-			Tile tile = tiles.get(i);
-			try {
-				if (bounds.intersects(tile.getBounds())){
-					bool = false;
-				}
-			} catch (NullPointerException e){}
-		}
-		return bool;
 	}
 	
 	/**
@@ -338,13 +271,13 @@ public abstract class Map {
 					objects.remove(i);
 				}
 			}
-			for (int i=0; i<tiles.size(); i++){
-				Tile tile = tiles.get(i);
-				if (tile!=null){
-					int tileX = tile.getX() + x;
-					int tileY = tile.getY() + y;
-					if (visibleRect.intersects(new Rectangle(tileX, tileY, tile.getImage().getWidth(null), tile.getImage().getHeight(null)))){
-						g.drawImage(tile.getImage(), tileX, tileY, null);
+			for (int my=0; my<MAP_HEIGHT; my++){
+				for (int mx=0; mx<MAP_WIDTH; mx++){
+					Tile tile = _tiles[mx][my];
+					if (tile!=null){
+						if (MapView.isVisible(tile)){
+							g.drawImage(tile.getImage(), tile.getX()+x, tile.getY()+y, null);
+						}
 					}
 				}
 			}
@@ -380,34 +313,45 @@ public abstract class Map {
 	/*
 	 * Checks for collisions for an object. Helper method.
 	 */
-	private static final void checkCollisions(GObject obj, boolean horizontal, boolean vertical){
+	private static final void checkCollisions(GObject obj, boolean hor, boolean vert){
 		if (MapView.isVisible(obj) || Global.ENABLE_COLLISION_DETECTION_FOR_ALL_OBJECTS){
 			for (int i=0; i<objects.size(); i++){
 				try {
 					GObject other = objects.get(i);
 					if (other.isAlive()){
-						if (other.isCollidingWith(obj) && other!=obj){
-							if (horizontal){
-								obj.HorizontalCollision(other);
-								return;
-							}
-							if (vertical){
-								obj.VerticalCollision(other);
-								return;
-							}
-							if (!horizontal && !vertical){
+						if (other.isCollidingWith(obj)){
+							if (!hor && !vert){
 								obj.collision(other);
 								return;
 							}
+							if (!Global.MOVE_INTO_SOLID_OBJECTS && other.isSolid()){
+								// Move the object back
+								if (hor){
+									if (obj.getVelocityX()>0){
+										obj.setX(other.getX()-obj.getWidth());
+									} else {
+										obj.setX(other.getX()+other.getWidth());
+									}
+									obj.setVelocityX(0);
+									return;
+								}
+								if (vert){
+									if (obj.getVelocityY()>0){
+										obj.setY(other.getY()-obj.getHeight());
+									} else {
+										obj.setY(other.getY()+other.getHeight());
+									}
+									obj.setVelocityY(0);
+									return;
+								}
+							}
+							return;
 						}
 					} else {
 						objects.remove(i);
 					}
 				} catch (Exception e){
-					if (e instanceof NullPointerException){
-						//objects.remove(i);
-						//e.printStackTrace();
-					} else {
+					if (!(e instanceof NullPointerException)){
 						e.printStackTrace();
 					}
 				}

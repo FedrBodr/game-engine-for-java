@@ -21,6 +21,8 @@ public abstract class Global {
 	/** If disabled, collision detection is only done for objects which are visible in the view.
 	 *  This is disabled by default. You may want to enable this feature for some games. */
 	public static boolean ENABLE_COLLISION_DETECTION_FOR_ALL_OBJECTS = false;
+	/** Enabling this option will move objects into solid objects */
+	public static boolean MOVE_INTO_SOLID_OBJECTS = false;
 	/** The property to show or hide cursor */
 	public static boolean HIDE_CURSOR                = false;
 	/** The switch for full screen mode */
@@ -30,6 +32,6 @@ public abstract class Global {
 	/** A map containing various properties */
 	public static HashMap<String, Object> PROPERTIES = new HashMap<String, Object>();
 	/** Variable containing the current GEJ version */
-	public static String GEJ_VERSION                 = "GEJ V0.6";
+	public static String GEJ_VERSION                 = "GEJ V0.6 R1";
 	
 }

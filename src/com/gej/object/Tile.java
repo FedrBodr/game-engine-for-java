@@ -1,7 +1,6 @@
 package com.gej.object;
 
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import com.gej.util.ImageTool;
@@ -67,14 +66,6 @@ public class Tile {
 	 */
 	public int getY(){
 		return y;
-	}
-	
-	/**
-	 * Returns the bounds of this tile.
-	 * @return The rectangle containing the boundaries of this tile
-	 */
-	public Rectangle getBounds(){
-		return new Rectangle(x, y, img.getWidth(null), img.getHeight(null));
 	}
 
 }

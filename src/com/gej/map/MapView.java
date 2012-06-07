@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 
 import com.gej.core.Global;
 import com.gej.object.GObject;
+import com.gej.object.Tile;
 
 /**
  * Implements the view of the map so that a map can scroll
@@ -75,10 +76,42 @@ public class MapView {
 	 * @return True if visible, else false.
 	 */
 	public static boolean isVisible(GObject obj){
-		boolean bool = false;
-		Rectangle objRect = new Rectangle(Math.round(obj.getX())+OffSetX, Math.round(obj.getY())+OffSetY, obj.getWidth(), obj.getHeight());
-		bool = getVisibleRect().intersects(objRect);
-		return bool;
+    	int x1 = 0;
+    	int y1 = 0;
+    	int x2 = (int)obj.getX() + OffSetX;
+    	int y2 = (int)obj.getY() + OffSetY;
+    	if (x1 < x2 + obj.getWidth()){
+    		if (x2 < x1 + Global.WIDTH){
+    			if (y1 < y2 + obj.getHeight()){
+    				if (y2 < y1 + Global.HEIGHT){
+    					return true;
+    				}
+    			}
+    		}
+    	}
+		return false;
+	}
+	
+	/**
+	 * Checks if a tile is visible or not according to the view.
+	 * @param tile The tile to be checked
+	 * @return True if visible, else false.
+	 */
+	public static boolean isVisible(Tile tile){
+    	int x1 = 0;
+    	int y1 = 0;
+    	int x2 = (int)tile.getX() + OffSetX;
+    	int y2 = (int)tile.getY() + OffSetY;
+    	if (x1 < x2 + tile.getImage().getWidth(null)){
+    		if (x2 < x1 + Global.WIDTH){
+    			if (y1 < y2 + tile.getImage().getHeight(null)){
+    				if (y2 < y1 + Global.HEIGHT){
+    					return true;
+    				}
+    			}
+    		}
+    	}
+		return false;
 	}
 	
 }

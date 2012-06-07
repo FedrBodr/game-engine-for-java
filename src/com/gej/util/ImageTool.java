@@ -153,5 +153,35 @@ public abstract class ImageTool {
 		g.dispose();
 		return img;
 	}
+	
+	/**
+	 * Flips an image horizontally. (Mirrors it)
+	 * @param img The source image
+	 * @return The image after flip
+	 */
+	public static Image flipImageHorizontally(Image img){
+		int w = img.getWidth(null);
+		int h = img.getHeight(null);
+		BufferedImage bimg = toBufferedImage(getEmptyImage(w, h));
+		Graphics2D g = bimg.createGraphics();
+		g.drawImage(img, 0, 0, w, h, w, 0, 0, h, null);
+		g.dispose();
+		return toImage(bimg);
+	}
+	
+	/**
+	 * Flips an image vertically. (Mirrors it)
+	 * @param img The source image
+	 * @return The image after flip
+	 */
+	public static Image flipImageVertically(Image img){
+		int w = img.getWidth(null);
+		int h = img.getHeight(null);
+		BufferedImage bimg = toBufferedImage(getEmptyImage(w, h));
+		Graphics2D g = bimg.createGraphics();
+		g.drawImage(img, 0, 0, w, h, 0, h, w, 0, null);
+		g.dispose();
+		return toImage(bimg);
+	}
 		
 }

@@ -57,21 +57,18 @@ public class PlatformTest extends Game implements MapLoader {
 			return enemy;
 		} else if (c=='C'){
 			return new Coin(x, y);
-		}else if (c=='O'){
+		} else if (c=='O'){
 			return new Door(x, y);
+		} else if (c=='D'){
+			return new Wall(x, y, "resources/dark_floor.png");
+		} else if (c=='G'){
+			return new Wall(x, y, "resources/grass_floor.png");
 		}
 		return null;
 	}
 
 	public Tile getTile(char c, int x, int y) {
-		if (c=='D'){
-			// The D and G are walls but with different sprites
-			return new Tile(loadImage("resources/dark_floor.png"), x, y);
-		} else if (c=='G'){
-			return new Tile(loadImage("resources/grass_floor.png"), x, y);
-		} else {
-			return null;
-		}
+		return null;
 	}
 	
 	@Override
@@ -115,8 +112,6 @@ public class PlatformTest extends Game implements MapLoader {
 		int jump_time = 0;
 		// A jump is started but not ended
 		boolean jump_started = false;
-		// The player is on ground
-		boolean onGround     = true;
 		
 		public Bouncy(Image img) {
 			super(img);
@@ -124,65 +119,46 @@ public class PlatformTest extends Game implements MapLoader {
 		
 		public void update(long elapsedTime){
 			MapView.follow(this);
-			// The present positions of the player
-			float nx = getX();
-			float ny = getY();
 			// If the jump has been started and till not yet completed
 			// move the player up
 			if (jump_started && jump_time<=1000){
-				ny = ny - 0.15f * elapsedTime;
+				setVelocityY(-0.15f);
 				// Increase the jump time
 				jump_time += elapsedTime;
-				// If there is a wall in the jump path, end the jump
-				if (!Map.isTileCollisionFree(nx, ny, this)){
-					jump_started = false;
-				}
-			} else if (!onGround){
+			} else if (Map.isObjectCollisionFree(getX(), getY()+1, true, this)){
 				// The player is not in the jump. So apply gravity
-				ny = ny + 0.15f * elapsedTime;
+				setVelocityY(0.15f);
 				// Stop the jump
 				jump_started = false;
 			}
 			// If space is pressed and the player is not in any jump,
 			// and there is a wall below the player, start the jump
 			if ((GKeyBoard.isPressed(KeyEvent.VK_SPACE) || GKeyBoard.isPressed(KeyEvent.VK_UP)) && !jump_started){
-				if (!Map.isTileCollisionFree(nx, ny+5, this)){
+				if (!Map.isObjectCollisionFree(x, y+1, true, this)){
 					jump_time = 0;
 					jump_started = true;
-					onGround = false;
 				}
 			}
+			setVelocityX(0);
 			// If the left has been pressed, move the player left
 			if (GKeyBoard.isPressed(KeyEvent.VK_LEFT)){
-				nx = nx - 0.15f * elapsedTime;
+				setVelocityX(-0.15f);
 			}
 			// If he pressed right, move him right
 			if (GKeyBoard.isPressed(KeyEvent.VK_RIGHT)){
-				nx = nx + 0.15f * elapsedTime;
-			}
-			// Move to the new x-position only if the position is collision free
-			if (Map.isTileCollisionFree(nx, getY(), this)){
-				setX(nx);
-			}
-			// Move to the new y-position only if the position is collision free
-			if (Map.isTileCollisionFree(getX(), ny, this)){
-				setY(ny);
-			} else {
-				// We move down. Line the player with the bottom tile
-				if (ny>getY() && !onGround){
-					try {
-						setY(Map.getTileCollidingPoint(getX(), ny, getWidth(), getHeight()).y - getHeight() + 1);
-						onGround = true;
-					} catch (Exception e){}
-				}
+				setVelocityX(0.15f);
 			}
 		}
 		
 		public void collision(GObject other){
-			if (other instanceof Enemy && other.isAlive()){
+			if (other instanceof Enemy){
 				resetMap();
-			} else if (other instanceof Coin && other.isAlive()){
+			} else if (other instanceof Coin){
 				other.destroy();
+			} else if (other instanceof Wall){
+				if (isTopCollision(other)){
+					jump_started = false;
+				}
 			}
 		}
 		
@@ -199,29 +175,21 @@ public class PlatformTest extends Game implements MapLoader {
 		}
 		
 		public void update(long elapsedTime){
-			if (isAlive()){
-				if (MapView.isVisible(this)){
-					float nx = getX() + 0.11f * elapsedTime;
-					float ny = getY() + 0.15f * elapsedTime;
-					boolean bool1 = false;
-					boolean bool2 = false;
-					if (Map.isTileCollisionFree(nx, getY(), this)){
-						setX(nx);
-					} else {
-						bool1 = true;
-					}
-					if (Map.isTileCollisionFree(getX(), ny, this)){
-						setY(ny);
-					} else {
-						bool2 = true;
-					}
-					if (bool1 && bool2){
-						destroy();
-					}
+			setVelocityX(0);
+			setVelocityY(0);
+			if (MapView.isVisible(this)){
+				boolean canMoveRight = Map.isObjectCollisionFree(getX()+1, getY(), true, this);
+				boolean canMoveDown = Map.isObjectCollisionFree(getX(), getY(), true, this);
+				if (canMoveRight)
+					setVelocityX(0.15f);
+				if (canMoveDown)
+					setVelocityY(0.15f);
+				if (!canMoveRight && !canMoveDown){
+					destroy();
 				}
 			}
 		}
-		
+			
 	}	
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////
@@ -248,6 +216,15 @@ public class PlatformTest extends Game implements MapLoader {
 			super(loadImage("resources/dark_floor.png"));
 			setX(x);
 			setY(y);
+		}
+		
+	}
+	
+	public class Wall extends GObject {
+		
+		public Wall(int x, int y, String img){
+			super(loadImage(img), x, y);
+			setSolid(true);
 		}
 		
 	}
