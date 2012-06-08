@@ -291,7 +291,7 @@ public abstract class Map {
 		try {
 			for (int i = 0; i < objects.size(); i++) {
 				GObject obj = objects.get(i);
-				if (obj != null && obj.isAlive()) {
+				if (obj != null && obj.isAlive() && MapView.isVisible(obj)) {
 					int obj_x = Math.round(obj.getX()) + x;
 					int obj_y = Math.round(obj.getY()) + y;
 					g.drawImage(obj.getImage(), obj_x, obj_y, null);
