@@ -3,12 +3,13 @@ package com.gej.object;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
+
+import com.gej.core.Game;
 import com.gej.core.Global;
 import com.gej.core.Updateable;
 import com.gej.graphics.Animation;
 import com.gej.input.GInput;
 import com.gej.input.GMouse;
-import com.gej.map.Map;
 import com.gej.util.GUtil;
 import com.gej.util.ImageTool;
 
@@ -124,30 +125,23 @@ public class GObject implements Updateable {
      * @param elapsedTime
      */
     public final void superUpdate(long elapsedTime){
-        if (isAlive()){
-            update(elapsedTime);
-            anim.update(elapsedTime);
-        } else{
-            // Try to remove from the map
-            Map.removeObject(this);
-        }
+        update(elapsedTime);
+        anim.update(elapsedTime);
     }
     
     /**
      * Moves this object based on time.
-     * @param elapsedTime The time elapsed in the current frame
      */
-    public void move(long elapsedTime){
-        moveHorizontally(elapsedTime);
-        moveVertically(elapsedTime);
+    public void move(){
+        moveHorizontally();
+        moveVertically();
     }
     
     /**
      * Moves the object horizontally
-     * @param elapsedTime The time elapsed in the current frame
      */
-    public void moveHorizontally(long elapsedTime){
-        float nx = x + dx * elapsedTime;
+    public void moveHorizontally(){
+        float nx = x + dx * Game.elapsedTime;
         if (check(nx, getY())){
             setX(nx);
         }
@@ -155,10 +149,9 @@ public class GObject implements Updateable {
     
     /**
      * Moves the object vertically
-     * @param elapsedTime The time elapsed in the current frame
      */
-    public void moveVertically(long elapsedTime){
-        float ny = y + dy * elapsedTime;
+    public void moveVertically(){
+        float ny = y + dy * Game.elapsedTime;
         if (check(getX(), ny)){
             setY(ny);
         }
@@ -249,8 +242,6 @@ public class GObject implements Updateable {
      */
     public void destroy(){
         alive = false;
-        // Try to remove from map
-        Map.removeObject(this);
     }
     
     /**

@@ -116,7 +116,7 @@ public class PlatformTest extends Game implements MapLoader {
         public Bouncy(Image img){
             super(img);
         }
-        
+                
         public void update(long elapsedTime){
             MapView.follow(this);
             // If the jump has been started and till not yet completed

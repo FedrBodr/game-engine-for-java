@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 
 import com.gej.input.GInput;
 import com.gej.map.Map;
-import com.gej.util.GUtil;
 import com.gej.util.ImageTool;
 
 /**
@@ -77,24 +76,6 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
         setDoubleBuffered(true);
         setFocusable(true);
         input = new GInput(this);
-        // Use separate thread to render the game
-        GUtil.runInSeperateThread(new Runnable() {
-            public void run(){
-                while (running){
-                    // Show or hide the cursor
-                    if (Global.HIDE_CURSOR){
-                        setCursor(GInput.INVISIBLE_CURSOR);
-                    } else{
-                        setCursor(Cursor.getDefaultCursor());
-                    }
-                    try{
-                        Thread.sleep(Math.min(1000 / Global.FRAMES_PER_SECOND, 10));
-                    } catch (Exception e){
-                    }
-                    repaint();
-                }
-            }
-        });
         // Start the game thread to process game updates.
         Thread th = new Thread(this);
         th.setPriority(Thread.MAX_PRIORITY);
@@ -110,41 +91,43 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
         Map.initMap();
         initResources();
         // Note the current time
-        long startTime = System.nanoTime() / 1000000;
-        long currTime = startTime;
-        // Variables used in counting the frame rate
-        int frames = 0;
-        int frame_time = 0;
-        // The actual game loop
-        while (running){
-            // Calculate the time
-            elapsedTime = (System.nanoTime() / 1000000) - currTime;
-            currTime += elapsedTime;
-            frame_time += elapsedTime;
-            frames++;
-            // Calculate the frame rate
-            if (frame_time >= 1000){
-                Global.FRAMES_PER_SECOND = frames;
-                frames = 0;
-                frame_time = (int)elapsedTime;
+        long time = System.nanoTime()/1000000;
+        long fpsRecalcPeriod = 0;
+        while (running) {
+            // Calculate the elapsed time
+            elapsedTime = System.nanoTime()/1000000 - time;
+            time = System.nanoTime()/1000000;
+            // Show or hide the cursor
+            if (Global.HIDE_CURSOR){
+                setCursor(GInput.INVISIBLE_CURSOR);
+            } else {
+                setCursor(Cursor.getDefaultCursor());
             }
-            // Set the max frame-rate to 150 as more fps is
-            // not supported in old linux systems.
-            if (Global.FRAMES_PER_SECOND > 150){
-                Global.FRAMES_PER_SECOND = 150;
-            }
-            // Update and render the game
+            // Update the game and the objects
             update(elapsedTime);
             Map.updateObjects(elapsedTime);
-            try{
-                // Sleep for a maximum of 10 milliseconds, so that
-                // we won't waste any cpu cycles
-                Thread.sleep(Math.min(1000l / Global.FRAMES_PER_SECOND, 10));
-            } catch (Exception e){
+            // Repaint the game
+            repaint();
+            // Sync the game to meet the target frame rate
+            sync();
+            fpsRecalcPeriod += elapsedTime;
+            // Calculate the FPS every 500ms
+            if (elapsedTime>0 && fpsRecalcPeriod>500){
+                Global.FRAMES_PER_SECOND = (int)(1000/elapsedTime);
+                fpsRecalcPeriod = 0;
             }
         }
     }
     
+    private void sync(){
+        try {
+            // Wait a bit to meet the target frame rate
+            long wait = 1000/Global.FRAMES_PER_SECOND;
+            wait = Math.min(wait, 10);
+            Thread.sleep(wait);
+        } catch (Exception e){}
+    }
+
     /**
      * Draw's the game. Here the triple buffering or double buffering is implemented
      */
@@ -173,8 +156,7 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
                 g2D.drawImage(backImage, 0, 0, Global.WIDTH, Global.HEIGHT, null);
             }
             g2D.dispose();
-        } catch (NullPointerException e){
-        }
+        } catch (NullPointerException e){}
     }
     
     /**
@@ -207,7 +189,7 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
         Image img = null;
         if (cache.containsKey(name)){
             img = cache.get(name);
-        } else{
+        } else {
             img = new ImageIcon(Game.class.getClassLoader().getResource(name)).getImage();
             cache.put(name, img);
         }

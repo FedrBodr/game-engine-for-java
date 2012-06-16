@@ -30,7 +30,7 @@ public class MapView {
         OffSetX = Math.round(Global.WIDTH / 2 - obj.getX() - Map.TILE_SIZE);
         OffSetX = Math.min(OffSetX, 0);
         OffSetX = Math.max(OffSetX, Global.WIDTH - Map.getWidth());
-        // /////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////
         OffSetY = Math.round(Global.HEIGHT / 2 - obj.getY() - Map.TILE_SIZE);
         OffSetY = Math.min(OffSetY, 0);
         OffSetY = Math.max(OffSetY, Global.HEIGHT - Map.getHeight());

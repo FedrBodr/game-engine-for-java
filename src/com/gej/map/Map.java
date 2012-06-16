@@ -118,11 +118,15 @@ public abstract class Map {
             for (int i = 0; i < lines.length; i++){
                 for (int j = 0; j < lines[i].length(); j++){
                     mapdata[j][i] = lines[i].charAt(j);
-                    objects.add(loader.getObject(mapdata[j][i], j * TILE_SIZE, i * TILE_SIZE));
+                    GObject obj = loader.getObject(mapdata[j][i], j * TILE_SIZE, i * TILE_SIZE);
+                    if (obj!=null){
+                        objects.add(obj);
+                    }
                     _tiles[j][i] = loader.getTile(mapdata[j][i], j * TILE_SIZE, i * TILE_SIZE);
                 }
             }
         } catch (Exception e){
+            e.printStackTrace();
         }
     }
     
@@ -157,12 +161,9 @@ public abstract class Map {
         GObject obj = null;
         Rectangle bounds = new Rectangle(Math.round(x), Math.round(y), width, height);
         for (int i = 0; i < objects.size(); i++){
-            try{
-                GObject object = objects.get(i);
-                if (bounds.intersects(object.getBounds())){
-                    obj = object;
-                }
-            } catch (NullPointerException e){
+            GObject object = objects.get(i);
+            if (bounds.intersects(object.getBounds())){
+                obj = object;
             }
         }
         return obj;
@@ -182,19 +183,16 @@ public abstract class Map {
         for (int i = 0; i < objects.size(); i++){
             GObject obj = objects.get(i);
             if (object != obj && (obj.isSolid() == solid)){
-                try{
-                    if (bounds.intersects(obj.getBounds())){
-                        if (obj.isAlive()){
+                if (bounds.intersects(obj.getBounds())){
+                    if (obj.isAlive()){
+                        bool = false;
+                    }
+                    if (bool && Global.USE_PIXELPERFECT_COLLISION){
+                        bool = GUtil.isPixelPerfectCollision(x, y, object.getAnimation().getBufferedImage(), obj.getX(), obj.getY(), obj.getAnimation().getBufferedImage());
+                        if (bool){
                             bool = false;
                         }
-                        if (bool && Global.USE_PIXELPERFECT_COLLISION){
-                            bool = GUtil.isPixelPerfectCollision(x, y, object.getAnimation().getBufferedImage(), obj.getX(), obj.getY(), obj.getAnimation().getBufferedImage());
-                            if (bool){
-                                bool = false;
-                            }
-                        }
                     }
-                } catch (NullPointerException e){
                 }
             }
         }
@@ -262,13 +260,11 @@ public abstract class Map {
         try{
             for (int i = 0; i < objects.size(); i++){
                 GObject obj = objects.get(i);
-                if (obj != null && obj.isAlive() && MapView.isVisible(obj)){
-                    int obj_x = Math.round(obj.getX()) + x;
-                    int obj_y = Math.round(obj.getY()) + y;
-                    g.drawImage(obj.getImage(), obj_x, obj_y, null);
-                } else{
-                    objects.remove(i);
-                }
+                    if (MapView.isVisible(obj)){
+                        int obj_x = Math.round(obj.getX()) + x;
+                        int obj_y = Math.round(obj.getY()) + y;
+                        g.drawImage(obj.getImage(), obj_x, obj_y, null);
+                    }
             }
             for (int my = 0; my < MAP_HEIGHT; my++){
                 for (int mx = 0; mx < MAP_WIDTH; mx++){
@@ -290,23 +286,16 @@ public abstract class Map {
      */
     public static void updateObjects(long elapsedTime){
         for (int i = 0; i < objects.size(); i++){
-            try{
-                GObject obj = objects.get(i);
-                if (obj != null){
-                    if (obj.isAlive()){
-                        obj.superUpdate(elapsedTime);
-                        obj.moveHorizontally(elapsedTime);
-                        checkCollisions(obj, true, false);
-                        obj.moveVertically(elapsedTime);
-                        checkCollisions(obj, false, true);
-                        checkCollisions(obj, false, false);
-                    } else{
-                        objects.remove(i);
-                    }
-                } else{
-                    objects.remove(i);
-                }
-            } catch (NullPointerException e){
+            GObject obj = objects.get(i);
+            if (obj.isAlive()){
+                obj.superUpdate(elapsedTime);
+                obj.moveHorizontally();
+                checkCollisions(obj, true, false);
+                obj.moveVertically();
+                checkCollisions(obj, false, true);
+                checkCollisions(obj, false, false);
+            } else{
+                objects.remove(i);
             }
         }
     }
@@ -384,7 +373,7 @@ public abstract class Map {
      * </pre>
      * @param c The class of the object
      */
-    public static void removeObjectsOfType(Class<GObject> c){
+    public static void removeObjectsOfType(Class<?> c){
         for (int i = 0; i < objects.size(); i++){
             GObject obj = objects.get(i);
             if (c.isInstance(obj)){

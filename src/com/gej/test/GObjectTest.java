@@ -42,7 +42,7 @@ public class GObjectTest extends Game {
             box.setVelocityY(-Math.abs(box.getVelocityY()));
         }
         box.superUpdate(elapsedTime);
-        box.move(elapsedTime);
+        box.move();
     }
     
     @Override

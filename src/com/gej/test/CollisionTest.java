@@ -50,7 +50,7 @@ public class CollisionTest extends Game {
     public void update(long elapsedTime){
         for (GObject object : objects){
             object.update(elapsedTime);
-            object.move(elapsedTime);
+            object.move();
             for (GObject object2 : objects){
                 if (object.isCollidingWith(object2) && object != object2){
                     object.bounce();
