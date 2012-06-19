@@ -74,6 +74,7 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
         running = true;
         cache = new HashMap<String, Image>();
         setFocusTraversalKeysEnabled(false);
+        setIgnoreRepaint(true);
         setDoubleBuffered(true);
         setFocusable(true);
         input = new GInput(this);
