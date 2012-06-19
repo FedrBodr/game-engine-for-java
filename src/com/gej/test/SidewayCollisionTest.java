@@ -12,19 +12,19 @@ import com.gej.input.GInput;
 import com.gej.object.GObject;
 
 public class SidewayCollisionTest extends Game {
-    
+
     /**
 	 * 
 	 */
     private static final long serialVersionUID = -3368876887836736254L;
-    
+
     GObject object1 = null;
     GObject object2 = null;
-    
+
     GInput input = null;
-    
+
     Image background = null;
-    
+
     @Override
     public void initResources(){
         background = loadImage("resources/back.png");
@@ -38,15 +38,15 @@ public class SidewayCollisionTest extends Game {
         object2.setY(180);
         Global.FRAMES_PER_SECOND = 150;
     }
-    
+
     @Override
     public void update(long elapsedTime){
-        if (input.getMouseX() != 0 && input.getMouseY() != 0){
+        if (input.getMouseX() != 0 && input.getMouseY() != 0) {
             object2.setX(input.getMouseX());
             object2.setY(input.getMouseY());
         }
     }
-    
+
     @Override
     public void render(Graphics2D g){
         g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
@@ -60,9 +60,9 @@ public class SidewayCollisionTest extends Game {
         g.drawString("Left   : " + object2.isLeftCollision(object1), 15, 75);
         g.drawString("Right  : " + object2.isRightCollision(object1), 15, 100);
     }
-    
+
     public static void main(String[] args){
         GWindow.setup(new SidewayCollisionTest());
     }
-    
+
 }

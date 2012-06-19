@@ -6,17 +6,19 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 /**
- * This class can be used to convert images. Note that all the methods of this class are declared as
- * static.
+ * This class can be used to convert images. Note that all the methods of this
+ * class are declared as static.
+ * 
  * @author Sri Harsha Chilakapati
  */
 public abstract class ImageTool {
-    
-    private ImageTool(){
+
+    private ImageTool() {
     }
-    
+
     /**
      * Converts a given Image into a BufferedImage
+     * 
      * @param img The Image to be converted
      * @return The converted BufferedImage
      */
@@ -30,9 +32,10 @@ public abstract class ImageTool {
         // Return the buffered image
         return bimage;
     }
-    
+
     /**
      * Splits an image into a number of rows and columns
+     * 
      * @param img The image to be split
      * @param rows The number of rows
      * @param cols The number of columns
@@ -50,8 +53,8 @@ public abstract class ImageTool {
         // Create the BufferedImage array
         BufferedImage[] imgs = new BufferedImage[num];
         // Start looping and creating images [splitting]
-        for (int x = 0; x < rows; x++){
-            for (int y = 0; y < cols; y++){
+        for (int x = 0; x < rows; x++) {
+            for (int y = 0; y < cols; y++) {
                 // The BITMASK type allows us to use bmp images with coloured
                 // text and any background
                 imgs[count] = new BufferedImage(w, h, BufferedImage.BITMASK);
@@ -66,20 +69,22 @@ public abstract class ImageTool {
         }
         return imgs;
     }
-    
+
     /**
      * Converts a given BufferedImage into an Image
+     * 
      * @param bimage The BufferedImage to be converted
      * @return The converted Image
      */
     public static Image toImage(BufferedImage bimage){
         // Casting is enough to convert from BufferedImage to Image
-        Image img = (Image)bimage;
+        Image img = (Image) bimage;
         return img;
     }
-    
+
     /**
      * Resizes a given image to given width and height
+     * 
      * @param img The image to be resized
      * @param width The new width
      * @param height The new height
@@ -97,9 +102,10 @@ public abstract class ImageTool {
         image = toImage(bimg);
         return image;
     }
-    
+
     /**
      * Creates a tiled image with an image upto given width and height
+     * 
      * @param img The source image
      * @param width The width of image to be created
      * @param height The height of the image to be created
@@ -117,8 +123,8 @@ public abstract class ImageTool {
         int numY = (height / imageHeight) + 2;
         // Create the graphics context
         Graphics2D bGr = bimg.createGraphics();
-        for (int y = 0; y < numY; y++){
-            for (int x = 0; x < numX; x++){
+        for (int y = 0; y < numY; y++) {
+            for (int x = 0; x < numX; x++) {
                 bGr.drawImage(img, x * imageWidth, y * imageHeight, null);
             }
         }
@@ -126,9 +132,10 @@ public abstract class ImageTool {
         image = toImage(bimg);
         return image;
     }
-    
+
     /**
      * Creates an empty image with transparency
+     * 
      * @param width The width of required image
      * @param height The height of required image
      * @return The created image
@@ -137,9 +144,10 @@ public abstract class ImageTool {
         BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         return toImage(img);
     }
-    
+
     /**
      * Creates a colored image with a specified color
+     * 
      * @param color The color to be filled with
      * @param width The width of the required image
      * @param height The height of the required image
@@ -153,9 +161,10 @@ public abstract class ImageTool {
         g.dispose();
         return img;
     }
-    
+
     /**
      * Flips an image horizontally. (Mirrors it)
+     * 
      * @param img The source image
      * @return The image after flip
      */
@@ -168,9 +177,10 @@ public abstract class ImageTool {
         g.dispose();
         return toImage(bimg);
     }
-    
+
     /**
      * Flips an image vertically. (Mirrors it)
+     * 
      * @param img The source image
      * @return The image after flip
      */
@@ -183,5 +193,5 @@ public abstract class ImageTool {
         g.dispose();
         return toImage(bimg);
     }
-    
+
 }

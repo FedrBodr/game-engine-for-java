@@ -10,16 +10,16 @@ import com.gej.core.Global;
 import com.gej.object.GObject;
 
 public class CollisionTest extends Game {
-    
+
     /**
 	 * 
 	 */
     private static final long serialVersionUID = -8609095432386666625L;
-    
+
     ArrayList<GObject> objects = null;
-    
+
     Image background = null;
-    
+
     @Override
     public void initResources(){
         // Create the game resources
@@ -45,30 +45,30 @@ public class CollisionTest extends Game {
         // Setting the frame rate
         Global.FRAMES_PER_SECOND = 150;
     }
-    
+
     @Override
     public void update(long elapsedTime){
-        for (GObject object : objects){
+        for (GObject object : objects) {
             object.update(elapsedTime);
             object.move();
-            for (GObject object2 : objects){
-                if (object.isCollidingWith(object2) && object != object2){
+            for (GObject object2 : objects) {
+                if (object.isCollidingWith(object2) && object != object2) {
                     object.bounce();
                 }
             }
         }
     }
-    
+
     @Override
     public void render(Graphics2D g){
         g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
-        for (GObject object : objects){
+        for (GObject object : objects) {
             g.drawImage(object.getImage(), Math.round(object.getX()), Math.round(object.getY()), null);
         }
     }
-    
+
     public static void main(String[] args){
         GWindow.setup(new CollisionTest());
     }
-    
+
 }
