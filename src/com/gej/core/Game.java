@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.util.HashMap;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -15,8 +16,8 @@ import com.gej.util.ImageTool;
 
 /**
  * This class is the main class for any game. You should extend this class to write a game. The
- * games requires J2SE 1.5 or more to run. This class won't support applet mode as applets are not
- * the target of this engine. This class uses triple buffering if available or uses double
+ * games requires J2SE 1.5 or more to run. To run as an Applet, use the GApplet class.
+ * This class uses triple buffering if available or uses double
  * buffering. The default game template could be like this.
  * 
  * <pre>
@@ -121,6 +122,8 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
     
     private void sync(){
         try {
+        	// Sync the toolkit
+        	Toolkit.getDefaultToolkit().sync();
             // Wait a bit to meet the target frame rate
             long wait = 1000/Global.FRAMES_PER_SECOND;
             wait = Math.min(wait, 10);

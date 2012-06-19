@@ -3,7 +3,7 @@ package com.gej.map;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-
+import java.util.HashMap;
 import com.gej.core.Global;
 import com.gej.object.GObject;
 import com.gej.object.Tile;
@@ -32,6 +32,11 @@ public abstract class Map {
     // Collection of all the game objects and tiles
     private static ArrayList<GObject> objects = null;
     
+    // Layering data
+    private static HashMap<Integer, MapLayer> layers = null;
+    
+    private static int maxDepth = 0;
+    
     // prevent instantiation
     private Map(){
     }
@@ -41,6 +46,7 @@ public abstract class Map {
      */
     public static void initMap(){
         objects = new ArrayList<GObject>();
+        layers = new HashMap<Integer, MapLayer>();
     }
     
     /**
@@ -106,6 +112,8 @@ public abstract class Map {
         // Reset the map's height and width
         MAP_WIDTH = 0;
         MAP_HEIGHT = 0;
+        // Reset layering data
+        maxDepth = 0;
         // Try parsing the file
         try{
             for (int i = 0; i < lines.length; i++){
@@ -120,7 +128,7 @@ public abstract class Map {
                     mapdata[j][i] = lines[i].charAt(j);
                     GObject obj = loader.getObject(mapdata[j][i], j * TILE_SIZE, i * TILE_SIZE);
                     if (obj!=null){
-                        objects.add(obj);
+                        addObject(obj);
                     }
                     _tiles[j][i] = loader.getTile(mapdata[j][i], j * TILE_SIZE, i * TILE_SIZE);
                 }
@@ -147,6 +155,7 @@ public abstract class Map {
      */
     public static void clearObjects(){
         objects.clear();
+        layers.clear();
     }
     
     /**
@@ -245,7 +254,7 @@ public abstract class Map {
      * @param g The graphics context
      */
     public static void renderMap(Graphics2D g){
-        renderMap(g, 0, 0, new Rectangle(0, 0, Global.WIDTH, Global.HEIGHT));
+        renderMap(g, 0, 0);
     }
     
     /**
@@ -254,18 +263,14 @@ public abstract class Map {
      * @param g The graphics context
      * @param x The x-position
      * @param y The y-position
-     * @param visibleRect The Rectangle object of the visible area.
      */
-    public static void renderMap(Graphics2D g, int x, int y, Rectangle visibleRect){
+    public static void renderMap(Graphics2D g, int x, int y){
         try{
-            for (int i = 0; i < objects.size(); i++){
-                GObject obj = objects.get(i);
-                    if (MapView.isVisible(obj)){
-                        int obj_x = Math.round(obj.getX()) + x;
-                        int obj_y = Math.round(obj.getY()) + y;
-                        g.drawImage(obj.getImage(), obj_x, obj_y, null);
-                    }
+            // Draw the layers
+            for (int i=maxDepth; i>=0; i--){
+                layers.get(i).render(g, x, y);
             }
+            // Draw the tiles
             for (int my = 0; my < MAP_HEIGHT; my++){
                 for (int mx = 0; mx < MAP_WIDTH; mx++){
                     Tile tile = _tiles[mx][my];
@@ -395,7 +400,17 @@ public abstract class Map {
      * @param obj The new object
      */
     public static void addObject(GObject obj){
-        objects.add(obj);
+        if (obj!=null){
+            objects.add(obj);
+            maxDepth = Math.max(maxDepth, obj.getDepth());
+            if (layers.containsKey(maxDepth)){
+                layers.get(maxDepth).addObject(obj);
+            } else {
+                MapLayer layer = new MapLayer();
+                layer.addObject(obj);
+                layers.put(maxDepth, layer);
+            }
+        }
     }
     
     /**

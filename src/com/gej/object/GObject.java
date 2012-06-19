@@ -52,6 +52,12 @@ public class GObject implements Updateable {
     protected float dx;
     protected float dy;
     
+    // The depth of this object
+    protected int depth = 0;
+    
+    // Is this object visible??
+    protected boolean visible = true;
+    
     // If this object is solid and alive
     private boolean solid = false;
     private boolean alive = true;
@@ -157,6 +163,14 @@ public class GObject implements Updateable {
         }
     }
     
+    public void setDepth(int depth){
+        this.depth = depth;
+    }
+    
+    public int getDepth(){
+        return depth;
+    }
+    
     /**
      * Could be used to give limits to the object.
      * @param nx The new x-position
@@ -227,6 +241,23 @@ public class GObject implements Updateable {
             bool = GUtil.isPixelPerfectCollision(x, y, getAnimation().getBufferedImage(), other.getX(), other.getY(), other.getAnimation().getBufferedImage());
         }
         return bool;
+    }
+    
+    /**
+     * Sets the visibility of this object
+     * @param val The visibility of this object
+     */
+    public void setVisible(boolean val){
+        visible = val;
+    }
+    
+    /**
+     * Checks if this object is visible.
+     * Note that this value is independent of the map view.
+     * @return True if visible else false.
+     */
+    public boolean isVisible(){
+        return visible;
     }
     
     /**
@@ -614,7 +645,7 @@ public class GObject implements Updateable {
      * @return The image which is used to represent this object
      */
     public Image getImage(){
-        if (isAlive()){
+        if (isAlive() && isVisible()){
             return anim.getImage();
         } else{
             return null;

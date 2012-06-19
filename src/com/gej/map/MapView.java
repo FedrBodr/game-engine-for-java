@@ -27,13 +27,18 @@ public class MapView {
      * @param obj The object which is to be centered.
      */
     public static void follow(GObject obj){
-        OffSetX = Math.round(Global.WIDTH / 2 - obj.getX() - Map.TILE_SIZE);
-        OffSetX = Math.min(OffSetX, 0);
-        OffSetX = Math.max(OffSetX, Global.WIDTH - Map.getWidth());
-        ////////////////////////////////////////////////////////////////////
-        OffSetY = Math.round(Global.HEIGHT / 2 - obj.getY() - Map.TILE_SIZE);
-        OffSetY = Math.min(OffSetY, 0);
-        OffSetY = Math.max(OffSetY, Global.HEIGHT - Map.getHeight());
+        OffSetX = 0;
+        OffSetY = 0;
+        if (Map.getWidth()>Global.WIDTH){
+            OffSetX = Math.round(Global.WIDTH / 2 - obj.getX() - Map.TILE_SIZE);
+            OffSetX = Math.min(OffSetX, 0);
+            OffSetX = Math.max(OffSetX, Global.WIDTH - Map.getWidth());
+        }
+        if (Map.getHeight()>Global.HEIGHT){
+            OffSetY = Math.round(Global.HEIGHT / 2 - obj.getY() - Map.TILE_SIZE);
+            OffSetY = Math.min(OffSetY, 0);
+            OffSetY = Math.max(OffSetY, Global.HEIGHT - Map.getHeight());
+        }
     }
     
     /**
@@ -51,7 +56,7 @@ public class MapView {
      */
     public static void render(Graphics2D g){
         try{
-            Map.renderMap(g, OffSetX, OffSetY, getVisibleRect());
+            Map.renderMap(g, OffSetX, OffSetY);
         } catch (NullPointerException e){
         }
     }

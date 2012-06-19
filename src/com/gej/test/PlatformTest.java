@@ -115,6 +115,7 @@ public class PlatformTest extends Game implements MapLoader {
         
         public Bouncy(Image img){
             super(img);
+            setDepth(1);
         }
                 
         public void update(long elapsedTime){
@@ -216,6 +217,7 @@ public class PlatformTest extends Game implements MapLoader {
             super(loadImage("resources/dark_floor.png"));
             setX(x);
             setY(y);
+            setDepth(0);
         }
         
     }

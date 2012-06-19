@@ -44,7 +44,6 @@ public class DirectionedGObject extends GObject {
      * @param img The image of the object
      * @param x The x-coordinate
      * @param y The y-coordinate
-     * @return 
      */
     public DirectionedGObject(Image img, float x, float y){
         super(img);
