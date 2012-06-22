@@ -193,5 +193,18 @@ public abstract class ImageTool {
         g.dispose();
         return toImage(bimg);
     }
+    
+    /**
+     * Clones an image. After cloning, a copy of the image is returned.
+     * @param img The image to be cloned
+     * @return The clone of the given image
+     */
+    public static Image clone(Image img){
+        BufferedImage bimg = toBufferedImage(getEmptyImage(img.getWidth(null), img.getHeight(null)));
+        Graphics2D g = bimg.createGraphics();
+        g.drawImage(img, 0, 0, null);
+        g.dispose();
+        return toImage(bimg);
+    }
 
 }

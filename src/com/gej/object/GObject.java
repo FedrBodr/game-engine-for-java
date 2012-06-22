@@ -126,6 +126,26 @@ public class GObject implements Updateable {
     public GObject(Image img) {
         this.anim = new Animation(new Image[] { img }, 100);
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public GObject clone(){
+        try {
+            GObject obj = getClass().newInstance();
+            obj.setAnimation(getAnimation());
+            obj.setDepth(getDepth());
+            obj.setSolid(isSolid());
+            obj.setVelocityX(getVelocityX());
+            obj.setVelocityY(getVelocityY());
+            obj.setVisible(isVisible());
+            obj.setX(getX());
+            obj.setY(getY());
+            return obj;
+        } catch (InstantiationException e) {}
+          catch (IllegalAccessException e) {}
+        return null;
+    }
 
     /**
      * Updates this object based on time

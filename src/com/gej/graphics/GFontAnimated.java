@@ -89,5 +89,16 @@ public class GFontAnimated implements Updateable {
         fonts.add(font);
         durations.add(duration);
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public GFontAnimated clone(){
+        GFontAnimated fanim = new GFontAnimated();
+        for (int i=0; i<fonts.size(); i++){
+            fanim.addFont(fonts.get(i), durations.get(i));
+        }
+        return fanim;
+    }
 
 }

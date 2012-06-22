@@ -55,6 +55,9 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
 
     /** The time elapsed in the current frame */
     public static long elapsedTime = 0;
+    
+    // The game state
+    private static GameState state = GameState.GAME_LOADING;
 
     // Input manager
     protected GInput input = null;
@@ -111,7 +114,9 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
             }
             // Update the game and the objects
             update(elapsedTime);
-            Map.updateObjects(elapsedTime);
+            if (state!=GameState.GAME_PAUSED){
+                Map.updateObjects(elapsedTime);
+            }
             // Repaint the game
             repaint();
             // Sync the game to meet the target frame rate
@@ -217,6 +222,22 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
      */
     public GInput getInput(){
         return input;
+    }
+    
+    /**
+     * Sets the state of this game
+     * @param g The new state
+     */
+    public static void setState(GameState g){
+        state = g;
+    }
+    
+    /**
+     * Gets the current state of the game
+     * @return The current game state
+     */
+    public static GameState getState(){
+        return state;
     }
 
 }

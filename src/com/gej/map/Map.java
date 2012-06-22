@@ -103,6 +103,7 @@ public abstract class Map {
         String[] lines = info.MapData.split("\n");
         TILE_SIZE = info.tileSize;
         loadMap(lines, info.loader);
+        info.mapLoaded();
     }
 
     /**
