@@ -134,7 +134,7 @@ public class ResourceManager extends Thread {
      * @return The percentage of loading resources
      */
     public static final int getLoadPercentage(){
-        return (int)(numLoaded/numResources)*100;
+        return (int)((numLoaded/numResources)*100);
     }
     
     /**
