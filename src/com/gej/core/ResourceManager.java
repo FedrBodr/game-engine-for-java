@@ -69,13 +69,17 @@ public class ResourceManager extends Thread {
         Game.setState(GameState.GAME_LOADING);
         for (int i=0; i<images.size(); i++){
             String imageName = images.get(i);
-            imgMap.put(imageName, Game.loadImage(imageName));
+            Image image = Game.loadImage(imageName);
+            while (image==null){}
+            imgMap.put(imageName, image);
             numLoaded++;
         }
         images.clear();
         for (int i=0; i<sounds.size(); i++){
             String soundName = sounds.get(i);
-            sndMap.put(soundName, WavPlayer.loadSound(soundName));
+            WavSound sound = WavPlayer.loadSound(soundName);
+            while (sound==null){}
+            sndMap.put(soundName, sound);
             numLoaded++;
         }
         sounds.clear();
@@ -136,7 +140,7 @@ public class ResourceManager extends Thread {
      * @return True if loading, else false
      */
     public static final boolean isLoading(){
-        return numResources!=numLoaded;
+        return !(numResources==numLoaded);
     }
 
 }
