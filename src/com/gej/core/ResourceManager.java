@@ -91,6 +91,7 @@ public class ResourceManager extends Thread {
      */
     public static final void defineImage(String imgName){
         images.add(imgName);
+        numResources++;
     }
     
     /**
@@ -99,6 +100,7 @@ public class ResourceManager extends Thread {
      */
     public static final void defineSound(String sndName){
         sounds.add(sndName);
+        numResources++;
     }
     
     /**
