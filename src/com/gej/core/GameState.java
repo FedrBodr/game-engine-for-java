@@ -13,6 +13,11 @@ public enum GameState {
     GAME_LOADING,
     
     /**
+     * State indicating that the game is in intro screen
+     */
+    GAME_INTRO,
+    
+    /**
      * State indicating that the game is playing
      */
     GAME_PLAYING,
@@ -20,6 +25,11 @@ public enum GameState {
     /**
      * State indicating that the game is paused
      */
-    GAME_PAUSED
+    GAME_PAUSED,
+    
+    /**
+     * State indicating that the game is at end screen
+     */
+    GAME_END
     
 }

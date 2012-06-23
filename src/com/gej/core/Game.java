@@ -114,7 +114,7 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
             }
             // Update the game and the objects
             update(elapsedTime);
-            if (state!=GameState.GAME_PAUSED){
+            if (state==GameState.GAME_PLAYING){
                 Map.updateObjects(elapsedTime);
             }
             // Repaint the game
