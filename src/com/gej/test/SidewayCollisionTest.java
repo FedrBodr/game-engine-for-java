@@ -8,7 +8,7 @@ import java.awt.Image;
 import com.gej.core.GWindow;
 import com.gej.core.Game;
 import com.gej.core.Global;
-import com.gej.input.GInput;
+import com.gej.input.GMouse;
 import com.gej.object.GObject;
 
 public class SidewayCollisionTest extends Game {
@@ -21,8 +21,6 @@ public class SidewayCollisionTest extends Game {
     GObject object1 = null;
     GObject object2 = null;
 
-    GInput input = null;
-
     Image background = null;
 
     @Override
@@ -32,19 +30,16 @@ public class SidewayCollisionTest extends Game {
         object1.setX(Global.WIDTH / 2 - 32);
         object1.setY(Global.HEIGHT / 2 - 32);
         object2 = new GObject(loadImage("resources/box2.png"));
-        input = new GInput(this);
-        input.setCursor(GInput.INVISIBLE_CURSOR);
         object2.setX(180);
         object2.setY(180);
         Global.FRAMES_PER_SECOND = 150;
+        Global.HIDE_CURSOR = true;
     }
 
     @Override
     public void update(long elapsedTime){
-        if (input.getMouseX() != 0 && input.getMouseY() != 0) {
-            object2.setX(input.getMouseX());
-            object2.setY(input.getMouseY());
-        }
+        object2.setX(GMouse.MOUSE_X);
+        object2.setY(GMouse.MOUSE_Y);
     }
 
     @Override
@@ -53,7 +48,6 @@ public class SidewayCollisionTest extends Game {
         g.drawImage(object1.getImage(), Math.round(object1.getX()), Math.round(object1.getY()), null);
         g.drawImage(object2.getImage(), Math.round(object2.getX()), Math.round(object2.getY()), null);
         g.setColor(Color.WHITE);
-        g.draw(object2.getBounds());
         g.setFont(new Font("Courier New", Font.BOLD, 12));
         g.drawString("Top    : " + object2.isTopCollision(object1), 15, 25);
         g.drawString("Bottom : " + object2.isBottomCollision(object1), 15, 50);
