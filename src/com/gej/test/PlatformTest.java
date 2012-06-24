@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 
 import com.gej.core.GWindow;
 import com.gej.core.Game;
+import com.gej.core.GameState;
 import com.gej.core.Global;
 import com.gej.graphics.Animation;
 import com.gej.graphics.Background;
@@ -38,8 +39,9 @@ public class PlatformTest extends Game implements MapLoader {
         Map.loadMap(48, "resources/PlatformTest.txt", this);
         // configure the game
         Global.USE_PIXELPERFECT_COLLISION = true;
-        // Global.FULLSCREEN = true;
-        Global.HIDE_CURSOR = true;
+        Global.FULLSCREEN = true;
+        //Global.HIDE_CURSOR = true;
+        setState(GameState.GAME_PLAYING);
     }
 
     public GObject getObject(char c, int x, int y){
