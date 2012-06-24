@@ -163,7 +163,7 @@ public class GWindow extends JFrame implements ActionListener {
                 DisplayMode[] modes = device.getDisplayModes();
                 // Cycle and set the best display mode
                 for (DisplayMode mode : modes) {
-                    System.out.println(mode.getWidth() + "     " + mode.getHeight() + "     " + mode.getBitDepth());
+                    //System.out.println(mode.getWidth() + "     " + mode.getHeight() + "     " + mode.getBitDepth());
                     if (mode.getWidth() == Global.WIDTH
                             && mode.getHeight() == Global.HEIGHT
                             && (mode.getBitDepth() == 32 || mode.getBitDepth() == DisplayMode.BIT_DEPTH_MULTI)) {
