@@ -46,7 +46,7 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
 	 * 
 	 */
     private static final long serialVersionUID = 5934394613281562786L;
-
+    
     // Private variables
     private boolean running = false;
     private Image backImage = null;
@@ -77,6 +77,13 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
      * and starts the game loop
      */
     public final void init(){
+        // Enable opengl acceleration
+        try {
+            System.setProperty("sun.java2d.opengl", "true");
+        } catch (Exception e){
+            // System doesn't support opengl
+            System.setProperty("sun.java2d.opengl", "false");
+        }
         running = true;
         cache = new HashMap<String, Image>();
         setFocusTraversalKeysEnabled(false);
