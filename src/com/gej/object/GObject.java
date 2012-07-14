@@ -49,10 +49,13 @@ public class GObject implements Updateable {
     // The animation object
     private Animation anim;
     // The positions and velocities
-    protected float x;
-    protected float y;
-    protected float dx;
-    protected float dy;
+    private float x;
+    private float y;
+    private float dx;
+    private float dy;
+    
+    // The direction of this object
+    protected float direction = 0;
 
     // The depth of this object
     protected int depth = 0;
@@ -175,7 +178,7 @@ public class GObject implements Updateable {
      * Moves the object horizontally
      */
     public void moveHorizontally(){
-        float nx = x + dx * Game.elapsedTime;
+        float nx = x + (float)(dx/30)*Game.elapsedTime;
         if (check(nx, getY())) {
             setX(nx);
         }
@@ -185,18 +188,39 @@ public class GObject implements Updateable {
      * Moves the object vertically
      */
     public void moveVertically(){
-        float ny = y + dy * Game.elapsedTime;
+        float ny = y + (float)(dy/30)*Game.elapsedTime;
         if (check(getX(), ny)) {
             setY(ny);
         }
     }
 
+    /**
+     * Sets the depth of this object
+     * @param depth The depth of this object
+     */
     public void setDepth(int depth){
         this.depth = depth;
     }
 
+    /**
+     * Gets the depth of the object
+     * @return The depth of the object
+     */
     public int getDepth(){
         return depth;
+    }
+    
+    /**
+     * Returns the direction of this object. The angles are as followed.
+     * <pre>
+     * 0&deg;   : moving upwards
+     * 90&deg;  : moving right or stationary
+     * 180&deg; : moving down
+     * 270&deg; : moving left
+     * </pre>
+     */
+    public int getDirection(){
+        return (int)(direction = 90+(int)Math.toDegrees(Math.atan2(getNextY(Game.elapsedTime)-y, getNextX(Game.elapsedTime)-x)));
     }
 
     /**
@@ -238,7 +262,7 @@ public class GObject implements Updateable {
     public Rectangle getBounds(){
         return new Rectangle(Math.round(getX()), Math.round(getY()), getWidth(), getHeight());
     }
-
+    
     /**
      * Checks if this object is colliding the other object. You can enable
      * pixel-perfect collision detection by using
@@ -496,35 +520,73 @@ public class GObject implements Updateable {
     }
 
     /**
-     * Changes the velocities of this object in order to get a bounce effect
-     * over the object.
+     * This object bounces back from the other object in a natural way.
+     * Please realize that the bounce is not completely accurate because
+     * this depends on many properties. But in many situations the effect
+     * is good enough. Had some bugs in pixel perfect detection mode if
+     * the image has a larger area of complete alpha. If using PPCD, make
+     * the object fit the image size by removing the alpha and resizing
+     * the image.
      */
-    public void bounce(){
-        boolean left = false;
-        boolean right = false;
-        boolean up = false;
-        boolean down = false;
-        if (dx < 0) {
-            left = true;
-        } else if (dx > 0) {
-            right = true;
-        }
-        if (dy < 0) {
-            up = true;
-        } else if (dy > 0) {
-            down = true;
-        }
-        if (left && up) {
-            dx = -dx;
-        }
-        if (left && down) {
-            dy = -dy;
-        }
-        if (right && up) {
-            dx = -dx;
-        }
-        if (right && down) {
-            dy = -dy;
+    public void bounce(GObject other){
+        // bounce only if a collision
+        if (isCollidingWith(other)){
+            // The left part of this object
+            float lx = getX();
+            float ly = getY();
+            float lw = 2;
+            float lh = getHeight();
+            // The right part of this object
+            float rx = getX() + getWidth() -2;
+            float ry = getY();
+            float rw = 2;
+            float rh = getHeight();
+            // The top part of this object
+            float tx = getX();
+            float ty = getY();
+            float tw = getWidth();
+            float th = 2;
+            // The bottom part of this object
+            float bx = getX();
+            float by = getY() + getHeight() -2;
+            float bw = getWidth();
+            float bh = 2;
+            // The left part of other object
+            float olx = other.getX();
+            float oly = other.getY();
+            float olw = 2;
+            float olh = other.getHeight();
+            // The right part of the other object
+            float orx = other.getX() + other.getWidth() - 2;
+            float ory = other.getY();
+            float orw = 2;
+            float orh = other.getHeight();
+            // The top part of the other object
+            float otx = other.getX();
+            float oty = other.getY();
+            float otw = other.getWidth();
+            float oth = 2;
+            // The bottom part of the other object
+            float obx = other.getX();
+            float oby = other.getY() + other.getHeight() - 2;
+            float obw = other.getWidth();
+            float obh = 2;
+            boolean ver = GUtil.isCollision(lx, ly, lw, lh, orx, ory, orw, orh) || GUtil.isCollision(rx, ry, rw, rh, olx, oly, olw, olh);
+            boolean hor = GUtil.isCollision(tx, ty, tw, th, obx, oby, obw, obh) || GUtil.isCollision(bx, by, bw, bh, otx, oty, otw, oth);
+            // Now check for collisions
+            if (ver){
+                // Reverse horizontal direction
+                dx = -dx;
+            }
+            if (hor){
+                // Reverse vertical direction
+                dy = -dy;
+            }
+            if (!hor && !ver){
+                // We're stuck. Reverse both the directions
+                dx = -dx;
+                dy = -dy;
+            }
         }
     }
 

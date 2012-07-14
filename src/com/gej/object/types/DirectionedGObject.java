@@ -41,6 +41,10 @@ public class DirectionedGObject extends GObject {
     }
 
     /**
+    
+    public float getDirection(){
+        return direction;
+    }
      * Constructs an object with an image at a position x,y
      * 
      * @param img The image of the object
@@ -81,7 +85,7 @@ public class DirectionedGObject extends GObject {
      * @param img The image used for this object
      */
     public DirectionedGObject(Image img) {
-        super(new Animation(new Image[] { img }, 100));
+        super(img);
     }
 
     /**

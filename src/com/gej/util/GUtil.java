@@ -14,7 +14,35 @@ import java.util.ArrayList;
  */
 public abstract class GUtil {
 
+    // Prevent instantiation
     private GUtil() {
+    }
+    
+    /**
+     * Checks if two rectangles intersect each other at a high speed than the
+     * Rectangle class. This is also accurate since the collision detection is
+     * done if four stages.
+     * @param x1 The upper-left x-coordinate of the first rectangle
+     * @param y1 The upper-left y-coordinate of the first rectangle
+     * @param w1 The width of the first rectangle
+     * @param h1 The height of the first rectangle
+     * @param x2 The upper-left x-coordinate of the second rectangle
+     * @param y2 The upper-left y-coordinate of the second rectangle
+     * @param w2 The width of the second rectangle
+     * @param h2 The height of the second rectangle
+     * @return True if the two rectangles intersect each other
+     */
+    public static boolean isCollision(float x1, float y1, float w1, float h1, float x2, float y2, float w2, float h2){
+        if (x1 < x2 + w2) {
+            if (x2 < x1 + w1) {
+                if (y1 < y2 + h2) {
+                    if (y2 < y1 + h1) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /**

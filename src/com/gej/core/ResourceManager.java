@@ -144,5 +144,17 @@ public class ResourceManager extends Thread {
     public static final boolean isLoading(){
         return !(numResources==numLoaded);
     }
+    
+    /**
+     * Resets this resource manager to use multiple times
+     */
+    public static final void reset(){
+        numResources = 0;
+        numLoaded = 0;
+        imgMap.clear();
+        sndMap.clear();
+        images.clear();
+        sounds.clear();
+    }
 
 }

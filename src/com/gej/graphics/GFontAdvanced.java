@@ -44,5 +44,14 @@ public class GFontAdvanced {
         }
         return null;
     }
+    
+    /**
+     * Creates a font by using the default font descriptor
+     * @param img The image to be used.
+     * @return The created image
+     */
+    public static GFont getFont(Image img){
+        return (getFont(img, "ImageFonts/DefFontDescriptor.txt"));
+    }
 
 }

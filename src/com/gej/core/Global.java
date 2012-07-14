@@ -32,9 +32,14 @@ public abstract class Global {
     public static boolean FULLSCREEN = false;
     /** The FPS of the game */
     public static int FRAMES_PER_SECOND = 100;
+    /**
+     * Fits the drawn game to the window so that nothing in the view is escaped out.
+     * This makes the display of text using the Java2D fonts to an uneasy way
+     */
+    public static boolean STRETCH_TO_SCREEN = false;
     /** A map containing various properties */
     public static HashMap<String, Object> PROPERTIES = new HashMap<String, Object>();
     /** Variable containing the current GEJ version */
-    public static final String GEJ_VERSION = "GEJ V0.7 R3";
+    public static final String GEJ_VERSION = "GEJ V0.8";
 
 }

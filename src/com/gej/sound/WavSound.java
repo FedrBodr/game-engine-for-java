@@ -13,6 +13,8 @@ public class WavSound {
     // Private variables
     private byte[] data = null;
     private AudioFormat format = null;
+    
+    private int length = 0;
 
     private boolean loop = false;
     private SoundState state = SoundState.STATE_STOPPED;
@@ -23,11 +25,12 @@ public class WavSound {
      * @param data The data of the WAV file as a byte array.
      * @param format The format of this WAV file.
      */
-    public WavSound(byte[] data, AudioFormat format) {
+    public WavSound(byte[] data, AudioFormat format, int length) {
         this.data = data;
         this.format = format;
+        this.length = length;
     }
-
+    
     /**
      * Returns the data associated with this WavSound
      * 
@@ -114,6 +117,10 @@ public class WavSound {
      */
     public void setLooping(boolean value){
         loop = value;
+    }
+    
+    public int getLength(){
+        return length;
     }
 
 }

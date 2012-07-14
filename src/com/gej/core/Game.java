@@ -145,8 +145,7 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
             long wait = 1000 / Global.FRAMES_PER_SECOND;
             wait = Math.min(wait, 10);
             Thread.sleep(wait);
-        } catch (Exception e) {
-        }
+        } catch (Exception e) {}
     }
 
     /**
@@ -174,6 +173,8 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
             backGraphics.dispose();
             if (Global.FULLSCREEN) {
                 g2D.drawImage(backImage, 0, 0, GWindow.RESOLUTION_X, GWindow.RESOLUTION_Y, null);
+            } else if (Global.STRETCH_TO_SCREEN){
+                g2D.drawImage(backImage, 0, 0, getWidth(), getHeight(), null);
             } else {
                 g2D.drawImage(backImage, 0, 0, Global.WIDTH, Global.HEIGHT, null);
             }
@@ -216,8 +217,12 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
         if (cache.containsKey(name)) {
             img = cache.get(name);
         } else {
-            img = new ImageIcon(Game.class.getClassLoader().getResource(name)).getImage();
-            cache.put(name, img);
+            try {
+                img = new ImageIcon(Game.class.getClassLoader().getResource(name)).getImage();
+                cache.put(name, img);
+            } catch (Exception e){
+                System.err.println("Error loading image : " + name + "\nFatal error. The program is exiting.");
+            }
         }
         return img;
     }
