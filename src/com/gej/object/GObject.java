@@ -528,7 +528,7 @@ public class GObject implements Updateable {
      * the object fit the image size by removing the alpha and resizing
      * the image.
      */
-    public void bounce(GObject other){
+    public void bounce(GObject other, float velocity){
         // bounce only if a collision
         if (isCollidingWith(other)){
             // The left part of this object

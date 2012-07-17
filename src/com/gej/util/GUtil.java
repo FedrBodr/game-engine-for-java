@@ -18,6 +18,28 @@ public abstract class GUtil {
     private GUtil() {
     }
     
+    // Direction and velocities
+    
+    public static int getPositiveAngle(int angle){
+        if (angle<0){
+            return angle+360;
+        } else if (angle>360){
+            return angle-360;
+        } else {
+            return angle;
+        }
+    }
+    
+    public static float getVelocityX(float velocity, int angle){
+        return (float)(velocity*Math.sin(Math.toRadians(getPositiveAngle(angle))));
+    }
+    
+    public static float getVelocityY(float velocity, int angle){
+        return (float)(velocity*(-1)*Math.cos(Math.toRadians(getPositiveAngle(angle))));
+    }
+    
+    // Collision Detection
+    
     /**
      * Checks if two rectangles intersect each other at a high speed than the
      * Rectangle class. This is also accurate since the collision detection is
