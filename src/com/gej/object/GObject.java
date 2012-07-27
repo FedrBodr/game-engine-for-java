@@ -4,7 +4,6 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
 
-import com.gej.core.Game;
 import com.gej.core.Global;
 import com.gej.core.Updateable;
 import com.gej.graphics.Animation;
@@ -178,7 +177,7 @@ public class GObject implements Updateable {
      * Moves the object horizontally
      */
     public void moveHorizontally(){
-        float nx = x + (float)(dx/30)*Game.elapsedTime;
+        float nx = x + dx;
         if (check(nx, getY())) {
             setX(nx);
         }
@@ -188,7 +187,7 @@ public class GObject implements Updateable {
      * Moves the object vertically
      */
     public void moveVertically(){
-        float ny = y + (float)(dy/30)*Game.elapsedTime;
+        float ny = y + dy;
         if (check(getX(), ny)) {
             setY(ny);
         }
@@ -220,7 +219,7 @@ public class GObject implements Updateable {
      * </pre>
      */
     public int getDirection(){
-        return (int)(direction = 90+(int)Math.toDegrees(Math.atan2(getNextY(Game.elapsedTime)-y, getNextX(Game.elapsedTime)-x)));
+        return (int)(direction = 90+(int)Math.toDegrees(Math.atan2(getNextY()-y, getNextX()-x)));
     }
 
     /**
@@ -468,10 +467,9 @@ public class GObject implements Updateable {
      * @param nx The new x-position
      * @param ny The new y-position
      * @param speed The speed with which to move
-     * @param elapsedTime The time elapsed in the current frame.
      * @return True if the new point has been reached
      */
-    public boolean moveTo(float nx, float ny, float speed, long elapsedTime){
+    public boolean moveTo(float nx, float ny, float speed){
         boolean _x = false;
         boolean _y = false;
         int distance = (int) Math.sqrt((double) ((x - nx) * (x - nx) + (y - ny)
@@ -481,19 +479,19 @@ public class GObject implements Updateable {
         float newy = y;
         if (x > nx) {
             // We should move left
-            newx -= vel * elapsedTime;
+            newx -= vel;
         } else if (x < nx) {
             // We should move right
-            newx += vel * elapsedTime;
+            newx += vel;
         } else {
             _x = true;
         }
         if (y > ny) {
             // We should move up
-            newy -= vel * elapsedTime;
+            newy -= vel;
         } else if (y < ny) {
             // We should move down
-            newy += vel * elapsedTime;
+            newy += vel;
         } else {
             _y = true;
         }
@@ -512,11 +510,10 @@ public class GObject implements Updateable {
      * @param nx The new x-position
      * @param ny The new y-position
      * @param speed The speed with which to move
-     * @param elapsedTime The time elapsed in the current frame.
      * @return True if the new point has been reached
      */
-    public boolean moveTo(int nx, int ny, float speed, long elapsedTime){
-        return moveTo((float) nx, (float) ny, speed, elapsedTime);
+    public boolean moveTo(int nx, int ny, float speed){
+        return moveTo((float) nx, (float) ny, speed);
     }
 
     /**
@@ -528,86 +525,38 @@ public class GObject implements Updateable {
      * the object fit the image size by removing the alpha and resizing
      * the image.
      */
-    public void bounce(GObject other, float velocity){
-        // bounce only if a collision
-        if (isCollidingWith(other)){
-            // The left part of this object
-            float lx = getX();
-            float ly = getY();
-            float lw = 2;
-            float lh = getHeight();
-            // The right part of this object
-            float rx = getX() + getWidth() -2;
-            float ry = getY();
-            float rw = 2;
-            float rh = getHeight();
-            // The top part of this object
-            float tx = getX();
-            float ty = getY();
-            float tw = getWidth();
-            float th = 2;
-            // The bottom part of this object
-            float bx = getX();
-            float by = getY() + getHeight() -2;
-            float bw = getWidth();
-            float bh = 2;
-            // The left part of other object
-            float olx = other.getX();
-            float oly = other.getY();
-            float olw = 2;
-            float olh = other.getHeight();
-            // The right part of the other object
-            float orx = other.getX() + other.getWidth() - 2;
-            float ory = other.getY();
-            float orw = 2;
-            float orh = other.getHeight();
-            // The top part of the other object
-            float otx = other.getX();
-            float oty = other.getY();
-            float otw = other.getWidth();
-            float oth = 2;
-            // The bottom part of the other object
-            float obx = other.getX();
-            float oby = other.getY() + other.getHeight() - 2;
-            float obw = other.getWidth();
-            float obh = 2;
-            boolean ver = GUtil.isCollision(lx, ly, lw, lh, orx, ory, orw, orh) || GUtil.isCollision(rx, ry, rw, rh, olx, oly, olw, olh);
-            boolean hor = GUtil.isCollision(tx, ty, tw, th, obx, oby, obw, obh) || GUtil.isCollision(bx, by, bw, bh, otx, oty, otw, oth);
-            // Now check for collisions
-            if (ver){
-                // Reverse horizontal direction
-                dx = -dx;
-            }
-            if (hor){
-                // Reverse vertical direction
-                dy = -dy;
-            }
-            if (!hor && !ver){
-                // We're stuck. Reverse both the directions
-                dx = -dx;
-                dy = -dy;
-            }
+    public void bounce(GObject other){
+        int xd = (int)((other.x+other.getWidth()/2)-(x+getWidth()/2));
+        int yd = (int)((other.y+other.getHeight()/2)-(y+getHeight()/2));
+        if (xd<0){
+            xd = -xd;
+        }
+        if (yd<0){
+            yd = -yd;
+        }
+        if (xd>yd){
+            dx = -dx;
+        } else {
+            dy = -dy;
         }
     }
 
     /**
      * Predicts the next x-position based on the velocity
      * 
-     * @param elapsedTime The time elapsed in the current frame
      * @return The next x-position
      */
-    public float getNextX(long elapsedTime){
-        return x + dx * elapsedTime;
+    public float getNextX(){
+        return x + dx;
     }
 
     /**
      * Predicts the next y-position based on the velocity
      * 
-     * @param elapsedTime The time elapsed in the current frame
      * @return The next y-position
      */
-    public float getNextY(long elapsedTime){
-        return y + dy * elapsedTime;
+    public float getNextY(){
+        return y + dy;
     }
 
     /**

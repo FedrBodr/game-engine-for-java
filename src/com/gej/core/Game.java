@@ -52,9 +52,6 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
     private Image backImage = null;
     private Graphics2D backGraphics = null;
     private static HashMap<String, Image> cache = null;
-
-    /** The time elapsed in the current frame */
-    public static long elapsedTime = 0;
     
     // The game state
     private static GameState state = GameState.GAME_LOADING;
@@ -106,46 +103,45 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
         // Initialize the resources
         Map.initMap();
         initResources();
-        // Note the current time
-        long time = System.nanoTime() / 1000000;
-        long fpsRecalcPeriod = 0;
+        // For the FPS Counter
+        long fps = 0;
+        long counterelapsed = 0;
+        // Timing in the GameLoop
+        int loops = 0;
+        int SKIP_STEPS = 1000/Global.STEPS_FOR_SECOND;
+        // Don't skip too many frames
+        int MAX_FRAMESKIP = 1;
+        long time = (long)(System.nanoTime()*0.000001);
         while (running) {
-            // Calculate the elapsed time
-            elapsedTime = System.nanoTime() / 1000000 - time;
-            time = System.nanoTime() / 1000000;
+            loops = 0;
             // Show or hide the cursor
             if (Global.HIDE_CURSOR) {
                 setCursor(GInput.INVISIBLE_CURSOR);
             } else {
                 setCursor(Cursor.getDefaultCursor());
             }
+            // Increment and show FPS
+            counterelapsed += SKIP_STEPS;
+            fps++;
+            if (counterelapsed>=1000){
+                Global.FRAMES_PER_SECOND = (int)fps/MAX_FRAMESKIP;
+                fps = 0;
+                counterelapsed = 0;
+            }
             // Update the game and the objects
-            update(elapsedTime);
-            if (state==GameState.GAME_PLAYING){
-                Map.updateObjects(elapsedTime);
+            while( (System.nanoTime()*0.000001) > time && loops < MAX_FRAMESKIP) {
+                update(SKIP_STEPS);
+                if (state==GameState.GAME_PLAYING){
+                    Map.updateObjects(SKIP_STEPS);
+                }
+                loops++;
+                time += SKIP_STEPS;
             }
             // Repaint the game
             repaint();
             // Sync the game to meet the target frame rate
-            sync();
-            fpsRecalcPeriod += elapsedTime;
-            // Calculate the FPS every 500ms
-            if (elapsedTime > 0 && fpsRecalcPeriod > 500) {
-                Global.FRAMES_PER_SECOND = (int) (1000 / elapsedTime);
-                fpsRecalcPeriod = 0;
-            }
-        }
-    }
-
-    private void sync(){
-        try {
-            // Sync the toolkit
             Toolkit.getDefaultToolkit().sync();
-            // Wait a bit to meet the target frame rate
-            long wait = 1000 / Global.FRAMES_PER_SECOND;
-            wait = Math.min(wait, 10);
-            Thread.sleep(wait);
-        } catch (Exception e) {}
+        }
     }
 
     /**

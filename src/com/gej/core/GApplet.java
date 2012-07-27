@@ -15,12 +15,21 @@ public class GApplet extends JApplet {
      * 
      */
     private static final long serialVersionUID = 1994280929713148311L;
+    
+    String gmname = "";
+    
+    public GApplet(String gmname){
+        this.gmname = gmname;
+    }
+    
+    public GApplet(){
+        gmname = "";
+    }
 
     /**
      * Initializes the applet mode
      */
     public void init(){
-        String gmname = getParameter("game-class");
         if (gmname == null || gmname == "") {
             gmname = JOptionPane.showInputDialog("Enter game class name");
         }

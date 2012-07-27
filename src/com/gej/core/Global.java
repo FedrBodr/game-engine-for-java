@@ -24,12 +24,16 @@ public abstract class Global {
      * this feature for some games.
      */
     public static boolean ENABLE_COLLISION_DETECTION_FOR_ALL_OBJECTS = false;
-    /** Enabling this option will move objects into solid objects */
-    public static boolean MOVE_INTO_SOLID_OBJECTS = false;
     /** The property to show or hide cursor */
     public static boolean HIDE_CURSOR = false;
     /** The switch for full screen mode */
     public static boolean FULLSCREEN = false;
+    /**
+     * The speed of the game in steps for second. This is the speed with which
+     * the game will be updated. You can experiment with change in this value
+     * to see which speed aptly suites your game.
+     */
+    public static int STEPS_FOR_SECOND = 30;
     /** The FPS of the game */
     public static int FRAMES_PER_SECOND = 100;
     /**

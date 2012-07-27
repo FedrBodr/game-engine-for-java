@@ -317,11 +317,8 @@ public abstract class Map {
             GObject obj = objects.get(i);
             if (obj.isAlive()) {
                 obj.superUpdate(elapsedTime);
-                obj.moveHorizontally();
-                checkCollisions(obj, true, false);
-                obj.moveVertically();
-                checkCollisions(obj, false, true);
-                checkCollisions(obj, false, false);
+                obj.move();
+                checkCollisions(obj);
             } else {
                 objects.remove(i);
             }
@@ -331,43 +328,15 @@ public abstract class Map {
     /*
      * Checks for collisions for an object. Helper method.
      */
-    private static final void checkCollisions(GObject obj, boolean hor, boolean vert){
-        if (MapView.isVisible(obj)
-                || Global.ENABLE_COLLISION_DETECTION_FOR_ALL_OBJECTS) {
+    private static final void checkCollisions(GObject obj){
+        if (MapView.isVisible(obj)) {
             for (int i = 0; i < objects.size(); i++) {
                 try {
                     GObject other = objects.get(i);
                     if (other.isAlive()) {
-                        if (other.isCollidingWith(obj)) {
-                            if (!hor && !vert) {
-                                obj.collision(other);
+                        if (other.isCollidingWith(obj)){
+                            obj.collision(other);
                                 return;
-                            }
-                            if (!Global.MOVE_INTO_SOLID_OBJECTS
-                                    && other.isSolid()) {
-                                // Move the object back
-                                if (hor) {
-                                    if (obj.getVelocityX() > 0) {
-                                        obj.setX(other.getX() - obj.getWidth());
-                                    } else {
-                                        obj.setX(other.getX()
-                                                + other.getWidth());
-                                    }
-                                    obj.setVelocityX(0);
-                                    return;
-                                }
-                                if (vert) {
-                                    if (obj.getVelocityY() > 0) {
-                                        obj.setY(other.getY() - obj.getHeight());
-                                    } else {
-                                        obj.setY(other.getY()
-                                                + other.getHeight());
-                                    }
-                                    obj.setVelocityY(0);
-                                    return;
-                                }
-                            }
-                            return;
                         }
                     } else {
                         objects.remove(i);
