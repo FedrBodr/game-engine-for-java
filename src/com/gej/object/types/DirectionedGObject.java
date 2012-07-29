@@ -41,11 +41,8 @@ public class DirectionedGObject extends GObject {
     }
 
     /**
-    
-    public float getDirection(){
-        return direction;
-    }
-     * Constructs an object with an image at a position x,y
+     * public float getDirection(){ return direction; } Constructs an object
+     * with an image at a position x,y
      * 
      * @param img The image of the object
      * @param x The x-coordinate

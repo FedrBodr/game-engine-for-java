@@ -52,7 +52,7 @@ public class GObject implements Updateable {
     private float y;
     private float dx;
     private float dy;
-    
+
     // The direction of this object
     protected float direction = 0;
 
@@ -128,7 +128,7 @@ public class GObject implements Updateable {
     public GObject(Image img) {
         this.anim = new Animation(new Image[] { img }, 100);
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -144,8 +144,9 @@ public class GObject implements Updateable {
             obj.setX(getX());
             obj.setY(getY());
             return obj;
-        } catch (InstantiationException e) {}
-          catch (IllegalAccessException e) {}
+        } catch (InstantiationException e) {
+        } catch (IllegalAccessException e) {
+        }
         return null;
     }
 
@@ -195,6 +196,7 @@ public class GObject implements Updateable {
 
     /**
      * Sets the depth of this object
+     * 
      * @param depth The depth of this object
      */
     public void setDepth(int depth){
@@ -203,14 +205,16 @@ public class GObject implements Updateable {
 
     /**
      * Gets the depth of the object
+     * 
      * @return The depth of the object
      */
     public int getDepth(){
         return depth;
     }
-    
+
     /**
      * Returns the direction of this object. The angles are as followed.
+     * 
      * <pre>
      * 0&deg;   : moving upwards
      * 90&deg;  : moving right or stationary
@@ -219,7 +223,8 @@ public class GObject implements Updateable {
      * </pre>
      */
     public int getDirection(){
-        return (int)(direction = 90+(int)Math.toDegrees(Math.atan2(getNextY()-y, getNextX()-x)));
+        return (int) (direction = 90 + (int) Math.toDegrees(Math.atan2(getNextY()
+                - y, getNextX() - x)));
     }
 
     /**
@@ -261,7 +266,7 @@ public class GObject implements Updateable {
     public Rectangle getBounds(){
         return new Rectangle(Math.round(getX()), Math.round(getY()), getWidth(), getHeight());
     }
-    
+
     /**
      * Checks if this object is colliding the other object. You can enable
      * pixel-perfect collision detection by using
@@ -517,24 +522,23 @@ public class GObject implements Updateable {
     }
 
     /**
-     * This object bounces back from the other object in a natural way.
-     * Please realize that the bounce is not completely accurate because
-     * this depends on many properties. But in many situations the effect
-     * is good enough. Had some bugs in pixel perfect detection mode if
-     * the image has a larger area of complete alpha. If using PPCD, make
-     * the object fit the image size by removing the alpha and resizing
-     * the image.
+     * This object bounces back from the other object in a natural way. Please
+     * realize that the bounce is not completely accurate because this depends
+     * on many properties. But in many situations the effect is good enough. Had
+     * some bugs in pixel perfect detection mode if the image has a larger area
+     * of complete alpha. If using PPCD, make the object fit the image size by
+     * removing the alpha and resizing the image.
      */
     public void bounce(GObject other){
-        int xd = (int)((other.x+other.getWidth()/2)-(x+getWidth()/2));
-        int yd = (int)((other.y+other.getHeight()/2)-(y+getHeight()/2));
-        if (xd<0){
+        int xd = (int) ((other.x + other.getWidth() / 2) - (x + getWidth() / 2));
+        int yd = (int) ((other.y + other.getHeight() / 2) - (y + getHeight() / 2));
+        if (xd < 0) {
             xd = -xd;
         }
-        if (yd<0){
+        if (yd < 0) {
             yd = -yd;
         }
-        if (xd>yd){
+        if (xd > yd) {
             dx = -dx;
         } else {
             dy = -dy;

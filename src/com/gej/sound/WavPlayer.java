@@ -51,7 +51,7 @@ public class WavPlayer extends Thread {
             DataInputStream dis = new DataInputStream(audioStream);
             dis.readFully(samples);
             // Create a sound container
-            WavSound sound = new WavSound(samples, format, (int)audioStream.getFrameLength());
+            WavSound sound = new WavSound(samples, format, (int) audioStream.getFrameLength());
             // Don't start the sound on load
             sound.setState(SoundState.STATE_STOPPED);
             // Create a new player for each sound
@@ -89,13 +89,13 @@ public class WavPlayer extends Thread {
             AudioFormat format = sound.getAudioFormat();
             // Calculate the buffer size and create the buffer
             int bufferSize = sound.getLength();
-            //System.out.println(bufferSize);
+            // System.out.println(bufferSize);
             byte[] buffer = new byte[bufferSize];
             // Create a new data line to write the samples onto
             DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
             line = (SourceDataLine) AudioSystem.getLine(info);
             // Open and start playing on the line
-            if  (!line.isOpen()){
+            if (!line.isOpen()) {
                 line.open();
             }
             line.start();

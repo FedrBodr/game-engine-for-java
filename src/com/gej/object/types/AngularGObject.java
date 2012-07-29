@@ -9,6 +9,7 @@ import com.gej.util.ImageTool;
 /**
  * A customized object to move along a direction specified by angle in degrees.
  * The angles are as follows:
+ * 
  * <pre>
  * 0&deg;   : moving upwards
  * 90&deg;  : moving right or stationary
@@ -19,7 +20,7 @@ import com.gej.util.ImageTool;
  * @author Sri Harsha Chilakapati
  */
 public class AngularGObject extends GObject {
-    
+
     // The velocity of this object
     protected float velocity = 0;
 
@@ -85,7 +86,7 @@ public class AngularGObject extends GObject {
     public AngularGObject(Image img) {
         super(img);
     }
-    
+
     /**
      * Sets the velocity of this object. The velocity must be always positive.
      * If negative velocities are used, then the direction will be reversed.
@@ -94,7 +95,7 @@ public class AngularGObject extends GObject {
      */
     public void setVelocity(float vel){
         velocity = vel;
-        setDirection((int)direction);
+        setDirection((int) direction);
     }
 
     /**
@@ -108,11 +109,12 @@ public class AngularGObject extends GObject {
 
     /**
      * Sets the direction of this object
+     * 
      * @param dir The new direction in degrees
      */
     public void setDirection(int dir){
-        setVelocityX((float)(velocity*Math.sin(Math.toRadians(dir))));
-        setVelocityY((float)(velocity*(-1)*Math.cos(Math.toRadians(dir))));
+        setVelocityX((float) (velocity * Math.sin(Math.toRadians(dir))));
+        setVelocityY((float) (velocity * (-1) * Math.cos(Math.toRadians(dir))));
     }
 
 }

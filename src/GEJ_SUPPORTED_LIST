@@ -1,0 +1,116 @@
+[GEJ SUPPORTED LIST]
+  [Actions]
+    * Total Done Actions 34
+    * Total TODO Actions 18
+    * Total PARTIALLY_DONE Actions 1
+    * Total Done GML Functions 9
+    * Total TODO GML Functions 10
+    * Total PARTIALLY_DONE GML Functions 0
+  [NOT_IN_GM_BUT_IN_GEJ]
+    * Animated Fonts
+    * Image Fonts
+    * Object Acceleration
+    * Different Types of Objects
+    * In Game ResourceManager
+    * Five GameStates
+  [IN_GM_BUT_NOT_IN_GEJ]
+    * TimeLines
+    * Paths
+    * Particle Systems
+    * 3D Functions
+
+[Done]
+  [Actions]
+    ; Movement Functions
+    * Move Fixed
+    * Move Free
+    * Move Towards
+    * Speed Horizontal
+    * Speed Vertical
+    * Reverse Horizontal
+    * Reverse Vertical
+    * Jump To Position
+    * Align to Grid
+    * Bounce
+    ; Main Actions Set 1
+    * Create Instance
+    * Destroy Instance
+    * Change Image
+    * Change Animation
+    * Play Sound
+    * Stop Sound
+    * Check Sound
+    * Previous Room
+    * Next Room
+    * Restart Room
+    * Different Room
+    * Check Previous
+    * Check Next
+    ; Main Actions Set 2
+    * Restart Game
+    * End Game
+    ; Control actions
+    * Check Empty
+    * Check Collision
+    * Test Chance
+    * Check Mouse
+    * Check Grid
+    ; Extra Actions
+    * Set Cursor
+    ; Global Settings
+    * Fullscreen mode
+    * Scaling
+    * Display the cursor
+  [GML]
+    ; Real valued functions
+    * random(x)
+    * random_range(x1, x2)
+    * frac(x)
+    * sign(x)
+    * choose(val1, val2, val3,...)
+    * min(val1, val2, val3,...)
+    * max(val1, val2, val3,...)
+    * mean(val1, val2, val3,...)
+    * point_distance(x1, y1, x2, y2)
+ 
+[TODO]
+  [Actions]
+    ; Move Actions
+    * Gravity
+    * Friction
+    * Jump To Start
+    * Jump To Random
+    * Wrap Screen
+    ; Main Actions Set 1
+    * Create Moving
+    * Create Random
+    * Change Instance
+    * Destroy at Position
+    ; Main Actions Set 2
+    * Set Alarm
+    * Sleep
+    * Display Message
+    * Show Info
+    * Save Game
+    * Load Game
+    ; Control Actions
+    * Check Object
+    * Test Instance Count
+    * Check Question
+  [GML]
+    ; Real valued functions
+    * irandom(x)
+    * irandom_range(x1, x2)
+    * random_set_seed(seed)
+    * random_get_seed()
+    * power(x, n)
+    * logn(n, x)
+    * median(val1, val2, val3,...)
+    * point_direction(x1, y1, x2, y2)
+    * lengthdir_x(len, dir)
+    * lengthdir_x(len, dir)
+
+[Partially Done]
+  [Actions]
+    ; Move Actions
+    * Move to Contact

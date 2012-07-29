@@ -334,9 +334,13 @@ public abstract class Map {
                 try {
                     GObject other = objects.get(i);
                     if (other.isAlive()) {
-                        if (other.isCollidingWith(obj)){
+                        if (other.isCollidingWith(obj)) {
+                            if (other.isSolid()) {
+                                // Move back
+                                obj.setX(obj.getX() - obj.getVelocityX());
+                                obj.setY(obj.getY() - obj.getVelocityY());
+                            }
                             obj.collision(other);
-                                return;
                         }
                     } else {
                         objects.remove(i);

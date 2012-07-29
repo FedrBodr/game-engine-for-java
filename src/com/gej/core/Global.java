@@ -10,6 +10,10 @@ import java.util.HashMap;
  */
 public abstract class Global {
 
+    // prevent instantiation
+    private Global() {
+    }
+
     /** The window title */
     public static String TITLE = "GEJ - The simplest GameEngine for Java";
     /** The window width */
@@ -30,17 +34,18 @@ public abstract class Global {
     public static boolean FULLSCREEN = false;
     /**
      * The speed of the game in steps for second. This is the speed with which
-     * the game will be updated. You can experiment with change in this value
-     * to see which speed aptly suites your game.
+     * the game will be updated. You can experiment with change in this value to
+     * see which speed aptly suites your game.
      */
-    public static int STEPS_FOR_SECOND = 30;
+    public static int STEPS_FOR_SECOND = 60;
     /** The FPS of the game */
-    public static int FRAMES_PER_SECOND = 100;
+    public static int FRAMES_PER_SECOND = 60;
     /**
-     * Fits the drawn game to the window so that nothing in the view is escaped out.
-     * This makes the display of text using the Java2D fonts to an uneasy way
+     * Fits the drawn game to the window so that nothing in the view is escaped
+     * out. This makes the display of text using the Java2D fonts to an uneasy
+     * way
      */
-    public static boolean STRETCH_TO_SCREEN = false;
+    public static boolean STRETCH_TO_SCREEN = true;
     /** A map containing various properties */
     public static HashMap<String, Object> PROPERTIES = new HashMap<String, Object>();
     /** Variable containing the current GEJ version */

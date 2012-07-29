@@ -15,14 +15,14 @@ public class GApplet extends JApplet {
      * 
      */
     private static final long serialVersionUID = 1994280929713148311L;
-    
+
     String gmname = "";
-    
-    public GApplet(String gmname){
+
+    public GApplet(String gmname) {
         this.gmname = gmname;
     }
-    
-    public GApplet(){
+
+    public GApplet() {
         gmname = "";
     }
 

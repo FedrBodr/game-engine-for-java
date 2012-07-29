@@ -145,13 +145,13 @@ public class Animation implements Updateable {
     public synchronized boolean isPaused(){
         return paused;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     public Animation clone(){
         Animation clone = new Animation();
-        for (int i=0; i<images.size(); i++){
+        for (int i = 0; i < images.size(); i++) {
             clone.addFrame(images.get(i), durations.get(i));
         }
         return clone;

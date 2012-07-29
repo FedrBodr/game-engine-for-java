@@ -13,7 +13,7 @@ public class WavSound {
     // Private variables
     private byte[] data = null;
     private AudioFormat format = null;
-    
+
     private int length = 0;
 
     private boolean loop = false;
@@ -30,7 +30,7 @@ public class WavSound {
         this.format = format;
         this.length = length;
     }
-    
+
     /**
      * Returns the data associated with this WavSound
      * 
@@ -118,7 +118,7 @@ public class WavSound {
     public void setLooping(boolean value){
         loop = value;
     }
-    
+
     public int getLength(){
         return length;
     }

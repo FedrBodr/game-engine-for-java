@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 import com.gej.input.GInput;
 import com.gej.map.Map;
+import com.gej.timer.GTimer;
 import com.gej.util.ImageTool;
 
 /**
@@ -46,13 +47,13 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
 	 * 
 	 */
     private static final long serialVersionUID = 5934394613281562786L;
-    
+
     // Private variables
     private boolean running = false;
     private Image backImage = null;
     private Graphics2D backGraphics = null;
     private static HashMap<String, Image> cache = null;
-    
+
     // The game state
     private static GameState state = GameState.GAME_LOADING;
 
@@ -77,7 +78,7 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
         // Enable opengl acceleration
         try {
             System.setProperty("sun.java2d.opengl", "true");
-        } catch (Exception e){
+        } catch (Exception e) {
             // System doesn't support opengl
             System.setProperty("sun.java2d.opengl", "false");
         }
@@ -103,43 +104,26 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
         // Initialize the resources
         Map.initMap();
         initResources();
-        // For the FPS Counter
-        long fps = 0;
-        long counterelapsed = 0;
-        // Timing in the GameLoop
-        int loops = 0;
-        int SKIP_STEPS = 1000/Global.STEPS_FOR_SECOND;
-        // Don't skip too many frames
-        int MAX_FRAMESKIP = 1;
-        long time = (long)(System.nanoTime()*0.000001);
+        // Start the timer
+        GTimer.startTimer();
+        GTimer.refresh();
+        long elapsedTime = 0;
+        // The game loop
         while (running) {
-            loops = 0;
+            // Update the game
+            update(elapsedTime);
+            if (state == GameState.GAME_PLAYING) {
+                Map.updateObjects(elapsedTime);
+            }
             // Show or hide the cursor
             if (Global.HIDE_CURSOR) {
                 setCursor(GInput.INVISIBLE_CURSOR);
             } else {
                 setCursor(Cursor.getDefaultCursor());
             }
-            // Increment and show FPS
-            counterelapsed += SKIP_STEPS;
-            fps++;
-            if (counterelapsed>=1000){
-                Global.FRAMES_PER_SECOND = (int)fps/MAX_FRAMESKIP;
-                fps = 0;
-                counterelapsed = 0;
-            }
-            // Update the game and the objects
-            while( (System.nanoTime()*0.000001) > time && loops < MAX_FRAMESKIP) {
-                update(SKIP_STEPS);
-                if (state==GameState.GAME_PLAYING){
-                    Map.updateObjects(SKIP_STEPS);
-                }
-                loops++;
-                time += SKIP_STEPS;
-            }
-            // Repaint the game
+            // Repaint the game and sync
             repaint();
-            // Sync the game to meet the target frame rate
+            elapsedTime = GTimer.sync();
             Toolkit.getDefaultToolkit().sync();
         }
     }
@@ -169,7 +153,7 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
             backGraphics.dispose();
             if (Global.FULLSCREEN) {
                 g2D.drawImage(backImage, 0, 0, GWindow.RESOLUTION_X, GWindow.RESOLUTION_Y, null);
-            } else if (Global.STRETCH_TO_SCREEN){
+            } else if (Global.STRETCH_TO_SCREEN) {
                 g2D.drawImage(backImage, 0, 0, getWidth(), getHeight(), null);
             } else {
                 g2D.drawImage(backImage, 0, 0, Global.WIDTH, Global.HEIGHT, null);
@@ -216,8 +200,9 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
             try {
                 img = new ImageIcon(Game.class.getClassLoader().getResource(name)).getImage();
                 cache.put(name, img);
-            } catch (Exception e){
-                System.err.println("Error loading image : " + name + "\nFatal error. The program is exiting.");
+            } catch (Exception e) {
+                System.err.println("Error loading image : " + name
+                        + "\nFatal error. The program is exiting.");
             }
         }
         return img;
@@ -231,17 +216,19 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
     public GInput getInput(){
         return input;
     }
-    
+
     /**
      * Sets the state of this game
+     * 
      * @param g The new state
      */
     public static void setState(GameState g){
         state = g;
     }
-    
+
     /**
      * Gets the current state of the game
+     * 
      * @return The current game state
      */
     public static GameState getState(){

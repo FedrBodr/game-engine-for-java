@@ -45,11 +45,11 @@ public class MapInfo {
     public void setMapLoader(MapLoader loader){
         this.loader = loader;
     }
-    
+
     /**
-     * Indicates that the data in this map is loaded into
-     * the Map class
+     * Indicates that the data in this map is loaded into the Map class
      */
-    public void mapLoaded(){}
+    public void mapLoaded(){
+    }
 
 }
