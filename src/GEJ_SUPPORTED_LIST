@@ -1,7 +1,7 @@
 [GEJ SUPPORTED LIST]
   [Actions]
-    * Total Done Actions 34
-    * Total TODO Actions 18
+    * Total Done Actions 35
+    * Total TODO Actions 17
     * Total PARTIALLY_DONE Actions 1
     * Total Done GML Functions 9
     * Total TODO GML Functions 10
@@ -52,6 +52,7 @@
     ; Control actions
     * Check Empty
     * Check Collision
+    * Test Instance Count
     * Test Chance
     * Check Mouse
     * Check Grid
@@ -95,7 +96,6 @@
     * Load Game
     ; Control Actions
     * Check Object
-    * Test Instance Count
     * Check Question
   [GML]
     ; Real valued functions

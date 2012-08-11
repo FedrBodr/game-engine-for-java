@@ -150,7 +150,11 @@ public class ResourceManager extends Thread {
      * @return True if loading, else false
      */
     public static final boolean isLoading(){
-        return !(numResources == numLoaded);
+        boolean bool = !(numResources == numLoaded);
+        if (!bool){
+            reset();
+        }
+        return bool;
     }
 
     /**

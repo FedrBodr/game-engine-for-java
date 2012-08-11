@@ -95,10 +95,12 @@ public class WavPlayer extends Thread {
             DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
             line = (SourceDataLine) AudioSystem.getLine(info);
             // Open and start playing on the line
-            if (!line.isOpen()) {
-                line.open();
-            }
-            line.start();
+            try {
+                if (!line.isOpen()) {
+                    line.open();
+                }
+                line.start();
+            } catch (Exception e){}
             // The total bytes read
             int numBytesRead = 0;
             boolean running = true;

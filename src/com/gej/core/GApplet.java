@@ -5,7 +5,7 @@ import javax.swing.JOptionPane;
 
 /**
  * Runs a game as an Applet by loading the class dynamically at runtime. The
- * name of the class should be specified as a parameter named game-class.
+ * name of the class should be specified as a parameter named "game".
  * 
  * @author Sri Harsha Chilakapati
  */
@@ -18,12 +18,12 @@ public class GApplet extends JApplet {
 
     String gmname = "";
 
+    /**
+     * Construct an applet with a game.
+     * @param gmname The name of the game class with package name
+     */
     public GApplet(String gmname) {
         this.gmname = gmname;
-    }
-
-    public GApplet() {
-        gmname = "";
     }
 
     /**
@@ -35,13 +35,20 @@ public class GApplet extends JApplet {
         }
         try {
             Class<?> gameClass = getClass().getClassLoader().loadClass(gmname);
-            add((Game) gameClass.newInstance());
+            Game game = (Game)gameClass.newInstance();
+            add(game);
+            game.setFocusable(true);
+            setVisible(true);
+            setIgnoreRepaint(true);
         } catch (ClassNotFoundException e) {
             System.err.println("Error finding class : " + gmname);
+            e.printStackTrace();
         } catch (InstantiationException e) {
             System.err.println("Error loading class : " + gmname);
+            e.printStackTrace();
         } catch (IllegalAccessException e) {
             System.err.println("Error loading class : " + gmname);
+            e.printStackTrace();
         }
     }
 

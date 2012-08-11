@@ -169,6 +169,23 @@ public abstract class Map {
         objects.clear();
         layers.clear();
     }
+    
+    /**
+     * Returns the number of instances of the specified class
+     * present in the current map.
+     * @param cl The class of the object
+     * @return The number of instances
+     */
+    public static int numInstances(Class<?> cl){
+        int count = 0;
+        for (int i=0; i<objects.size(); i++){
+            GObject obj = objects.get(i);
+            if (cl.isInstance(obj) && obj.isAlive()){
+                count++;
+            }
+        }
+        return count;
+    }
 
     /**
      * Get the colliding object at a specific position and width and height

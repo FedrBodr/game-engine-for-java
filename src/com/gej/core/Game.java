@@ -80,7 +80,6 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
             System.setProperty("sun.java2d.opengl", "true");
         } catch (Exception e) {
             // System doesn't support opengl
-            System.setProperty("sun.java2d.opengl", "false");
         }
         running = true;
         cache = new HashMap<String, Image>();
