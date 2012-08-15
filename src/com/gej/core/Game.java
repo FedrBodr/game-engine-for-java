@@ -8,8 +8,7 @@ import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.util.HashMap;
 import javax.swing.ImageIcon;
-import javax.swing.JPanel;
-
+import javax.swing.JApplet;
 import com.gej.input.GInput;
 import com.gej.map.Map;
 import com.gej.timer.GTimer;
@@ -41,7 +40,7 @@ import com.gej.util.ImageTool;
  * 
  * @author Sri Harsha Chilakapati
  */
-public abstract class Game extends JPanel implements Runnable, Updateable {
+public abstract class Game extends JApplet implements Runnable, Updateable {
 
     /**
 	 * 
@@ -49,7 +48,7 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
     private static final long serialVersionUID = 5934394613281562786L;
 
     // Private variables
-    private boolean running = false;
+    private static boolean running = false;
     private Image backImage = null;
     private Graphics2D backGraphics = null;
     private static HashMap<String, Image> cache = null;
@@ -59,15 +58,13 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
 
     // Input manager
     protected GInput input = null;
-
+    
     /**
      * Constructs a new Game with default values. No need to use the
      * constructor, as it is automatically called by the constructor of the sub
      * classes.
      */
-    public Game() {
-        init();
-    }
+    public Game() {}
 
     /**
      * Initializes the game. Called automatically when the game starts. Users
@@ -83,11 +80,11 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
         }
         running = true;
         cache = new HashMap<String, Image>();
+        input = GInput.install(this);
         setFocusTraversalKeysEnabled(false);
         setIgnoreRepaint(true);
-        setDoubleBuffered(true);
         setFocusable(true);
-        input = new GInput(this);
+        requestFocusInWindow();
         // Start the game thread to process game updates.
         Thread th = new Thread(this);
         th.setPriority(Thread.MAX_PRIORITY);
@@ -215,6 +212,14 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
     public GInput getInput(){
         return input;
     }
+    
+    /**
+     * Set the input used by the game
+     * @param inp
+     */
+    public void setInput(GInput inp){
+        input = inp;
+    }
 
     /**
      * Sets the state of this game
@@ -232,6 +237,13 @@ public abstract class Game extends JPanel implements Runnable, Updateable {
      */
     public static GameState getState(){
         return state;
+    }
+    
+    /**
+     * Stops the execution of this game
+     */
+    public static void stopGame(){
+        running = false;
     }
 
 }

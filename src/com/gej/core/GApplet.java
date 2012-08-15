@@ -3,13 +3,26 @@ package com.gej.core;
 import javax.swing.JApplet;
 import javax.swing.JOptionPane;
 
+import com.gej.input.GInput;
+
 /**
- * Runs a game as an Applet by loading the class dynamically at runtime. The
- * name of the class should be specified as a parameter named "game".
+ * Runs a game as an Applet by loading the class dynamically at runtime.
+ * A class should be made extending this class by pointing the path of
+ * the class which extends like this.
+ * 
+ * <pre>
+ * public class MyGameApplet extends GApplet {
+ * 
+ *     public MyGameApplet(){
+ *         super("mypackage.MyGame");
+ *     }
+ * 
+ * }
+ * </pre>
  * 
  * @author Sri Harsha Chilakapati
  */
-public class GApplet extends JApplet {
+public class GApplet extends JApplet implements Runnable {
 
     /**
      * 
@@ -17,6 +30,7 @@ public class GApplet extends JApplet {
     private static final long serialVersionUID = 1994280929713148311L;
 
     String gmname = "";
+    Class<?> gmClass = null;
 
     /**
      * Construct an applet with a game.
@@ -34,22 +48,31 @@ public class GApplet extends JApplet {
             gmname = JOptionPane.showInputDialog("Enter game class name");
         }
         try {
-            Class<?> gameClass = getClass().getClassLoader().loadClass(gmname);
-            Game game = (Game)gameClass.newInstance();
-            add(game);
-            game.setFocusable(true);
-            setVisible(true);
-            setIgnoreRepaint(true);
+            gmClass = getClass().getClassLoader().loadClass(gmname);
+            new Thread(this).run();
         } catch (ClassNotFoundException e) {
             System.err.println("Error finding class : " + gmname);
             e.printStackTrace();
+        }
+    }
+    
+    public void run(){
+        try {
+            Game game = (Game)gmClass.newInstance();
+            game.setInput(GInput.install(game));
+            GInput.install(this);
         } catch (InstantiationException e) {
-            System.err.println("Error loading class : " + gmname);
             e.printStackTrace();
         } catch (IllegalAccessException e) {
-            System.err.println("Error loading class : " + gmname);
             e.printStackTrace();
         }
+    }
+    
+    /**
+     * Stops the applet
+     */
+    public void stop(){
+        Game.stopGame();
     }
 
 }

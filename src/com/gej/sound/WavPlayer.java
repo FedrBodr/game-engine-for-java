@@ -133,7 +133,7 @@ public class WavPlayer extends Thread {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            // Do nothing
         }
     }
 
