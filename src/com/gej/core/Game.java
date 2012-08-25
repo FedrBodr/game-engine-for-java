@@ -7,8 +7,10 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.util.HashMap;
+
 import javax.swing.ImageIcon;
 import javax.swing.JApplet;
+
 import com.gej.input.GInput;
 import com.gej.map.Map;
 import com.gej.timer.GTimer;
@@ -17,8 +19,8 @@ import com.gej.util.ImageTool;
 /**
  * This class is the main class for any game. You should extend this class to
  * write a game. The games requires J2SE 1.5 or more to run. To run as an
- * Applet, use the GApplet class. This class uses triple buffering if available
- * or uses double buffering. The default game template could be like this.
+ * Applet, use the GApplet class. This class uses double buffering if available
+ * or uses no buffering. The default game template could be like this.
  * 
  * <pre>
  * public class MyGame extends Game {
@@ -40,13 +42,13 @@ import com.gej.util.ImageTool;
  * 
  * @author Sri Harsha Chilakapati
  */
-public abstract class Game extends JApplet implements Runnable, Updateable {
+public abstract class Game extends JApplet implements Updateable, Runnable {
 
     /**
-	 * 
-	 */
-    private static final long serialVersionUID = 5934394613281562786L;
-
+     * 
+     */
+    private static final long serialVersionUID = 4506620240836220298L;
+    
     // Private variables
     private static boolean running = false;
     private Image backImage = null;
@@ -59,44 +61,23 @@ public abstract class Game extends JApplet implements Runnable, Updateable {
     // Input manager
     protected GInput input = null;
     
-    /**
-     * Constructs a new Game with default values. No need to use the
-     * constructor, as it is automatically called by the constructor of the sub
-     * classes.
-     */
-    public Game() {}
-
-    /**
-     * Initializes the game. Called automatically when the game starts. Users
-     * are prohibited from overriding this method as it creates the image cache
-     * and starts the game loop
-     */
-    public final void init(){
-        // Enable opengl acceleration
-        try {
-            System.setProperty("sun.java2d.opengl", "true");
-        } catch (Exception e) {
-            // System doesn't support opengl
-        }
-        running = true;
+    public void init(){}
+    
+    public void start(){
+        setFocusable(true);
         cache = new HashMap<String, Image>();
         input = GInput.install(this);
-        setFocusTraversalKeysEnabled(false);
-        setIgnoreRepaint(true);
-        setFocusable(true);
-        requestFocusInWindow();
-        // Start the game thread to process game updates.
+        running = true;
         Thread th = new Thread(this);
-        th.setPriority(Thread.MAX_PRIORITY);
         th.start();
+        System.out.println(isFocusable());
     }
-
-    /**
-     * Starts the game and acts as a game loop. The FPS value is calculated
-     * automatically every second and can be known by using
-     * Global.FRAMES_PER_SECOND variable.
-     */
-    public final void run(){
+    
+    public void stop(){}
+    
+    public void destroy(){}
+    
+    public void run(){
         // Initialize the resources
         Map.initMap();
         initResources();
@@ -124,11 +105,7 @@ public abstract class Game extends JApplet implements Runnable, Updateable {
         }
     }
 
-    /**
-     * Draw's the game. Here the triple buffering or double buffering is
-     * implemented
-     */
-    public final void paint(Graphics g){
+    public void paint(Graphics g){
         try {
             // We need the Graphics2D class, not the legacy Graphics
             Graphics2D g2D = (Graphics2D) g;
@@ -155,33 +132,31 @@ public abstract class Game extends JApplet implements Runnable, Updateable {
                 g2D.drawImage(backImage, 0, 0, Global.WIDTH, Global.HEIGHT, null);
             }
             g2D.dispose();
-        } catch (NullPointerException e) {
-        }
+        } catch (NullPointerException e) {}
     }
+    
+    public void initResources(){}
 
-    /**
-     * Initialize the resources, if any used by the game.
-     */
-    public void initResources(){
+    public void render(Graphics2D g){}
+    
+    public void update(long elapsedTime){}
+    
+    public void setInput(GInput i){
+        input = i;
     }
-
-    /**
-     * Render the game. Draw all your objects etc., in this game.
-     * 
-     * @param g The graphics context
-     */
-    public void render(Graphics2D g){
+    
+    public static void setState(GameState s){
+        state = s;
     }
-
-    /**
-     * Use this method to update your game. You could check input, collision
-     * between GObjects, and move them in this method.
-     * 
-     * @param elapsedTime The time elapsed in the current frame
-     */
-    public void update(long elapsedTime){
+    
+    public static GameState getState(){
+        return state;
     }
-
+    
+    public static void stopGame(){
+        running = false;
+    }
+    
     /**
      * Gets you image to load from the root of your jar file
      * 
@@ -203,47 +178,5 @@ public abstract class Game extends JApplet implements Runnable, Updateable {
         }
         return img;
     }
-
-    /**
-     * Get the GInput object associated with this game.
-     * 
-     * @return The current GInput method.
-     */
-    public GInput getInput(){
-        return input;
-    }
     
-    /**
-     * Set the input used by the game
-     * @param inp
-     */
-    public void setInput(GInput inp){
-        input = inp;
-    }
-
-    /**
-     * Sets the state of this game
-     * 
-     * @param g The new state
-     */
-    public static void setState(GameState g){
-        state = g;
-    }
-
-    /**
-     * Gets the current state of the game
-     * 
-     * @return The current game state
-     */
-    public static GameState getState(){
-        return state;
-    }
-    
-    /**
-     * Stops the execution of this game
-     */
-    public static void stopGame(){
-        running = false;
-    }
-
 }

@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -13,6 +14,7 @@ import java.awt.event.MouseWheelListener;
 
 import com.gej.util.GUtil;
 import com.gej.util.ImageTool;
+import com.gej.util.Logger;
 
 /**
  * Constitutes all the information to take input polling for a game. You could
@@ -59,7 +61,9 @@ public class GInput implements KeyListener, MouseListener, MouseMotionListener {
     public GInput(Component comp) {
         this.comp = comp;
         mouseLocation = new Point();
+        comp.dispatchEvent(new FocusEvent(comp, FocusEvent.FOCUS_GAINED));
         comp.addKeyListener(this);
+        Logger.Log("Added GInput as KeyListener", 4);
         comp.addMouseListener(this);
         comp.addMouseMotionListener(this);
         comp.setFocusTraversalKeysEnabled(false);
@@ -180,16 +184,16 @@ public class GInput implements KeyListener, MouseListener, MouseMotionListener {
 
     public void keyPressed(KeyEvent e){
         GKeyBoard.KeyPress(e.getKeyCode());
-        e.consume();
+        //e.consume();
     }
 
     public void keyReleased(KeyEvent e){
         GKeyBoard.KeyReleased(e.getKeyCode());
-        e.consume();
+        //e.consume();
     }
 
     public void keyTyped(KeyEvent e){
-        e.consume();
+        //e.consume();
     }
 
     public void mousePressed(MouseEvent e){
