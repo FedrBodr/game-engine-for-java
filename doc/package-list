@@ -1,0 +1,9 @@
+com.gej.core
+com.gej.graphics
+com.gej.input
+com.gej.map
+com.gej.object
+com.gej.object.types
+com.gej.sound
+com.gej.timer
+com.gej.util

@@ -1,14 +1,14 @@
 package com.gej.core;
 
 import javax.swing.JApplet;
-import javax.swing.JOptionPane;
-
-import com.gej.input.GInput;
 
 /**
  * Runs a game as an Applet by loading the class dynamically at runtime.
  * A class should be made extending this class by pointing the path of
- * the class which extends like this.
+ * the class which extends like this.<br><br>
+ * 
+ * NOTE: This class launches a window from the applet so that we can also
+ *       use the fullscreen mode.<br><br>
  * 
  * <pre>
  * public class MyGameApplet extends GApplet {
@@ -22,16 +22,18 @@ import com.gej.input.GInput;
  * 
  * @author Sri Harsha Chilakapati
  */
-public class GApplet extends JApplet implements Runnable {
+public class GApplet extends JApplet {
 
     /**
      * 
      */
     private static final long serialVersionUID = 1994280929713148311L;
 
-    String gmname = "";
-    Class<?> gmClass = null;
-
+    // Private variables
+    private String gmname = "";
+    private Class<?> gmClass = null;
+    private Game game = null;
+    
     /**
      * Construct an applet with a game.
      * @param gmname The name of the game class with package name
@@ -44,23 +46,13 @@ public class GApplet extends JApplet implements Runnable {
      * Initializes the applet mode
      */
     public void init(){
-        if (gmname == null || gmname == "") {
-            gmname = JOptionPane.showInputDialog("Enter game class name");
-        }
+        Global.WEB_MODE = true;
         try {
             gmClass = getClass().getClassLoader().loadClass(gmname);
-            new Thread(this).run();
+            game = (Game)gmClass.newInstance();
         } catch (ClassNotFoundException e) {
             System.err.println("Error finding class : " + gmname);
             e.printStackTrace();
-        }
-    }
-    
-    public void run(){
-        try {
-            Game game = (Game)gmClass.newInstance();
-            game.setInput(GInput.install(game));
-            GInput.install(this);
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -69,10 +61,12 @@ public class GApplet extends JApplet implements Runnable {
     }
     
     /**
-     * Stops the applet
+     * Starts the game only if the game is not running.
      */
-    public void stop(){
-        Game.stopGame();
+    public final void showGame(){
+        if (!Game.isRunning()){
+            GWindow.setup(game);
+        }
     }
 
 }

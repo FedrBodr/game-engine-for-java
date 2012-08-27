@@ -8,11 +8,10 @@ import java.util.HashMap;
  * 
  * @author Sri Harsha Chilakapati
  */
-public abstract class Global {
+public final class Global {
 
     // prevent instantiation
-    private Global() {
-    }
+    private Global() {}
 
     /** The window title */
     public static String TITLE = "GEJ - The simplest GameEngine for Java";
@@ -37,7 +36,7 @@ public abstract class Global {
      * the game will be updated. You can experiment with change in this value to
      * see which speed aptly suites your game.
      */
-    public static int STEPS_FOR_SECOND = 60;
+    public static int STEPS_FOR_SECOND = 33;
     /** The FPS of the game */
     public static int FRAMES_PER_SECOND = 60;
     /**
@@ -46,9 +45,24 @@ public abstract class Global {
      * way
      */
     public static boolean STRETCH_TO_SCREEN = true;
+    /**
+     * Indicates that the game has been running in the web mode
+     */
+    public static boolean WEB_MODE = false;
     /** A map containing various properties */
     public static HashMap<String, Object> PROPERTIES = new HashMap<String, Object>();
     /** Variable containing the current GEJ version */
     public static final String GEJ_VERSION = "GEJ V0.8 R1";
+    
+    /**
+     * Set's the time for each step to take place
+     * @param time The time for each step (in ms)
+     */
+    public static final void SET_TIME_FOR_EACH_STEP(int time){
+        if (time <= 0){
+            time = 1;
+        }
+        STEPS_FOR_SECOND = 1000/time; 
+    }
 
 }

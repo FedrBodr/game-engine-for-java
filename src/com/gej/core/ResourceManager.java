@@ -66,12 +66,10 @@ public class ResourceManager extends Thread {
      * Loads the resources in a separate thread
      */
     public final void run(){
-        System.out.println("Total resources :   " + numResources);
         Game.setState(GameState.GAME_LOADING);
         for (int i = 0; i < images.size(); i++) {
             String imageName = images.get(i);
             Image image = Game.loadImage(imageName);
-            System.out.println("Loading " + imageName);
             imgMap.put(imageName, image);
             numLoaded++;
         }
@@ -79,12 +77,10 @@ public class ResourceManager extends Thread {
         for (int i = 0; i < sounds.size(); i++) {
             String soundName = sounds.get(i);
             WavSound sound = WavPlayer.loadSound(soundName);
-            System.out.println("Loading " + soundName);
             sndMap.put(soundName, sound);
             numLoaded++;
         }
         sounds.clear();
-        System.out.println("Loaded resources :   " + numLoaded);
     }
 
     /**

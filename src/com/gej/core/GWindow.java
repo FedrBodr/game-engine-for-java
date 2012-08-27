@@ -45,7 +45,7 @@ import javax.swing.Timer;
  * 
  * @author Sri Harsha Chilakapati
  */
-public class GWindow extends JFrame implements ActionListener {
+public final class GWindow extends JFrame implements ActionListener {
 
     /**
 	 * 
@@ -56,6 +56,8 @@ public class GWindow extends JFrame implements ActionListener {
     Timer timer = null;
     /** The Game object (passed as an argument) */
     Game game = null;
+    
+    private static GWindow window = null;
 
     /** The width of resolution of the screen */
     public static int RESOLUTION_X = Global.WIDTH;
@@ -66,7 +68,7 @@ public class GWindow extends JFrame implements ActionListener {
     GraphicsDevice device = null;
 
     boolean fullscreen = false;
-
+    
     /**
      * This method fixes the repaint issue (flickering) on old machines with
      * latest JRE. It is called automatically by the timer
@@ -100,7 +102,7 @@ public class GWindow extends JFrame implements ActionListener {
         // Set and add the game object
         this.game = game;
         add(game);
-        game.start();
+        this.game.start();
         game.setFocusable(true);
         setVisible(true);
         // Fix the repaint issue on some older machines
@@ -115,8 +117,7 @@ public class GWindow extends JFrame implements ActionListener {
                 int retVal = JOptionPane.showOptionDialog(null, "Are you sure want to exit?", Global.TITLE, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[] {
                         "Sure, close it!", "Sorry! Go Back!" }, "Sorry! Go Back!");
                 if (retVal == JOptionPane.YES_OPTION) {
-                    dispose();
-                    System.exit(0);
+                    closeWindow();
                 } else {
                     // Do nothing
                 }
@@ -164,8 +165,6 @@ public class GWindow extends JFrame implements ActionListener {
                 DisplayMode[] modes = device.getDisplayModes();
                 // Cycle and set the best display mode
                 for (DisplayMode mode : modes) {
-                    // System.out.println(mode.getWidth() + "     " +
-                    // mode.getHeight() + "     " + mode.getBitDepth());
                     if (mode.getWidth() == Global.WIDTH
                             && mode.getHeight() == Global.HEIGHT
                             && (mode.getBitDepth() == 32 || mode.getBitDepth() == DisplayMode.BIT_DEPTH_MULTI)) {
@@ -195,7 +194,23 @@ public class GWindow extends JFrame implements ActionListener {
      * @return The GWindow instance.
      */
     public static final GWindow setup(Game game){
-        return new GWindow(game, Global.TITLE, Global.WIDTH, Global.HEIGHT);
+        window = new GWindow(game, Global.TITLE, Global.WIDTH, Global.HEIGHT);
+        return window;
+    }
+    
+    /**
+     * Restores the windowed mode and closes this window.
+     * Terminates the window if not in WEBMODE
+     */
+    public static void closeWindow(){
+        Global.FULLSCREEN = false;
+        window.timer.stop();
+        window.setFullScreen(false);
+        window.dispose();
+        if (!Global.WEB_MODE){
+            // terminate the VM
+            System.exit(0);
+        }
     }
 
 }

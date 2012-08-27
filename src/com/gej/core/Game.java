@@ -9,7 +9,7 @@ import java.awt.Toolkit;
 import java.util.HashMap;
 
 import javax.swing.ImageIcon;
-import javax.swing.JApplet;
+import javax.swing.JPanel;
 
 import com.gej.input.GInput;
 import com.gej.map.Map;
@@ -19,8 +19,8 @@ import com.gej.util.ImageTool;
 /**
  * This class is the main class for any game. You should extend this class to
  * write a game. The games requires J2SE 1.5 or more to run. To run as an
- * Applet, use the GApplet class. This class uses double buffering if available
- * or uses no buffering. The default game template could be like this.
+ * Applet, use the GApplet class. This class uses triple buffering if available
+ * or uses double buffering. The default game template could be like this.
  * 
  * <pre>
  * public class MyGame extends Game {
@@ -42,7 +42,7 @@ import com.gej.util.ImageTool;
  * 
  * @author Sri Harsha Chilakapati
  */
-public abstract class Game extends JApplet implements Updateable, Runnable {
+public abstract class Game extends JPanel implements Updateable, Runnable {
 
     /**
      * 
@@ -61,23 +61,29 @@ public abstract class Game extends JApplet implements Updateable, Runnable {
     // Input manager
     protected GInput input = null;
     
-    public void init(){}
-    
-    public void start(){
+    /**
+     * Start the game and the game loop
+     */
+    public final void start(){
+        // Finalize the VM
+        System.gc();
+        System.runFinalization();
+        // Panel settings
+        setDoubleBuffered(true);
         setFocusable(true);
+        // Create the cache and input
         cache = new HashMap<String, Image>();
         input = GInput.install(this);
         running = true;
+        // Start the game loop in new thread
         Thread th = new Thread(this);
         th.start();
-        System.out.println(isFocusable());
     }
     
-    public void stop(){}
-    
-    public void destroy(){}
-    
-    public void run(){
+    /**
+     * Implements the game loop. User mustn't call this method.
+     */
+    public final void run(){
         // Initialize the resources
         Map.initMap();
         initResources();
@@ -105,7 +111,10 @@ public abstract class Game extends JApplet implements Updateable, Runnable {
         }
     }
 
-    public void paint(Graphics g){
+    /**
+     * Paints the game and calls the render() method
+     */
+    public final void paint(Graphics g){
         try {
             // We need the Graphics2D class, not the legacy Graphics
             Graphics2D g2D = (Graphics2D) g;
@@ -135,26 +144,44 @@ public abstract class Game extends JApplet implements Updateable, Runnable {
         } catch (NullPointerException e) {}
     }
     
+    /**
+     * Initialize the resources for the game
+     */
     public void initResources(){}
 
+    /**
+     * Render the game using the supplied Graphics2D object
+     * @param g The Graphics2D object
+     */
     public void render(Graphics2D g){}
     
+    /**
+     * Update the game. Do game logic.
+     */
     public void update(long elapsedTime){}
     
-    public void setInput(GInput i){
-        input = i;
-    }
-    
-    public static void setState(GameState s){
+    /**
+     * Set the state of the game
+     * @param s The new game state
+     */
+    public static final void setState(GameState s){
         state = s;
     }
     
-    public static GameState getState(){
+    /**
+     * @return The current game state
+     */
+    public static final GameState getState(){
         return state;
     }
-    
-    public static void stopGame(){
+        
+    /**
+     * Ends the current game. Only use this method but
+     * do not explicitly terminate the VM
+     */
+    public static final void end_game(){
         running = false;
+        GWindow.closeWindow();
     }
     
     /**
@@ -165,6 +192,9 @@ public abstract class Game extends JApplet implements Updateable, Runnable {
      */
     public static Image loadImage(String name){
         Image img = null;
+        if (cache==null){
+            cache = new HashMap<String, Image>();
+        }
         if (cache.containsKey(name)) {
             img = cache.get(name);
         } else {
@@ -177,6 +207,13 @@ public abstract class Game extends JApplet implements Updateable, Runnable {
             }
         }
         return img;
+    }
+    
+    /**
+     * @return True if the gameloop is running
+     */
+    public static final boolean isRunning(){
+        return running;
     }
     
 }
