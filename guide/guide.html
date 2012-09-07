@@ -1,0 +1,657 @@
+<html>
+<head>
+<title>GEJ (Game Engine 4 Java)</title>
+<style type="text/css">
+    body {
+	    text-align: center;
+	    font-family: Trebuchet MS, sans-serif;
+	    background-color : #7D7E86;
+	    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#a3b7d6', endColorstr='#678bc2');
+        background: -webkit-gradient(linear, left top, left bottom, from(#a3b7d6), to(#678bc2));
+        background: -moz-linear-gradient(top,  #a3b7d6,  #678bc2);
+        background-image: -o-linear-gradient(270deg, #a3b7d6, #678bc2);
+        background-attachment:fixed;
+    }
+
+    .wrapper {
+	    width : 800px;
+	    position : relative;
+	    margin : 10px auto 5px auto;
+	    border : solid 2px #CFD0D4;
+	    text-align : justify;
+	    background-color: #F3F2FF;
+	    padding: 10px;	
+	    background:url("wrapper_bg.png");
+	    background-size: 100% 100%;
+	    border: 1px solid #000000;
+	    background-attachment:fixed;
+    }
+
+    .title {
+	    line-height: 25pt;
+	    font-weight: bold;
+	    text-align: center;
+	    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#678bc2');
+        background: -webkit-gradient(linear, left top, left bottom, from(#FFFFFF), to(#678bc2));
+        background: -moz-linear-gradient(top,  #FFFFFF,  #678bc2);    
+        background-image: -o-linear-gradient(270deg, #FFFFFF, #678bc2);
+	    color : black;
+        border: 1px solid #000000;
+    }    
+
+    .text {
+	    display : none;
+    }
+
+    a {
+	    color : black;
+	    text-decoration : none;
+	    line-height: 25pt;
+    }
+
+    a.main {
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    a:hover .main {
+	    color : black;
+	    text-decoration : underline;
+	    font-size: 24;
+	    line-height: 25pt;
+    }
+
+    a.link {
+        color: blue;
+        font-weight: bold;
+    }
+
+    code {
+        margin: 5px;
+        padding: 10px;
+        text-align: left;
+        display: block;
+        overflow: auto;
+        font-size: 15px;
+        background: #FAFAFA;
+        border: 1px solid #000000;
+    }
+
+    doc {
+        margin: 5px;
+        padding: 10px;
+        text-align: left;
+        display: block;
+        overflow: auto;
+        font-size: 15px;
+        background: #FAFAFA;
+        border: 1px solid #000000;
+        text-align: justify;
+    }
+
+    bluedoc {
+        margin: 5px;
+        padding: 10px;
+        text-align: left;
+        display: block;
+        overflow: auto;
+        font-size: 15px;
+        background: #FAFAFA;
+  	    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#a3b7d6', endColorstr='#678bc2');
+        background: -webkit-gradient(linear, left top, left bottom, from(#a3b7d6), to(#678bc2));
+        background: -moz-linear-gradient(top,  #a3b7d6,  #678bc2);    
+        background-image: -o-linear-gradient(270deg, #a3b7d6, #678bc2);
+        border: 1px solid #000000;
+        text-align: justify;
+    }
+
+    code.blue {
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#a3b7d6', endColorstr='#678bc2');
+        background: -webkit-gradient(linear, left top, left bottom, from(#a3b7d6), to(#678bc2));
+        background: -moz-linear-gradient(top,  #a3b7d6,  #678bc2);    
+        background-image: -o-linear-gradient(270deg, #a3b7d6, #678bc2);
+    }
+    
+    i {
+        font-weight: bold;
+        font-style: italic;
+    }
+    
+</style>
+<script type="text/javascript">
+
+<!--
+	function toggle(id) {
+		var e = document.getElementById(id);
+		e.isopen = !e.isopen;
+		e.style.display = e.isopen?"block":"none";
+		return false;
+	}
+-->
+
+</script>
+</head>
+<body>
+<div class="wrapper">
+    <div class="title">
+        <img href="gej_logo.png" height="100" src="gej_logo.png"/>&nbsp;&nbsp;<img href="gej_logo_2.png" height="100" width="620" src="gej_logo_2.png"/>
+    </div>
+    <ul>
+        <li>
+            <a href="#" onclick="return toggle('introduction')" class="main">Introduction</a><br>
+            <div id="introduction" class="text">
+                <ul>
+                    <li>
+                        <a href="#" onclick="return toggle('what_is_gej')">What is GEJ?</a><br>
+                        <div id="what_is_gej" class="text">
+                            <doc>
+                                GEJ is a simplest game engine available for beginners. It can be used to create games in the Java
+                                programming language. It has several pre-created actions, which are useful for beginners. This is
+                                also intended to be small in size and be event based just like the GameMaker.
+                            </doc>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#" onclick="return toggle('installation')">Download and Installation</a><br>
+                        <div id="installation" class="text">
+                            <doc>
+                                You can always download the package
+                                <a class="link" href="https://code.google.com/p/game-engine-for-java/downloads/list">here</a>.
+                                GEJ is a free opensource game engine which is neatly packaged. Moreover it is very small in size too.
+                                After downloading, include it in your build path and your done installing it. You can also repack the
+                                <a class="link" href="#">.jar</a> files into a single archive.
+                            </doc>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#" onclick="return toggle('package_details')">Package Details</a><br>
+                        <div id="package_details" class="text">
+                            <doc>
+                                GEJ has three packages available for you to download. They are in the order here.<br>
+                                <code class="blue">
+                                    &gt;&nbsp;GEJ&nbsp;Binaries&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;The&nbsp;compiled&nbsp;engine<br />
+                                    &gt;&nbsp;GEJ&nbsp;Source&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;The&nbsp;source&nbsp;code<br />
+                                    &gt;&nbsp;GEJ&nbsp;Documentation&nbsp;&nbsp;&nbsp;--&nbsp;The&nbsp;JavaDocs
+                                </code>
+                            </doc>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li>
+            <a class="main" href="#" onclick="return toggle('coding_your_game')">Starting to code with GEJ</a><br>
+            <div id="coding_your_game" class="text">
+                <doc>
+                    A game in GEJ must be the subclass of the Game class of the com.gej.core package. A perfect game would implement
+                    these methods. They are<br>
+                    <bluedoc>
+                        <ul>
+                            <li>
+                                <b>initResources()</b><br>
+                                <doc>In this method you can load the resources needed by the game like images, sounds etc.,</doc>
+                            </li>
+                            <li>
+                                <b>update(long elapsedTime)</b><br>
+                                <doc>This method is used to control the game. It is called constantly all the time the game is running.
+                                The argument elapsedTime is time taken by the method in the last call.</doc>
+                            </li>
+                            <li>
+                                <b>render(Graphics2D g)</b><br>
+                                <doc>This method is used to render the game to the screen. You could render background, the viewing part
+                                of the map, animated fonts etc.,</doc>
+                            </li>
+                        </ul>
+                    </bluedoc>
+                </doc>
+                <h3>The Basic Game skeleton</h3>
+                <bluedoc>
+                    Now Let's see a skeleton which is common for any GEJ game.
+                    <code>
+                        <font color="#3f7f5f">//&nbsp;Java&nbsp;Foundation&nbsp;Classes&nbsp;(JFC)</font><br />
+                        <font color="#7f0055"><b>import&nbsp;</b></font><font color="#000000">java.awt.Graphics2D;</font><br />
+                        <font color="#ffffff"></font><br />
+                        <font color="#3f7f5f">//&nbsp;GEJ</font><br />
+                        <font color="#7f0055"><b>import&nbsp;</b></font><font color="#000000">com.gej.core.Game;</font><br />
+                        <font color="#ffffff"></font><br />
+                        <font color="#3f5fbf">/**</font><br />
+                        <font color="#ffffff">&nbsp;</font><font color="#3f5fbf">*&nbsp;The&nbsp;game&nbsp;skeleton</font><br />
+                        <font color="#ffffff">&nbsp;</font><font color="#3f5fbf">*/</font><br />
+                        <font color="#7f0055"><b>public&nbsp;class&nbsp;</b></font><font color="#000000">YourGame&nbsp;</font><font color="#7f0055"><b>extends&nbsp;</b></font><font color="#000000">Game&nbsp;</font><font color="#000000">{</font><br />
+                        <font color="#ffffff"></font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;</b></font><font color="#7f0055"><b>void&nbsp;</b></font><font color="#000000">initResources</font><font color="#000000">(){</font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f7f5f">//&nbsp;Initialize&nbsp;the&nbsp;game</font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+                        <font color="#ffffff"></font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;</b></font><font color="#7f0055"><b>void&nbsp;</b></font><font color="#000000">update</font><font color="#000000">(</font><font color="#7f0055"><b>long&nbsp;</b></font><font color="#000000">elapsedTime</font><font color="#000000">){</font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f7f5f">//&nbsp;Update&nbsp;your&nbsp;game</font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+                        <font color="#ffffff"></font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;</b></font><font color="#7f0055"><b>void&nbsp;</b></font><font color="#000000">render</font><font color="#000000">(</font><font color="#000000">Graphics2D&nbsp;g</font><font color="#000000">){</font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f7f5f">//&nbsp;Render&nbsp;your&nbsp;game&nbsp;to&nbsp;screen</font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br /><br>
+                        <font color="#000000">}</font><br />
+                    </code>
+                    Note that the game doesn't run yet. To run you must make a main method and create a window for it using the
+                    GWindow class of the same package.
+                    <code>
+                        <font color="#7f0055"><b>public&nbsp;static&nbsp;</b></font><font color="#7f0055"><b>void&nbsp;</b></font><font color="#000000">main</font><font color="#000000">(</font><font color="#000000">String</font><font color="#000000">[]&nbsp;</font><font color="#000000">args</font><font color="#000000">){</font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f7f5f">//&nbsp;Create&nbsp;the&nbsp;game</font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">GWindow.setup</font><font color="#000000">(</font><font color="#7f0055"><b>new&nbsp;</b></font><font color="#000000">YourGame</font><font color="#000000">())</font><font color="#000000">;</font><br />
+                        <font color="#000000">}</font>
+                    </code>
+                </bluedoc>
+            </div>
+        </li>
+        <li>
+            <a class="main" href="#" onclick="return toggle('engine_config')">Configuring the Engine</a><br>
+            <div id="engine_config" class="text">
+                <bluedoc>
+                    GEJ can be configured completely to your needs. To configure, you need to completely depend on the Global class
+                    com.gej.core package. Here's the total set of options. You have to set them in the initResources() method.
+                    <code>
+                        <font color="#000000">Global.TITLE&nbsp;=&nbsp;</font><font color="#2a00ff">&#34;Your&nbsp;game&#34;</font><font color="#000000">;</font><br />
+                        <font color="#000000">Global.WIDTH&nbsp;=&nbsp;</font><font color="#990000">640</font><font color="#000000">;</font><br />
+                        <font color="#000000">Global.HEIGHT&nbsp;=&nbsp;</font><font color="#990000">480</font><font color="#000000">;</font><br />
+                        <font color="#000000">Global.FULLSCREEN&nbsp;=&nbsp;</font><font color="#7f0055"><b>false</b></font><font color="#000000">;</font><br />
+                        <font color="#000000">Global.HIDE_CURSOR&nbsp;=&nbsp;</font><font color="#7f0055"><b>true</b></font><font color="#000000">;</font><br />
+                        <font color="#000000">Global.STEPS_FOR_SECOND&nbsp;=&nbsp;</font><font color="#990000">60</font><font color="#000000">;</font><br />
+                        <font color="#3f7f5f">//&nbsp;Adjust&nbsp;STEPS_PER_SECOND</font><br />
+                        <font color="#3f7f5f">//&nbsp;so&nbsp;that&nbsp;each&nbsp;step&nbsp;takes&nbsp;the</font><br />
+                        <font color="#3f7f5f">//&nbsp;same&nbsp;time</font><br />
+                        <font color="#000000">Global.SET_TIME_FOR_EACH_STEP</font><font color="#000000">(</font><font color="#990000">30</font><font color="#000000">)</font><font color="#000000">;</font><br />
+                        <font color="#000000">Global.USE_PIXELPERFECT_COLLISION&nbsp;=&nbsp;</font><font color="#7f0055"><b>true</b></font><font color="#000000">;</font>
+                    </code>
+                </bluedoc>
+                <doc>
+                    To get more details, see the JavaDocs at <a class="link" href="http://game-engine-for-java.googlecode.com/">GEJ's GoogleCode Page</a>
+                </doc>
+            </div>
+        </li>
+        <li>
+            <a class="main" href="#" onclick="return toggle('game_states')">Game States</a><br>
+            <div id="game_states" class="text">
+                <doc>
+                    In GEJ, a game is a state machine. Each game has five states which are defined in the enum GameState of the com.gej.core
+                    package. They are
+                    <bluedoc>
+                        <ul>
+                            <li>
+                                <b>GAME_LOADING</b>
+                                <doc>
+                                    This states says that the game is loading resources either by the initResources() method or by the
+                                    recommended ResourceManager class.
+                                </doc>
+                            </li>
+                            <li>
+                                <b>GAME_INTRO</b>
+                                <doc>
+                                    The game is currently showing the intro screen. Player has to see or press a key to start the game.
+                                </doc>
+                            </li>
+                            <li>
+                                <b>GAME_PLAYING</b>
+                                <doc>
+                                    This state says the the user is currently playing a level.
+                                </doc>
+                            </li>
+                            <li>
+                                <b>GAME_PAUSED</b>
+                                <doc>
+                                    Indicates that the game has been paused.
+                                </doc>
+                            </li>
+                            <li>
+                                <b>GAME_END</b>
+                                <doc>
+                                    The game is showing the end screen. Can be used to ask player whether he/she want's to restart or quit
+                                    the game.
+                                </doc>
+                            </li>
+                        </ul>
+                    </bluedoc>
+                </doc>
+            </div>
+        </li>
+        <li>
+            <a class="main" href="#" onclick="return toggle('resource_manager')">Resource Manager</a><br>
+            <div id="resource_manager" class="text">
+                <bluedoc>
+                    Every game needs images and sounds. To make loading them easily, GEJ provides a ResourceManager class. To make them
+                    easy, just make a new package called <i>resources</i> and make a class named <i>Resources</i> which contains names of
+                    the files.
+                    
+                    <code>
+                        <font color="#7f0055"><b>package&nbsp;</b></font><font color="#000000">resources;</font><br />
+                        <font color="#ffffff"></font><br />
+                        <font color="#7f0055"><b>public&nbsp;class&nbsp;</b></font><font color="#000000">Resources&nbsp;</font><font color="#000000">{</font><br />
+                        <font color="#ffffff"></font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;static&nbsp;</b></font><font color="#000000">String&nbsp;IMAGE_1&nbsp;=&nbsp;</font><font color="#2a00ff">&#34;resources/image1.png&#34;</font><font color="#000000">;</font><br />
+                        <font color="#ffffff"></font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;static&nbsp;</b></font><font color="#000000">String&nbsp;SOUND_1&nbsp;=&nbsp;</font><font color="#2a00ff">&#34;resources/sound1.wav&#34;</font><font color="#000000">;</font><br />
+                        <font color="#ffffff"></font><br />
+                        <font color="#000000">}</font>
+                    </code>
+                    
+                    Then you have to define them in the resource manager. So add this import.
+                    
+                    <code>
+                        <font color="#7f0055"><b>import&nbsp;static&nbsp;</b></font><font color="#000000">com.gej.core.ResourceManager.*;</font>
+                    </code>
+                    
+                    This makes you easily use the static methods of ResourceManager class. Then define the images and sounds in the <i>initResources()</i>
+                    method.
+                    
+                    <code>
+                        <font color="#000000">java.awt.Image&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMG_1&nbsp;=&nbsp;</font><font color="#7f0055"><b>null</b></font><font color="#000000">;&nbsp;&nbsp;</font><font color="#3f7f5f">//&nbsp;The&nbsp;image&nbsp;object</font><br />
+                        <font color="#000000">com.gej.sound.WavSound&nbsp;SND_1&nbsp;=&nbsp;</font><font color="#7f0055"><b>null</b></font><font color="#000000">;&nbsp;&nbsp;</font><font color="#3f7f5f">//&nbsp;The&nbsp;sound&nbsp;object</font><br />
+                        <font color="#ffffff"></font><br />
+                        <font color="#7f0055"><b>public&nbsp;</b></font><font color="#7f0055"><b>void&nbsp;</b></font><font color="#000000">initResources</font><font color="#000000">(){</font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">defineImage</font><font color="#000000">(</font><font color="#000000">Resources.IMAGE_1</font><font color="#000000">)</font><font color="#000000">;</font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">defineSound</font><font color="#000000">(</font><font color="#000000">Resources.SOUND_1</font><font color="#000000">)</font><font color="#000000">;</font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">loadResources</font><font color="#000000">()</font><font color="#000000">;&nbsp;</font><font color="#3f7f5f">//&nbsp;Start&nbsp;loading&nbsp;resources</font><br />
+                        <font color="#000000">}</font>
+                    </code>
+                    
+                    We've said to start loading resources. But if we start the gameplay with the null values, you'll get exceptions
+                    in the runtime and the game may not respond. To prevent this, you have to map your resources in the <i>update()</i>
+                    method.
+                    
+                    <code>
+                        <font color="#7f0055"><b>public&nbsp;</b></font><font color="#7f0055"><b>void&nbsp;</b></font><font color="#000000">update</font><font color="#000000">(</font><font color="#7f0055"><b>long&nbsp;</b></font><font color="#000000">elapsedTime</font><font color="#000000">){</font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>switch&nbsp;</b></font><font color="#000000">(</font><font color="#000000">getState</font><font color="#000000">()){</font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f7f5f">//&nbsp;The&nbsp;game&nbsp;is&nbsp;a&nbsp;state&nbsp;machine</font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>case&nbsp;</b></font><font color="#000000">GAME_LOADING:</font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>if&nbsp;</b></font><font color="#000000">(</font><font color="#000000">!isLoading</font><font color="#000000">()){</font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f7f5f">//&nbsp;Method&nbsp;of&nbsp;ResourceManager</font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">IMG_1&nbsp;=&nbsp;getImage</font><font color="#000000">(</font><font color="#000000">Resources.IMAGE_1</font><font color="#000000">)</font><font color="#000000">;</font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">SND_1&nbsp;=&nbsp;getSound</font><font color="#000000">(</font><font color="#000000">Resources.SOUND_1</font><font color="#000000">)</font><font color="#000000">;</font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f7f5f">//&nbsp;Mapping&nbsp;completed.&nbsp;Change&nbsp;game&nbsp;state</font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>break</b></font><font color="#000000">;</font><br />
+                        <font color="#ffffff">&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+                        <font color="#000000">}</font>
+                    </code>
+                </bluedoc>
+            </div>
+        </li>
+        <li>
+            <a class="main" href="#" onclick="return toggle('animations')">Animations</a>
+            <div id="animations" class="text">
+                <bluedoc>
+                    Most games will have animated characters. GEJ supports two types of animations. It can load an animation from a
+                    sheet of images and also from separate images. Note that loading from sheet of images is still in initial stage and loading
+                    from separate images is easier for most people.
+                    
+                    <code>
+                        <font color="#7f0055"><b>import&nbsp;</b></font><font color="#000000">com.gej.graphics.Animation;</font><br />
+                        <font color="#ffffff"></font><br />
+                        <font color="#000000">Image&nbsp;img1&nbsp;=&nbsp;.....</font><br />
+                        <font color="#000000">....</font><br />
+                        <font color="#000000">Image&nbsp;img5&nbsp;=&nbsp;.....;</font><br />
+                        <font color="#ffffff"></font><br />
+                        <font color="#000000">Now&nbsp;let's&nbsp;add&nbsp;these&nbsp;five&nbsp;images&nbsp;to&nbsp;an&nbsp;animation&nbsp;with&nbsp;different&nbsp;frame&nbsp;timing.</font><br />
+                        <font color="#ffffff"></font><br />
+                        <font color="#000000">Animation&nbsp;anim&nbsp;=&nbsp;</font><font color="#7f0055"><b>new&nbsp;</b></font><font color="#000000">Animation</font><font color="#000000">()</font><font color="#000000">;</font><br />
+                        <font color="#000000">anim.addFrame</font><font color="#000000">(</font><font color="#000000">img1,&nbsp;</font><font color="#990000">100</font><font color="#000000">)</font><font color="#000000">;&nbsp;</font><font color="#3f7f5f">//&nbsp;For&nbsp;100&nbsp;ms</font><br />
+                        <font color="#000000">anim.addFrame</font><font color="#000000">(</font><font color="#000000">img2,&nbsp;</font><font color="#990000">150</font><font color="#000000">)</font><font color="#000000">;&nbsp;</font><font color="#3f7f5f">//&nbsp;150&nbsp;ms</font><br />
+                        <font color="#000000">anim.addFrame</font><font color="#000000">(</font><font color="#000000">img3,&nbsp;</font><font color="#990000">200</font><font color="#000000">)</font><font color="#000000">;&nbsp;</font><font color="#3f7f5f">//&nbsp;200&nbsp;ms</font><br />
+                        <font color="#000000">...</font><br />
+                        <font color="#000000">anim.addFrame</font><font color="#000000">(</font><font color="#000000">img5,&nbsp;</font><font color="#990000">300</font><font color="#000000">)</font><font color="#000000">;&nbsp;</font><font color="#3f7f5f">//&nbsp;300&nbsp;ms</font><br />
+                        <font color="#ffffff"></font><br />
+                        <font color="#000000">You&nbsp;could&nbsp;change&nbsp;these&nbsp;values.</font>
+                    </code>
+                    
+                    You can still load from sheets by splitting them with <i>ImageTool</i> class in the <i>com.gej.util</i> package.
+                </bluedoc>
+            </div>
+        </li>
+        <li>
+            <a class="main" href="#" onclick="return toggle('playing_sounds')">Playing Sounds</a><br>
+            <div id="playing_sounds" class="text">
+                <bluedoc>
+                    You have seen how to load a sound. Now to play them, just called their <i>play()</i> method.
+                    <code>
+                        <font color="#000000">WavSound&nbsp;snd&nbsp;=&nbsp;....;</font><br />
+                        <font color="#ffffff"></font><br />
+                        <font color="#000000">snd.play</font><font color="#000000">()</font><font color="#000000">;</font>
+                    </code>
+                    You can also loop them. To loop, just call the <i>setLooping(boolean)</i> method.
+                    <code>
+                        <font color="#000000">WavSound&nbsp;snd&nbsp;=&nbsp;....;</font><br />
+                        <font color="#ffffff"></font><br />
+                        <font color="#000000">snd.setLooping</font><font color="#000000">(</font><font color="#7f0055"><b>true</b></font><font color="#000000">)</font><font color="#000000">;</font>
+                    </code>
+                    The <i>WavSound</i> class supports the following formats.
+                    <doc>
+                        <ul>
+                            <li>AIFF <i>(Audio Interchange File Format)</i></li>
+                            <li>AU   <i>(Sun Audio Format)</i></li>
+                            <li>WAV  <i>(WAVE Audio)</i></li>
+                            <li>MIDI <i>(Musical Instruments Digital Interface)</i></li>
+                        </ul>
+                    </doc>
+                </bluedoc>
+            </div>
+        </li>
+        <li>
+            <a class="main" href="#" onclick="return toggle('global_idea')">The Global Idea</a><br>
+            <div id="global_idea" class="text">
+                <bluedoc>
+                    To ease the game programming, GEJ has some built-in components. They are
+                    <ul>
+                        <li>
+                            <doc>
+                                Image <i>** Actually part of AWT **</i>
+                            </doc>
+                        </li>
+                        <li>
+                            <doc>
+                                Animation <i>to animate several images</i>
+                            </doc>
+                        </li>
+                        <li>
+                            <doc>
+                                WavSound <i>** Though the name says "WAV", all the above listed formats will work **</i>
+                            </doc>
+                        </li>
+                        <li>
+                            <doc>
+                                GObject <i>the base of every character in the game, probably the largest object class ever, you know it has 774 lines!!!</i>
+                            </doc>
+                        </li>
+                        <li>
+                            <doc>
+                                Background <i>the background of the game</i>
+                            </doc>
+                        </li>
+                        <li>
+                            <doc>
+                                MapInfo <i>contains the information of the level and tile size.</i>
+                            </doc>
+                        </li>
+                        <li>
+                            <doc>
+                                MapView <i>scrolls the map</i>
+                            </doc>
+                        </li>
+                    </ul>
+                </bluedoc>
+            </div>
+        </li>
+        <li>
+            <a class="main" href="#" onclick="return toggle('object_design')">Object Design</a><br>
+            <div id="object_design" class="text">
+                <ul>
+                    <li>
+                        <a href="#" onclick="return toggle('creating_at_position')">Creating a position at (x, y)</a><br>
+                        <div id="creating_at_position" class="text">
+                            <bluedoc>
+                                Creating an object is very easy. For every object, you have to make a class which extends the <i>GObject</i> class of the <i>com.gej.core</i> package.
+                                Let's start by making a simple GObject which doesn't do anything but just sit's at a position on the screen.
+                                <code>
+                                    <font color="#7f0055"><b>import&nbsp;</b></font><font color="#000000">com.gej.object.GObject;</font><br />
+                                    <font color="#ffffff"></font><br />
+                                    <font color="#7f0055"><b>public&nbsp;class&nbsp;</b></font><font color="#000000">MyObject&nbsp;</font><font color="#7f0055"><b>extends&nbsp;</b></font><font color="#000000">GObject&nbsp;</font><font color="#000000">{</font><br />
+                                    <font color="#ffffff"></font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;</b></font><font color="#000000">MyObject</font><font color="#000000">(</font><font color="#7f0055"><b>float&nbsp;</b></font><font color="#000000">x,&nbsp;</font><font color="#7f0055"><b>float&nbsp;</b></font><font color="#000000">y</font><font color="#000000">){</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f7f5f">//&nbsp;Call&nbsp;the&nbsp;constructor&nbsp;of&nbsp;GObject</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f7f5f">//&nbsp;it'll&nbsp;do&nbsp;some&nbsp;needed&nbsp;initialization</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>super</b></font><font color="#000000">(</font><font color="#000000">x,&nbsp;y</font><font color="#000000">)</font><font color="#000000">;</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+                                    <font color="#ffffff"></font><br />
+                                    <font color="#000000">}</font>
+                                </code>
+                            </bluedoc>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#" onclick="return toggle('setting_image')">Setting an Image</a><br>
+                        <div id="setting_image" class="text">
+                            <bluedoc>
+                                The object you've created in the previous step isn't visible unless you set an image or an animation for it's face. Also we didn't add it to the map. So
+                                let's first know how to set an image to the object.
+                                <code>
+                                    <font color="#000000">Image&nbsp;myImage&nbsp;=&nbsp;....;</font><br />
+                                    <font color="#3f7f5f">//&nbsp;Load&nbsp;the&nbsp;image&nbsp;first.</font><br />
+                                    <font color="#000000">setImage</font><font color="#000000">(</font><font color="#000000">myImage</font><font color="#000000">)</font><font color="#000000">;</font>
+                                </code>
+                            </bluedoc>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#" onclick="return toggle('setting_animation')">Setting an Animation</a><br>
+                        <div id="setting_animation" class="text">
+                            <bluedoc>
+                                You may have notified that many games do not use static images for objects, but rather use animations.
+                                <code>
+                                    <font color="#000000">Animation&nbsp;myAnim&nbsp;=&nbsp;....;</font><br />
+                                    <font color="#3f7f5f">//&nbsp;Load&nbsp;the&nbsp;animation&nbsp;first.</font><br />
+                                    <font color="#000000">setAnimation</font><font color="#000000">(</font><font color="#000000">myAnim</font><font color="#000000">)</font><font color="#000000">;</font>
+                                </code>
+                            </bluedoc>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#" onclick="return toggle('updating_object')">Updating the Object</a><br>
+                        <div id="updating_object" class="text">
+                            <bluedoc>
+                                Now that you know how to use the <i>update()</i> method in the game. This method also exists in the GObject class and all that you need is override this method.
+                                The <i>update()</i> method of every object is called after the update method of the game if the game state is <i>GameState.GAME_PLAYING</i>. This method could be
+                                used to set the direction of the object and changing the image/animation according to the direction of the object and to check input.
+                                Let's see an example <i>update()</i> method.
+                                <code>
+                                    <font color="#7f0055"><b>public&nbsp;</b></font><font color="#7f0055"><b>void&nbsp;</b></font><font color="#000000">update</font><font color="#000000">(</font><font color="#7f0055"><b>long&nbsp;</b></font><font color="#000000">elapsedTime</font><font color="#000000">){</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>if&nbsp;</b></font><font color="#000000">(</font><font color="#000000">GKeyBoard.isPressed</font><font color="#000000">(</font><font color="#000000">KeyEvent.VK_LEFT</font><font color="#000000">)){</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">setVelocityX</font><font color="#000000">(</font><font color="#000000">-</font><font color="#990000">4</font><font color="#000000">)</font><font color="#000000">;</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}&nbsp;</font><font color="#7f0055"><b>else&nbsp;if&nbsp;</b></font><font color="#000000">(</font><font color="#000000">GKeyBoard.isPressed</font><font color="#000000">(</font><font color="#000000">KeyEvent.VK_RIGHT</font><font color="#000000">)){</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">setVelocityX</font><font color="#000000">(</font><font color="#990000">4</font><font color="#000000">)</font><font color="#000000">;</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}&nbsp;</font><font color="#7f0055"><b>else&nbsp;</b></font><font color="#000000">{</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f7f5f">//&nbsp;No&nbsp;movement&nbsp;key&nbsp;(needed&nbsp;by&nbsp;this&nbsp;object</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f7f5f">//&nbsp;is&nbsp;being&nbsp;pressed.&nbsp;So&nbsp;stop.</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">setVelocityX</font><font color="#000000">(</font><font color="#990000">0</font><font color="#000000">)</font><font color="#000000">;</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+                                    <font color="#000000">}</font>
+                                </code>
+                            </bluedoc>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#" onclick="return toggle('collision_detection')">Collision Detection</a><br>
+                        <div id="collision_detection" class="text">
+                            <bluedoc>
+                                The next most important component of a game is collision detection. To do the collision detection, we use the <i>collision(GObject other)</i> method.
+                                The argument <i>other</i> is the reference to the object which collided the current object. When two objects collide, a collision event is fired by the
+                                engine. To be specific, two collision events are fired, one for each object.
+                                <code>
+                                    <font color="#7f0055"><b>public&nbsp;</b></font><font color="#7f0055"><b>void&nbsp;</b></font><font color="#000000">collision</font><font color="#000000">(</font><font color="#000000">GObject&nbsp;other</font><font color="#000000">){</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>if&nbsp;</b></font><font color="#000000">(</font><font color="#000000">other&nbsp;</font><font color="#7f0055"><b>instanceof&nbsp;</b></font><font color="#000000">MyObject1</font><font color="#000000">){</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f7f5f">//&nbsp;The&nbsp;class&nbsp;name&nbsp;of&nbsp;the&nbsp;other&nbsp;is&nbsp;MyObject1</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}&nbsp;</font><font color="#7f0055"><b>else&nbsp;if&nbsp;</b></font><font color="#000000">(</font><font color="#000000">other&nbsp;</font><font color="#7f0055"><b>instanceof&nbsp;</b></font><font color="#000000">MyObject2</font><font color="#000000">){</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f7f5f">//&nbsp;other&nbsp;is&nbsp;MyObject2</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+                                    <font color="#000000">}</font>
+                                </code>
+                                A note to beginners who don't know concepts of game-programming is that we program only one class for each object and a single object can have multiple
+                                instances in the level.
+                            </bluedoc>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#" onclick="return toggle('example_objects')">Example Objects</a><br>
+                        <div id="example_objects" class="text">
+                            <bluedoc>
+                                In this section, I wan't to show you an example which consists of two classes (two objects namely <i>Object1</i> and <i>Object2</i>.
+                                Object1 moves to the right and when collides Object2, it reverses it's direction.
+                                <code>
+                                    <font color="#7f0055"><b>public&nbsp;class&nbsp;</b></font><font color="#000000">Object1&nbsp;</font><font color="#7f0055"><b>extends&nbsp;</b></font><font color="#000000">GObject&nbsp;</font><font color="#000000">{</font><br />
+                                    <font color="#ffffff"></font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;</b></font><font color="#000000">Object1</font><font color="#000000">(){</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f7f5f">//&nbsp;Default&nbsp;constructor.</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>super</b></font><font color="#000000">(</font><font color="#990000">100</font><font color="#000000">,&nbsp;</font><font color="#990000">100</font><font color="#000000">,&nbsp;MyGame.OBJ_1_IMG</font><font color="#000000">)</font><font color="#000000">;</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">setVelocityX</font><font color="#000000">(</font><font color="#990000">4</font><font color="#000000">)</font><font color="#000000">;</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+                                    <font color="#ffffff"></font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;</b></font><font color="#7f0055"><b>void&nbsp;</b></font><font color="#000000">collision</font><font color="#000000">(</font><font color="#000000">GObject&nbsp;other</font><font color="#000000">){</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>if&nbsp;</b></font><font color="#000000">(</font><font color="#000000">other&nbsp;</font><font color="#7f0055"><b>instanceof&nbsp;</b></font><font color="#000000">Object2</font><font color="#000000">){</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f7f5f">//&nbsp;Reverse&nbsp;direction</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">setVelocityX</font><font color="#000000">(</font><font color="#000000">-getVelocityX</font><font color="#000000">())</font><font color="#000000">;</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+                                    <font color="#ffffff"></font><br />
+                                    <font color="#000000">}</font>
+                                </code>
+                                Now here's Object2. It just sits at a position.
+                                <code>
+                                    <font color="#7f0055"><b>public&nbsp;class&nbsp;</b></font><font color="#000000">Object2&nbsp;</font><font color="#7f0055"><b>extends&nbsp;</b></font><font color="#000000">GObject&nbsp;</font><font color="#000000">{</font><br />
+                                    <font color="#ffffff"></font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;</b></font><font color="#000000">Object2</font><font color="#000000">(){</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f7f5f">//&nbsp;Default&nbsp;constructor.</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>super</b></font><font color="#000000">(</font><font color="#990000">400</font><font color="#000000">,&nbsp;</font><font color="#990000">100</font><font color="#000000">,&nbsp;MyGame.OBJ_2_IMG</font><font color="#000000">)</font><font color="#000000">;</font><br />
+                                    <font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+                                    <font color="#ffffff"></font><br />
+                                    <font color="#000000">}</font>
+                                </code>
+                            </bluedoc>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li>
+            <a class="main" href="#" onclick="return toggle('map_and_maploader')">Maps and MapLoader</a><br>
+            <div id="map_and_maploader" class="text">
+                <bluedoc>
+                    Using the maps eases the level creation. To make levels, you need to implement the MapLoader interface from the com.gej.map package. At first we need a MapLoader.
+                    Here <i>MapLoader</i> refers to a class which implements the <i>MapLoader</i> interface. The common practice is to make the main game class implement this interface.
+                    Here's an example.
+                    <code>
+						<font color="#7f0055"><b>public&nbsp;class&nbsp;</b></font><font color="#000000">MyMaps&nbsp;</font><font color="#7f0055"><b>implements&nbsp;</b></font><font color="#000000">MapLoader&nbsp;</font><font color="#000000">{</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;</b></font><font color="#000000">GObject&nbsp;getObject</font><font color="#000000">(</font><font color="#7f0055"><b>char&nbsp;</b></font><font color="#000000">ch,&nbsp;</font><font color="#7f0055"><b>int&nbsp;</b></font><font color="#000000">x,&nbsp;</font><font color="#7f0055"><b>int&nbsp;</b></font><font color="#000000">y</font><font color="#000000">){</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>switch</b></font><font color="#000000">(</font><font color="#000000">ch</font><font color="#000000">){</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>case&nbsp;</b></font><font color="#990000">'1'</font><font color="#000000">:&nbsp;</font><font color="#7f0055"><b>return&nbsp;new&nbsp;</b></font><font color="#000000">Object1</font><font color="#000000">(</font><font color="#000000">x,&nbsp;y</font><font color="#000000">)</font><font color="#000000">;&nbsp;</font><font color="#7f0055"><b>break</b></font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>case&nbsp;</b></font><font color="#990000">'2'</font><font color="#000000">:&nbsp;</font><font color="#7f0055"><b>return&nbsp;new&nbsp;</b></font><font color="#000000">Object2</font><font color="#000000">(</font><font color="#000000">x,&nbsp;y</font><font color="#000000">)</font><font color="#000000">;&nbsp;</font><font color="#7f0055"><b>break</b></font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>return&nbsp;null</b></font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#000000">}</font>
+					</code>
+					See that we have used characters to denote objects and add them to the map. And there is also another method which you should implement.
+					<code>
+						<font color="#7f0055"><b>public&nbsp;</b></font><font color="#000000">Tile&nbsp;getTile</font><font color="#000000">(</font><font color="#7f0055"><b>char&nbsp;</b></font><font color="#000000">ch,&nbsp;</font><font color="#7f0055"><b>int&nbsp;</b></font><font color="#000000">x,&nbsp;</font><font color="#7f0055"><b>int&nbsp;</b></font><font color="#000000">y</font><font color="#000000">){</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>return&nbsp;null</b></font><font color="#000000">;</font><br />
+						<font color="#000000">}</font>
+					</code>
+					You may notice that why this method is null. This is kept only for backwards compatibility and may be removed in the future versions.
+                </bluedoc>
+            </div>
+        </li>
+    </ul>
+    <div class="title">
+        <small>Made by Sri Harsha Chilakapati</small>
+    </div>
+</div>
+</body>
+</html>
