@@ -621,31 +621,127 @@
         <li>
             <a class="main" href="#" onclick="return toggle('map_and_maploader')">Maps and MapLoader</a><br>
             <div id="map_and_maploader" class="text">
-                <bluedoc>
-                    Using the maps eases the level creation. To make levels, you need to implement the MapLoader interface from the com.gej.map package. At first we need a MapLoader.
-                    Here <i>MapLoader</i> refers to a class which implements the <i>MapLoader</i> interface. The common practice is to make the main game class implement this interface.
-                    Here's an example.
-                    <code>
-						<font color="#7f0055"><b>public&nbsp;class&nbsp;</b></font><font color="#000000">MyMaps&nbsp;</font><font color="#7f0055"><b>implements&nbsp;</b></font><font color="#000000">MapLoader&nbsp;</font><font color="#000000">{</font><br />
-						<font color="#ffffff"></font><br />
-						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;</b></font><font color="#000000">GObject&nbsp;getObject</font><font color="#000000">(</font><font color="#7f0055"><b>char&nbsp;</b></font><font color="#000000">ch,&nbsp;</font><font color="#7f0055"><b>int&nbsp;</b></font><font color="#000000">x,&nbsp;</font><font color="#7f0055"><b>int&nbsp;</b></font><font color="#000000">y</font><font color="#000000">){</font><br />
-						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>switch</b></font><font color="#000000">(</font><font color="#000000">ch</font><font color="#000000">){</font><br />
-						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>case&nbsp;</b></font><font color="#990000">'1'</font><font color="#000000">:&nbsp;</font><font color="#7f0055"><b>return&nbsp;new&nbsp;</b></font><font color="#000000">Object1</font><font color="#000000">(</font><font color="#000000">x,&nbsp;y</font><font color="#000000">)</font><font color="#000000">;&nbsp;</font><font color="#7f0055"><b>break</b></font><font color="#000000">;</font><br />
-						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>case&nbsp;</b></font><font color="#990000">'2'</font><font color="#000000">:&nbsp;</font><font color="#7f0055"><b>return&nbsp;new&nbsp;</b></font><font color="#000000">Object2</font><font color="#000000">(</font><font color="#000000">x,&nbsp;y</font><font color="#000000">)</font><font color="#000000">;&nbsp;</font><font color="#7f0055"><b>break</b></font><font color="#000000">;</font><br />
-						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
-						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>return&nbsp;null</b></font><font color="#000000">;</font><br />
-						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
-						<font color="#ffffff"></font><br />
-						<font color="#000000">}</font>
-					</code>
-					See that we have used characters to denote objects and add them to the map. And there is also another method which you should implement.
-					<code>
-						<font color="#7f0055"><b>public&nbsp;</b></font><font color="#000000">Tile&nbsp;getTile</font><font color="#000000">(</font><font color="#7f0055"><b>char&nbsp;</b></font><font color="#000000">ch,&nbsp;</font><font color="#7f0055"><b>int&nbsp;</b></font><font color="#000000">x,&nbsp;</font><font color="#7f0055"><b>int&nbsp;</b></font><font color="#000000">y</font><font color="#000000">){</font><br />
-						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>return&nbsp;null</b></font><font color="#000000">;</font><br />
-						<font color="#000000">}</font>
-					</code>
-					You may notice that why this method is null. This is kept only for backwards compatibility and may be removed in the future versions.
-                </bluedoc>
+            	<ul>
+            		<li>
+            			<a href="#" onclick="return toggle('maploader')">MapLoader interface</a><br>
+            			<div id="maploader" class="text">
+            				<bluedoc>
+			                    Using the maps eases the level creation. To make levels, you need to implement the MapLoader interface from the com.gej.map package. At first we need a MapLoader.
+			                    Here <i>MapLoader</i> refers to a class which implements the <i>MapLoader</i> interface. The common practice is to make the main game class implement this interface.
+            			        Here's an example.
+			                    <code>
+									<font color="#7f0055"><b>public&nbsp;class&nbsp;</b></font><font color="#000000">MyMaps&nbsp;</font><font color="#7f0055"><b>implements&nbsp;</b></font><font color="#000000">MapLoader&nbsp;</font><font color="#000000">{</font><br />
+									<font color="#ffffff"></font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;</b></font><font color="#000000">GObject&nbsp;getObject</font><font color="#000000">(</font><font color="#7f0055"><b>char&nbsp;</b></font><font color="#000000">ch,&nbsp;</font><font color="#7f0055"><b>int&nbsp;</b></font><font color="#000000">x,&nbsp;</font><font color="#7f0055"><b>int&nbsp;</b></font><font color="#000000">y</font><font color="#000000">){</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>switch</b></font><font color="#000000">(</font><font color="#000000">ch</font><font color="#000000">){</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>case&nbsp;</b></font><font color="#990000">'1'</font><font color="#000000">:&nbsp;</font><font color="#7f0055"><b>return&nbsp;new&nbsp;</b></font><font color="#000000">Object1</font><font color="#000000">(</font><font color="#000000">x,&nbsp;y</font><font color="#000000">)</font><font color="#000000">;&nbsp;</font><font color="#7f0055"><b>break</b></font><font color="#000000">;</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>case&nbsp;</b></font><font color="#990000">'2'</font><font color="#000000">:&nbsp;</font><font color="#7f0055"><b>return&nbsp;new&nbsp;</b></font><font color="#000000">Object2</font><font color="#000000">(</font><font color="#000000">x,&nbsp;y</font><font color="#000000">)</font><font color="#000000">;&nbsp;</font><font color="#7f0055"><b>break</b></font><font color="#000000">;</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>return&nbsp;null</b></font><font color="#000000">;</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+									<font color="#ffffff"></font><br />
+									<font color="#000000">}</font>
+								</code>
+								See that we have used characters to denote objects and add them to the map. And there is also another method which you should implement.
+								<code>
+									<font color="#7f0055"><b>public&nbsp;</b></font><font color="#000000">Tile&nbsp;getTile</font><font color="#000000">(</font><font color="#7f0055"><b>char&nbsp;</b></font><font color="#000000">ch,&nbsp;</font><font color="#7f0055"><b>int&nbsp;</b></font><font color="#000000">x,&nbsp;</font><font color="#7f0055"><b>int&nbsp;</b></font><font color="#000000">y</font><font color="#000000">){</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>return&nbsp;null</b></font><font color="#000000">;</font><br />
+									<font color="#000000">}</font>
+								</code>
+								You may notice that why this method is null. This is kept only for backwards compatibility and may be removed in the future versions.
+                			</bluedoc>
+            			</div>
+            		</li>
+            		<li>
+            			<a href="#" onclick="return toggle('map_info')">MapInfo</a><br>
+            			<div id="map_info" class="text">
+            				<bluedoc>
+            					GEJ's <i>Map</i> class is a <i>final static</i> class. So it cannot be <i>instantiated</i> and it has only one instance. The same map is cleared and loaded
+            					every level. A map is a place where the objects live. The positions of the objects are described in the MapInfo in the form of strings. Let's see an example
+            					MapInfo.
+            					<code>
+									<font color="#7f0055"><b>public&nbsp;class&nbsp;</b></font><font color="#000000">Map1&nbsp;</font><font color="#7f0055"><b>extends&nbsp;</b></font><font color="#000000">MapInfo&nbsp;</font><font color="#000000">{</font><br />
+									<font color="#ffffff"></font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">{</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f7f5f">//&nbsp;Set&nbsp;the&nbsp;tile&nbsp;size&nbsp;of&nbsp;the&nbsp;map&nbsp;for&nbsp;this&nbsp;level</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">tileSize&nbsp;=&nbsp;</font><font color="#990000">32</font><font color="#000000">;</font><br />
+									<font color="#ffffff"></font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f7f5f">//&nbsp;The&nbsp;level&nbsp;data.&nbsp;Here&nbsp;are&nbsp;the&nbsp;conventions</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f5fbf">/**</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f5fbf">*&nbsp;Use&nbsp;the&nbsp;characters&nbsp;which&nbsp;are&nbsp;defined&nbsp;in&nbsp;the</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f5fbf">*&nbsp;MapLoader.&nbsp;If&nbsp;the&nbsp;character&nbsp;isn't&nbsp;defined,</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f5fbf">*&nbsp;it&nbsp;is&nbsp;considered&nbsp;as&nbsp;an&nbsp;empty&nbsp;square.&nbsp;Every</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f5fbf">*&nbsp;'&nbsp;'&nbsp;space&nbsp;is&nbsp;considered&nbsp;as&nbsp;an&nbsp;empty&nbsp;square.</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f5fbf">*&nbsp;Use&nbsp;'\n'&nbsp;to&nbsp;go&nbsp;to&nbsp;next&nbsp;row.</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f5fbf">*</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f5fbf">*&nbsp;In&nbsp;this&nbsp;example,</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f5fbf">*&nbsp;&nbsp;&nbsp;&nbsp;'1'&nbsp;-&nbsp;Object&nbsp;1</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f5fbf">*&nbsp;&nbsp;&nbsp;&nbsp;'2'&nbsp;-&nbsp;Object&nbsp;2</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f5fbf">*/</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">MapData&nbsp;=&nbsp;</font><font color="#2a00ff">&#34;\n&#34;</font><font color="#000000">+</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#2a00ff">&#34;1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2\n&#34;</font><font color="#000000">+</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#2a00ff">&#34;\n&#34;</font><font color="#000000">;</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+									<font color="#ffffff"></font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;</b></font><font color="#000000">Map1</font><font color="#000000">(</font><font color="#000000">MapLoader&nbsp;loader</font><font color="#000000">){</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">setMapLoader</font><font color="#000000">(</font><font color="#000000">loader</font><font color="#000000">)</font><font color="#000000">;&nbsp;</font><font color="#3f7f5f">//&nbsp;Set&nbsp;the&nbsp;maploader</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+									<font color="#ffffff"></font><br />
+									<font color="#000000">}</font>
+								</code>
+            				</bluedoc>
+            			</div>
+            		</li>
+            		<li>
+            			<a href="#" onclick="return toggle('example_map_data')">An Example <i>MapData</i> string</a><br>
+            			<div id="example_map_data" class="text">
+            				<bluedoc>
+            					This example is from a Breakout game. In this example,
+            					<ul>
+            						<li>
+            							<code>B - The Block or the wall</code>
+            						</li>
+            						<li>
+            							<code>S - The Stone or Brick</code>
+            						</li>
+            						<li>
+            							<code>o - The ball</code>
+            						</li>
+            						<li>
+            							<code>b - The bat or paddle</code>
+            						</li>
+            						<li>
+            							<code>D - The dead line</code>
+            						</li>
+            					</ul>
+            					<code>
+									<font color="#000000">MapData&nbsp;=&nbsp;</font><font color="#2a00ff">&#34;\n\n&#34;</font><font color="#000000">+</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#2a00ff">&#34;BBBBBBBBBBBBBBBBBBBBBB\n&#34;</font><font color="#000000">+</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#2a00ff">&#34;B&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B\n&#34;</font><font color="#000000">+</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#2a00ff">&#34;B&nbsp;&nbsp;S&nbsp;S&nbsp;S&nbsp;S&nbsp;S&nbsp;S&nbsp;S&nbsp;S&nbsp;&nbsp;&nbsp;B\n&#34;</font><font color="#000000">+</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#2a00ff">&#34;B&nbsp;&nbsp;&nbsp;S&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S&nbsp;&nbsp;&nbsp;&nbsp;B\n&#34;</font><font color="#000000">+</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#2a00ff">&#34;B&nbsp;S&nbsp;&nbsp;&nbsp;S&nbsp;&nbsp;S&nbsp;S&nbsp;&nbsp;S&nbsp;&nbsp;&nbsp;S&nbsp;&nbsp;B\n&#34;</font><font color="#000000">+</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#2a00ff">&#34;B&nbsp;&nbsp;&nbsp;S&nbsp;&nbsp;&nbsp;S&nbsp;&nbsp;&nbsp;S&nbsp;&nbsp;&nbsp;S&nbsp;&nbsp;&nbsp;&nbsp;B\n&#34;</font><font color="#000000">+</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#2a00ff">&#34;B&nbsp;S&nbsp;&nbsp;&nbsp;S&nbsp;&nbsp;S&nbsp;S&nbsp;&nbsp;S&nbsp;&nbsp;&nbsp;S&nbsp;&nbsp;B\n&#34;</font><font color="#000000">+</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#2a00ff">&#34;B&nbsp;&nbsp;&nbsp;S&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S&nbsp;&nbsp;&nbsp;&nbsp;B\n&#34;</font><font color="#000000">+</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#2a00ff">&#34;B&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B\n&#34;</font><font color="#000000">+</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#2a00ff">&#34;B&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;o&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B\n&#34;</font><font color="#000000">+</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#2a00ff">&#34;B&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B\n&#34;</font><font color="#000000">+</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#2a00ff">&#34;BDDDDDDDDDDDDDDDDDDDDB\n&#34;</font><font color="#000000">+</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#2a00ff">&#34;B&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B&#34;</font><font color="#000000">;</font>
+									</code>
+            				</bluedoc>
+            			</div> 
+            		</li>
+            		<li>
+            			<a href="#" onclick="return toggle('map_view')">Map View</a><br>
+            			<div id="map_view" class="text">
+            				<bluedoc>
+            					TODO:
+            				</bluedoc>
+            			</div>
+            		</li>
+            	</ul>
             </div>
         </li>
     </ul>
