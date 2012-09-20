@@ -619,8 +619,8 @@
             </div>
         </li>
         <li>
-            <a class="main" href="#" onclick="return toggle('map_and_maploader')">Maps and MapLoader</a><br>
-            <div id="map_and_maploader" class="text">
+            <a class="main" href="#" onclick="return toggle('maps_and_maploader')">Maps and MapLoader</a><br>
+            <div id="maps_and_maploader" class="text">
             	<ul>
             		<li>
             			<a href="#" onclick="return toggle('maploader')">MapLoader interface</a><br>
@@ -734,15 +734,221 @@
             			</div> 
             		</li>
             		<li>
+            			<a href="#" onclick="return toggle('rendering_map')">Rendering the map</a><br>
+            			<div id="rendering_map" class="text">
+            				<bluedoc>
+            					Drawing a map is also easy. It doesn't deal with which <i>MapInfo</i> is currently loaded. It is so simple to call the <i>renderMap()</i> method from
+            					the <i>render()</i> method.
+            					<code>
+									<font color="#7f0055"><b>public&nbsp;</b></font><font color="#7f0055"><b>void&nbsp;</b></font><font color="#000000">render</font><font color="#000000">(</font><font color="#000000">Graphics2D&nbsp;g</font><font color="#000000">){</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">Map.renderMap</font><font color="#000000">(</font><font color="#000000">g</font><font color="#000000">)</font><font color="#000000">;</font><br />
+									<font color="#000000">}</font>
+								</code>
+            				</bluedoc>
+            			</div>
+            		</li>
+            		<li>
             			<a href="#" onclick="return toggle('map_view')">Map View</a><br>
             			<div id="map_view" class="text">
             				<bluedoc>
-            					TODO:
+            					Now that this method of creating maps is easier a lot, we have to think what if our map is larger and only a part of it is displayed? Here comes the
+            					<i>MapView</i> class. This class gives the effect of scrolling the map by simply changing the coordinates of the map. Map view translates these
+            					coordinates when it's static <i>follow()</i> method is called. So only one object should be followed. What you do is simply call the <i>follow()</i>
+            					method in the <i>update()</i> method and render using the <i>MapView</i> class.
+            					<code>
+									<font color="#3f7f5f">//&nbsp;The&nbsp;update()&nbsp;method&nbsp;in&nbsp;the&nbsp;object</font><br />
+									<font color="#7f0055"><b>public&nbsp;</b></font><font color="#7f0055"><b>void&nbsp;</b></font><font color="#000000">update</font><font color="#000000">(</font><font color="#7f0055"><b>long&nbsp;</b></font><font color="#000000">elapsedTime</font><font color="#000000">){</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">MapView.follow</font><font color="#000000">(</font><font color="#7f0055"><b>this</b></font><font color="#000000">)</font><font color="#000000">;</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f7f5f">//&nbsp;Other&nbsp;update&nbsp;code</font><br />
+									<font color="#000000">}</font><br />
+									<font color="#ffffff"></font><br />
+									<font color="#3f7f5f">//&nbsp;The&nbsp;render()&nbsp;method&nbsp;in&nbsp;the&nbsp;game</font><br />
+									<font color="#7f0055"><b>public&nbsp;</b></font><font color="#7f0055"><b>void&nbsp;</b></font><font color="#000000">render</font><font color="#000000">(</font><font color="#000000">Graphics2D&nbsp;g</font><font color="#000000">){</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">MapView.render</font><font color="#000000">(</font><font color="#000000">g</font><font color="#000000">)</font><font color="#000000">;</font><br />
+									<font color="#000000">}</font>
+								</code>
+            				</bluedoc>
+            			</div>
+            		</li>
+            		<li>
+            			<a href="#" onclick="return toggle('map_manager')">MapManager</a><br>
+            			<div id="map_manager" class="text">
+            				<bluedoc>
+            					To simplify the process of parsing and adding the objects to the <i>Map</i>, There exists another class called <i>MapManager</i>. This class contains
+            					an ordered list of <i>MapInfo</i> objects and provides an easier mechanism of switching the maps. It is so fast that parsing the MapInfo objects takes
+            					less than 10 milliseconds. This is how you use the manager.
+            					<code>
+									<font color="#3f5fbf">/**&nbsp;NOTE:&nbsp;This&nbsp;code&nbsp;should&nbsp;be&nbsp;placed</font><br />
+									<font color="#ffffff">&nbsp;</font><font color="#3f5fbf">*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in&nbsp;the&nbsp;game&nbsp;class&nbsp;which&nbsp;implements</font><br />
+									<font color="#ffffff">&nbsp;</font><font color="#3f5fbf">*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;MapLoader&nbsp;interface</font><br />
+									<font color="#ffffff">&nbsp;</font><font color="#3f5fbf">*/</font><br />
+									<font color="#ffffff"></font><br />									
+									<font color="#3f7f5f">//&nbsp;add&nbsp;the&nbsp;map&nbsp;to&nbsp;the&nbsp;MapManager</font><br />
+									<font color="#000000">MapManager.addMap</font><font color="#000000">(</font><font color="#7f0055"><b>new&nbsp;</b></font><font color="#000000">Map1</font><font color="#000000">(</font><font color="#7f0055"><b>this</b></font><font color="#000000">))</font><font color="#000000">;</font><br />
+									<font color="#000000">MapManager.addMap</font><font color="#000000">(</font><font color="#7f0055"><b>new&nbsp;</b></font><font color="#000000">Map2</font><font color="#000000">(</font><font color="#7f0055"><b>this</b></font><font color="#000000">))</font><font color="#000000">;</font><br />
+									<font color="#ffffff"></font><br />
+									<font color="#3f7f5f">//&nbsp;Starting&nbsp;the&nbsp;first&nbsp;map</font><br />
+									<font color="#000000">MapManager.startFirstMap</font><font color="#000000">()</font><font color="#000000">;</font><br />
+									<font color="#ffffff"></font><br />
+									<font color="#3f7f5f">//&nbsp;Loading&nbsp;next&nbsp;map</font><br />
+									<font color="#000000">MapManager.loadNextMap</font><font color="#000000">()</font><font color="#000000">;</font><br />
+									<font color="#ffffff"></font><br />
+									<font color="#3f7f5f">//&nbsp;Loading&nbsp;the&nbsp;previous&nbsp;map</font><br />
+									<font color="#000000">MapManager.loadPreviousMap</font><font color="#000000">()</font><font color="#000000">;</font><br />
+									<font color="#ffffff"></font><br />
+									<font color="#7f0055"><b>if&nbsp;</b></font><font color="#000000">(</font><font color="#000000">MapManager.hasNextMap</font><font color="#000000">()){</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f7f5f">//&nbsp;Do&nbsp;if&nbsp;there&nbsp;is&nbsp;a&nbsp;next&nbsp;map</font><br />
+									<font color="#000000">}</font><br />
+									<font color="#ffffff"></font><br />
+									<font color="#7f0055"><b>if&nbsp;</b></font><font color="#000000">(</font><font color="#000000">MapManager.hasPreviousMap</font><font color="#000000">()){</font><br />
+									<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f7f5f">//&nbsp;Do&nbsp;if&nbsp;there&nbsp;is&nbsp;a&nbsp;previous&nbsp;map</font><br />
+									<font color="#000000">}</font>
+								</code>
             				</bluedoc>
             			</div>
             		</li>
             	</ul>
             </div>
+        </li>
+        <li>
+        	<a class="main" href="#" onclick="return toggle('an_example_game')">An example game</a><br>
+        	<div id="an_example_game" class="text">
+        		<bluedoc>
+        			In this section, we will be making a maze game. We create the images using the ImageTool class. The code should be placed in <i>SimpleMaze.java</i>
+        			<code>
+						<font color="#3f7f5f">//&nbsp;AWT&nbsp;imports</font><br />
+						<font color="#7f0055"><b>import&nbsp;</b></font><font color="#000000">java.awt.*;</font><br />
+						<font color="#7f0055"><b>import&nbsp;</b></font><font color="#000000">java.awt.event.*;</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#3f7f5f">//&nbsp;GEJ&nbsp;imports</font><br />
+						<font color="#7f0055"><b>import&nbsp;</b></font><font color="#000000">com.gej.core.*;</font><br />
+						<font color="#7f0055"><b>import&nbsp;</b></font><font color="#000000">com.gej.graphics.*;</font><br />
+						<font color="#7f0055"><b>import&nbsp;</b></font><font color="#000000">com.gej.input.*;</font><br />
+						<font color="#7f0055"><b>import&nbsp;</b></font><font color="#000000">com.gej.map.*;</font><br />
+						<font color="#7f0055"><b>import&nbsp;</b></font><font color="#000000">com.gej.object.*;</font><br />
+						<font color="#7f0055"><b>import&nbsp;</b></font><font color="#000000">com.gej.util.*;</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#3f7f5f">//&nbsp;Main&nbsp;game&nbsp;class</font><br />
+						<font color="#7f0055"><b>public&nbsp;class&nbsp;</b></font><font color="#000000">SimpleMaze&nbsp;</font><font color="#7f0055"><b>extends&nbsp;</b></font><font color="#000000">Game&nbsp;</font><font color="#7f0055"><b>implements&nbsp;</b></font><font color="#000000">MapLoader&nbsp;</font><font color="#000000">{</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;static&nbsp;</b></font><font color="#000000">Image&nbsp;PLAYER;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;static&nbsp;</b></font><font color="#000000">Image&nbsp;WALL;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;static&nbsp;</b></font><font color="#000000">Image&nbsp;GOAL;</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;</b></font><font color="#7f0055"><b>void&nbsp;</b></font><font color="#000000">initResources</font><font color="#000000">(){</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">Global.TITLE&nbsp;=&nbsp;</font><font color="#2a00ff">&#34;A&nbsp;Simple&nbsp;Maze&nbsp;Game&#34;</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">PLAYER&nbsp;=&nbsp;ImageTool.getColoredImage</font><font color="#000000">(</font><font color="#000000">Color.RED,&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#990000">32</font><font color="#000000">,&nbsp;</font><font color="#990000">32</font><font color="#000000">)</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">WALL&nbsp;&nbsp;&nbsp;=&nbsp;ImageTool.getColoredImage</font><font color="#000000">(</font><font color="#000000">Color.GRAY,&nbsp;&nbsp;&nbsp;</font><font color="#990000">32</font><font color="#000000">,&nbsp;</font><font color="#990000">32</font><font color="#000000">)</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">GOAL&nbsp;&nbsp;&nbsp;=&nbsp;ImageTool.getColoredImage</font><font color="#000000">(</font><font color="#000000">Color.GREEN,&nbsp;&nbsp;</font><font color="#990000">32</font><font color="#000000">,&nbsp;</font><font color="#990000">32</font><font color="#000000">)</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">Background.setBackground</font><font color="#000000">(</font><font color="#000000">ImageTool.getColoredImage</font><font color="#000000">(</font><font color="#000000">Color.BLACK,</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">Global.WIDTH,</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">Global.HEIGHT</font><font color="#000000">))</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">MapManager.addMap</font><font color="#000000">(</font><font color="#7f0055"><b>new&nbsp;</b></font><font color="#000000">MazeMap</font><font color="#000000">(</font><font color="#7f0055"><b>this</b></font><font color="#000000">))</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">MapManager.startFirstMap</font><font color="#000000">()</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">setState</font><font color="#000000">(</font><font color="#000000">GameState.GAME_PLAYING</font><font color="#000000">)</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;</b></font><font color="#7f0055"><b>void&nbsp;</b></font><font color="#000000">update</font><font color="#000000">(</font><font color="#7f0055"><b>long&nbsp;</b></font><font color="#000000">elapsedTime</font><font color="#000000">){</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>if&nbsp;</b></font><font color="#000000">(</font><font color="#000000">GKeyBoard.isPressed</font><font color="#000000">(</font><font color="#000000">KeyEvent.VK_ESCAPE</font><font color="#000000">)){</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">end_game</font><font color="#000000">()</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;</b></font><font color="#7f0055"><b>void&nbsp;</b></font><font color="#000000">render</font><font color="#000000">(</font><font color="#000000">Graphics2D&nbsp;g</font><font color="#000000">){</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">MapView.render</font><font color="#000000">(</font><font color="#000000">g</font><font color="#000000">)</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;</b></font><font color="#000000">GObject&nbsp;getObject</font><font color="#000000">(</font><font color="#7f0055"><b>char&nbsp;</b></font><font color="#000000">c,&nbsp;</font><font color="#7f0055"><b>int&nbsp;</b></font><font color="#000000">x,&nbsp;</font><font color="#7f0055"><b>int&nbsp;</b></font><font color="#000000">y</font><font color="#000000">){</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>switch&nbsp;</b></font><font color="#000000">(</font><font color="#000000">c</font><font color="#000000">){</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>case&nbsp;</b></font><font color="#990000">'W'</font><font color="#000000">:&nbsp;</font><font color="#7f0055"><b>return&nbsp;new&nbsp;</b></font><font color="#000000">Wall</font><font color="#000000">(</font><font color="#000000">x,&nbsp;y</font><font color="#000000">)</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>case&nbsp;</b></font><font color="#990000">'P'</font><font color="#000000">:&nbsp;</font><font color="#7f0055"><b>return&nbsp;new&nbsp;</b></font><font color="#000000">Player</font><font color="#000000">(</font><font color="#000000">x,&nbsp;y</font><font color="#000000">)</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>case&nbsp;</b></font><font color="#990000">'G'</font><font color="#000000">:&nbsp;</font><font color="#7f0055"><b>return&nbsp;new&nbsp;</b></font><font color="#000000">Goal</font><font color="#000000">(</font><font color="#000000">x,&nbsp;y</font><font color="#000000">)</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>return&nbsp;null</b></font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;</b></font><font color="#000000">Tile&nbsp;getTile</font><font color="#000000">(</font><font color="#7f0055"><b>char&nbsp;</b></font><font color="#000000">c,&nbsp;</font><font color="#7f0055"><b>int&nbsp;</b></font><font color="#000000">x,&nbsp;</font><font color="#7f0055"><b>int&nbsp;</b></font><font color="#000000">y</font><font color="#000000">){</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>return&nbsp;null</b></font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;static&nbsp;</b></font><font color="#7f0055"><b>void&nbsp;</b></font><font color="#000000">main</font><font color="#000000">(</font><font color="#000000">String</font><font color="#000000">[]&nbsp;</font><font color="#000000">args</font><font color="#000000">){</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">GWindow.setup</font><font color="#000000">(</font><font color="#7f0055"><b>new&nbsp;</b></font><font color="#000000">SimpleMaze</font><font color="#000000">())</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;class&nbsp;</b></font><font color="#000000">Wall&nbsp;</font><font color="#7f0055"><b>extends&nbsp;</b></font><font color="#000000">GObject&nbsp;</font><font color="#000000">{</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;</b></font><font color="#000000">Wall</font><font color="#000000">(</font><font color="#7f0055"><b>float&nbsp;</b></font><font color="#000000">x,&nbsp;</font><font color="#7f0055"><b>float&nbsp;</b></font><font color="#000000">y</font><font color="#000000">){</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>super</b></font><font color="#000000">(</font><font color="#000000">SimpleMaze.WALL,&nbsp;x,&nbsp;y</font><font color="#000000">)</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">setSolid</font><font color="#000000">(</font><font color="#7f0055"><b>true</b></font><font color="#000000">)</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;class&nbsp;</b></font><font color="#000000">Goal&nbsp;</font><font color="#7f0055"><b>extends&nbsp;</b></font><font color="#000000">GObject&nbsp;</font><font color="#000000">{</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;</b></font><font color="#000000">Goal</font><font color="#000000">(</font><font color="#7f0055"><b>float&nbsp;</b></font><font color="#000000">x,&nbsp;</font><font color="#7f0055"><b>float&nbsp;</b></font><font color="#000000">y</font><font color="#000000">){</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>super</b></font><font color="#000000">(</font><font color="#000000">SimpleMaze.GOAL,&nbsp;x,&nbsp;y</font><font color="#000000">)</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;class&nbsp;</b></font><font color="#000000">Player&nbsp;</font><font color="#7f0055"><b>extends&nbsp;</b></font><font color="#000000">GObject&nbsp;</font><font color="#000000">{</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>final&nbsp;</b></font><font color="#7f0055"><b>float&nbsp;</b></font><font color="#000000">SPEED&nbsp;=&nbsp;</font><font color="#990000">4f</font><font color="#000000">;</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;</b></font><font color="#000000">Player</font><font color="#000000">(</font><font color="#7f0055"><b>float&nbsp;</b></font><font color="#000000">x,&nbsp;</font><font color="#7f0055"><b>float&nbsp;</b></font><font color="#000000">y</font><font color="#000000">){</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>super</b></font><font color="#000000">(</font><font color="#000000">SimpleMaze.PLAYER,&nbsp;x,&nbsp;y</font><font color="#000000">)</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;</b></font><font color="#7f0055"><b>void&nbsp;</b></font><font color="#000000">update</font><font color="#000000">(</font><font color="#7f0055"><b>long&nbsp;</b></font><font color="#000000">elapsedTime</font><font color="#000000">){</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">MapView.follow</font><font color="#000000">(</font><font color="#7f0055"><b>this</b></font><font color="#000000">)</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">setVelocityX</font><font color="#000000">(</font><font color="#990000">0</font><font color="#000000">)</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">setVelocityY</font><font color="#000000">(</font><font color="#990000">0</font><font color="#000000">)</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>if&nbsp;</b></font><font color="#000000">(</font><font color="#000000">GKeyBoard.isPressed</font><font color="#000000">(</font><font color="#000000">KeyEvent.VK_LEFT</font><font color="#000000">)){</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">setVelocityX</font><font color="#000000">(</font><font color="#000000">-SPEED</font><font color="#000000">)</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}&nbsp;</font><font color="#7f0055"><b>else&nbsp;if&nbsp;</b></font><font color="#000000">(</font><font color="#000000">GKeyBoard.isPressed</font><font color="#000000">(</font><font color="#000000">KeyEvent.VK_RIGHT</font><font color="#000000">)){</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">setVelocityX</font><font color="#000000">(</font><font color="#000000">SPEED</font><font color="#000000">)</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>if&nbsp;</b></font><font color="#000000">(</font><font color="#000000">GKeyBoard.isPressed</font><font color="#000000">(</font><font color="#000000">KeyEvent.VK_UP</font><font color="#000000">)){</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">setVelocityY</font><font color="#000000">(</font><font color="#000000">-SPEED</font><font color="#000000">)</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}&nbsp;</font><font color="#7f0055"><b>else&nbsp;if&nbsp;</b></font><font color="#000000">(</font><font color="#000000">GKeyBoard.isPressed</font><font color="#000000">(</font><font color="#000000">KeyEvent.VK_DOWN</font><font color="#000000">)){</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">setVelocityY</font><font color="#000000">(</font><font color="#000000">SPEED</font><font color="#000000">)</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;</b></font><font color="#7f0055"><b>void&nbsp;</b></font><font color="#000000">collision</font><font color="#000000">(</font><font color="#000000">GObject&nbsp;other</font><font color="#000000">){</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>if&nbsp;</b></font><font color="#000000">(</font><font color="#000000">other&nbsp;</font><font color="#7f0055"><b>instanceof&nbsp;</b></font><font color="#000000">Goal</font><font color="#000000">){</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#3f7f5f">//&nbsp;Start&nbsp;over&nbsp;again</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">MapManager.startFirstMap</font><font color="#000000">()</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;class&nbsp;</b></font><font color="#000000">MazeMap&nbsp;</font><font color="#7f0055"><b>extends&nbsp;</b></font><font color="#000000">MapInfo&nbsp;</font><font color="#000000">{</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">{</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">tileSize&nbsp;=&nbsp;</font><font color="#990000">32</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">MapData&nbsp;=&nbsp;</font><font color="#2a00ff">&#34;WWWWWWWWWWWWWWWWWWWWWWWWWW\n&#34;</font><font color="#000000">+</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#2a00ff">&#34;WPW&nbsp;&nbsp;&nbsp;W&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;W&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GW\n&#34;</font><font color="#000000">+</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#2a00ff">&#34;W&nbsp;W&nbsp;W&nbsp;W&nbsp;WWWWW&nbsp;W&nbsp;W&nbsp;W&nbsp;W&nbsp;W&nbsp;WW\n&#34;</font><font color="#000000">+</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#2a00ff">&#34;W&nbsp;&nbsp;&nbsp;W&nbsp;&nbsp;&nbsp;W&nbsp;&nbsp;&nbsp;W&nbsp;&nbsp;&nbsp;WWWWWWWWWW\n&#34;</font><font color="#000000">+</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#2a00ff">&#34;WWWWWWWWWWWWWWWWWWWWWWWWWW&#34;</font><font color="#000000">;&nbsp;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#7f0055"><b>public&nbsp;</b></font><font color="#000000">MazeMap</font><font color="#000000">(</font><font color="#000000">MapLoader&nbsp;loader</font><font color="#000000">){</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">setMapLoader</font><font color="#000000">(</font><font color="#000000">loader</font><font color="#000000">)</font><font color="#000000">;</font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#000000">}</font><br />
+						<font color="#ffffff"></font><br />
+						<font color="#000000">}</font>
+					</code>
+					It looks like this.<br>
+					<code><center><img href="SimpleMaze.png" src="SimpleMaze.png"></img></center></code>
+					Try changing the level and adding more levels. And with this, the tutorial ends. <code>To see more, look at the <a class="link" href="http://game-engine-for-java.googlecode.com/">documentation</a>.</code>
+        		</bluedoc>
+        	</div>
         </li>
     </ul>
     <div class="title">
