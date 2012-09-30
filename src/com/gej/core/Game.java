@@ -109,6 +109,7 @@ public abstract class Game extends JPanel implements Updateable, Runnable {
                 if (getCurrentTime() - lastupdCount > 1000){
                     lastupdCount = getCurrentTime();
                     Global.ACTUAL_STEPS_FOR_SECOND = updcount;
+                    Global.UPDATE_RATE = (int)((float)((float)Global.ACTUAL_STEPS_FOR_SECOND/(float)Global.STEPS_FOR_SECOND)*100);
                     updcount = 0;
                 }
                 // Show or hide the cursor

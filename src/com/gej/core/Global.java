@@ -42,6 +42,11 @@ public final class Global {
     /** The actual speed of the game in steps per second */
     public static int ACTUAL_STEPS_FOR_SECOND = 0;
     /**
+     * The percentage of updates done by the engine. Best if the percentage is
+     * greater than 70.
+     */
+    public static int UPDATE_RATE = 0;
+    /**
      * Fits the drawn game to the window so that nothing in the view is escaped
      * out. This makes the display of text using the Java2D fonts to an uneasy
      * way
@@ -54,7 +59,7 @@ public final class Global {
     /** A map containing various properties */
     public static HashMap<String, Object> PROPERTIES = new HashMap<String, Object>();
     /** Variable containing the current GEJ version */
-    public static final String GEJ_VERSION = "GEJ V0.8 R1";
+    public static final String GEJ_VERSION = "GEJ V0.8 R2";
     
     /**
      * Set's the time for each step to take place
