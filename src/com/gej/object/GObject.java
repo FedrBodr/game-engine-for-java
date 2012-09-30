@@ -52,6 +52,8 @@ public class GObject implements Updateable {
     private float y;
     private float dx;
     private float dy;
+    private float oldX;
+    private float oldY;
 
     // The direction of this object
     protected float direction = 0;
@@ -656,6 +658,7 @@ public class GObject implements Updateable {
      * @param x The new x-position
      */
     public void setX(float x){
+        oldX = this.x;
         this.x = x;
     }
 
@@ -665,7 +668,22 @@ public class GObject implements Updateable {
      * @param y The new y-position
      */
     public void setY(float y){
+        oldY = this.y;
         this.y = y;
+    }
+    
+    /**
+     * @return The last x-position of this object
+     */
+    public float getOldX(){
+        return oldX;
+    }
+    
+    /**
+     * @return The last y-position of this object
+     */
+    public float getOldY(){
+        return oldY;
     }
 
     /**

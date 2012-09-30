@@ -39,6 +39,8 @@ public final class Global {
     public static int STEPS_FOR_SECOND = 33;
     /** The FPS of the game */
     public static int FRAMES_PER_SECOND = 60;
+    /** The actual speed of the game in steps per second */
+    public static int ACTUAL_STEPS_FOR_SECOND = 0;
     /**
      * Fits the drawn game to the window so that nothing in the view is escaped
      * out. This makes the display of text using the Java2D fonts to an uneasy

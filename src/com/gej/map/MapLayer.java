@@ -57,9 +57,9 @@ public class MapLayer {
                     objects.remove(i);
                 } else {
                     if (MapView.isVisible(obj) && obj.isVisible()) {
-                        int obj_x = Math.round(obj.getX()) + x;
-                        int obj_y = Math.round(obj.getY()) + y;
-                        g.drawImage(obj.getImage(), obj_x, obj_y, null);
+                        float obj_x = obj.getX() + x;
+                        float obj_y = obj.getY() + y;
+                        g.drawImage(obj.getImage(), (int)obj_x, (int)obj_y, null);
                     }
                 }
             }
