@@ -4,6 +4,8 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import com.gej.collision.QuadTree;
 import com.gej.core.Global;
 import com.gej.object.GObject;
 import com.gej.object.Tile;
@@ -30,6 +32,8 @@ public abstract class Map {
     // Map's width and height (in tiles)
     private static int MAP_WIDTH = 0;
     private static int MAP_HEIGHT = 0;
+    
+    private static QuadTree quad = null;
 
     // Collection of all the game objects and tiles
     private static ArrayList<GObject> objects = null;
@@ -49,6 +53,7 @@ public abstract class Map {
     public static void initMap(){
         objects = new ArrayList<GObject>();
         layers = new HashMap<Integer, MapLayer>();
+        quad = new QuadTree();
     }
 
     /**
@@ -131,6 +136,7 @@ public abstract class Map {
             }
             mapdata = new char[MAP_WIDTH][MAP_HEIGHT];
             _tiles = new Tile[MAP_WIDTH][MAP_HEIGHT];
+            
             // Iterate and add all the objects and tiles
             for (int i = 0; i < lines.length; i++) {
                 for (int j = 0; j < lines[i].length(); j++) {
@@ -144,9 +150,10 @@ public abstract class Map {
                             * TILE_SIZE);
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { e.printStackTrace(); }
+        int mw = Math.max(getWidth(), Global.WIDTH);
+        int mh = Math.max(getHeight(), Global.HEIGHT);
+        quad.setBounds(0, 0, mw, mh);
     }
 
     /**
@@ -330,6 +337,8 @@ public abstract class Map {
      * @param elapsedTime The time elapsed in the current frame.
      */
     public static void updateObjects(long elapsedTime){
+        quad.clear();
+        quad.insert(objects);
         for (int i = 0; i < objects.size(); i++) {
             GObject obj = objects.get(i);
             if (obj.isAlive()) {
@@ -346,27 +355,20 @@ public abstract class Map {
      * Checks for collisions for an object. Helper method.
      */
     private static final void checkCollisions(GObject obj){
-        if (MapView.isVisible(obj)) {
-            for (int i = 0; i < objects.size(); i++) {
-                try {
-                    GObject other = objects.get(i);
-                    if (other.isAlive()) {
-                        if (other.isCollidingWith(obj)) {
-                            if (other.isSolid()) {
-                                // Move back
-                                obj.setX(obj.getX() - obj.getVelocityX());
-                                obj.setY(obj.getY() - obj.getVelocityY());
-                            }
-                            obj.collision(other);
-                        }
-                    } else {
-                        objects.remove(i);
+        ArrayList<GObject> collidables = quad.retrieve(obj);
+        for (int i=0; i<collidables.size(); i++){
+            GObject other = collidables.get(i);
+            if (other.isAlive()){
+                if (other.isCollidingWith(obj)){
+                    if (other.isSolid()) {
+                        // Move back
+                        obj.setX(obj.getX() - obj.getVelocityX());
+                        obj.setY(obj.getY() - obj.getVelocityY());
                     }
-                } catch (Exception e) {
-                    if (!(e instanceof NullPointerException)) {
-                        e.printStackTrace();
-                    }
+                    obj.collision(other);
                 }
+            } else {
+                objects.remove(other);
             }
         }
     }

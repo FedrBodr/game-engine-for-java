@@ -42,6 +42,14 @@ public final class Global {
     /** The actual speed of the game in steps per second */
     public static int ACTUAL_STEPS_FOR_SECOND = 0;
     /**
+     * The MAX number of frames that can be skipped.
+     * Set the number according to the needs. A large
+     * value means odd-looking graphics and very less
+     * means smooth graphics but the machine may not
+     * handle them. The default value is 10.
+     */
+    public static int MAX_FRAMESKIP = 10;
+    /**
      * The percentage of updates done by the engine. Best if the percentage is
      * greater than 70.
      */
@@ -59,10 +67,11 @@ public final class Global {
     /** A map containing various properties */
     public static HashMap<String, Object> PROPERTIES = new HashMap<String, Object>();
     /** Variable containing the current GEJ version */
-    public static final String GEJ_VERSION = "GEJ V0.8 R2";
+    public static final String GEJ_VERSION = "GEJ V0.8 R3";
     
     /**
-     * Set's the time for each step to take place
+     * Set's the time for each step to take place. Any negative time will be made
+     * equal to one second.
      * @param time The time for each step (in ms)
      */
     public static final void SET_TIME_FOR_EACH_STEP(int time){

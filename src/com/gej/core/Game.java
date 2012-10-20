@@ -1,14 +1,15 @@
 package com.gej.core;
 
+import java.awt.Canvas;
 import java.awt.Cursor;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
+import java.awt.image.BufferStrategy;
 import java.util.HashMap;
 
 import javax.swing.ImageIcon;
-import javax.swing.JPanel;
 
 import com.gej.input.GInput;
 import com.gej.map.Map;
@@ -40,7 +41,7 @@ import com.gej.util.ImageTool;
  * 
  * @author Sri Harsha Chilakapati
  */
-public abstract class Game extends JPanel implements Updateable, Runnable {
+public abstract class Game extends Canvas implements Updateable, Runnable {
 
     /**
      * 
@@ -55,6 +56,9 @@ public abstract class Game extends JPanel implements Updateable, Runnable {
     
     // The game state
     private static GameState state = GameState.GAME_LOADING;
+    
+    /** The BufferStrategy of the game */
+    public static BufferStrategy buffer = null;
 
     // Input manager
     protected GInput input = null;
@@ -63,11 +67,12 @@ public abstract class Game extends JPanel implements Updateable, Runnable {
      * Start the game and the game loop
      */
     public final void start(){
+        createBufferStrategy(2);
+        buffer = getBufferStrategy();
         // Finalize the VM
         System.gc();
         System.runFinalization();
         // Panel settings
-        setDoubleBuffered(true);
         setFocusable(true);
         // Create the cache and input
         cache = new HashMap<String, Image>();
@@ -86,62 +91,64 @@ public abstract class Game extends JPanel implements Updateable, Runnable {
         Map.initMap();
         initResources();
         // Game loop initialization
-        long SKIP_STEPS = 1000/Global.STEPS_FOR_SECOND;
-        int loops = 0;
-        long NEXT_GAME_STEP = (long)getCurrentTime();
+        int SKIP_STEPS = 1000/Global.STEPS_FOR_SECOND;
+        // The time
+        long gameTime = getCurrentTime();
+        int loops;
         // FPS counter
-        int framecount = 0;
-        double lastfpsCount = getCurrentTime();
+        int frames = 0;
+        long lastFPSCount = getCurrentTime();
         // UPD counter
-        int updcount = 0;
-        double lastupdCount = getCurrentTime();
-        // The game loop
+        int updates = 0;
+        long lastUPDCount = getCurrentTime();
+        // update info
+        long elapsedTime = 0;
+        long lastUpdateTime = 0;
         while (running){
             loops = 0;
-            while(getCurrentTime()>NEXT_GAME_STEP && loops<1){
-                // Update the game and map
-                update(SKIP_STEPS);
-                if (state == GameState.GAME_PLAYING) {
-                    Map.updateObjects(SKIP_STEPS);
-                }
+            while(getCurrentTime()>gameTime && loops<Global.MAX_FRAMESKIP){
+                elapsedTime = getCurrentTime() - lastUpdateTime;
+                lastUpdateTime = getCurrentTime();
+                updateGame(elapsedTime);
                 // calculate update count
-                updcount++;
-                if (getCurrentTime() - lastupdCount > 1000){
-                    lastupdCount = getCurrentTime();
-                    Global.ACTUAL_STEPS_FOR_SECOND = updcount;
+                updates++;
+                if (getCurrentTime() - lastUPDCount > 1000){
+                    lastUPDCount = getCurrentTime();
+                    Global.ACTUAL_STEPS_FOR_SECOND = updates;
                     Global.UPDATE_RATE = (int)((float)((float)Global.ACTUAL_STEPS_FOR_SECOND/(float)Global.STEPS_FOR_SECOND)*100);
-                    updcount = 0;
+                    updates = 0;
                 }
-                // Show or hide the cursor
-                if (Global.HIDE_CURSOR) {
-                    setCursor(GInput.INVISIBLE_CURSOR);
-                } else {
-                    setCursor(Cursor.getDefaultCursor());
-                }
-                NEXT_GAME_STEP+=SKIP_STEPS;
+                gameTime += SKIP_STEPS;
                 loops++;
             }
-            // Redraw the game
-            repaint();
+            displayGame();
             // FPS counter
-            framecount++;
-            if (getCurrentTime() - lastfpsCount > 1000) {
-                lastfpsCount = getCurrentTime();
-                Global.FRAMES_PER_SECOND = framecount;
-                framecount = 0;
+            frames++;
+            if (getCurrentTime() - lastFPSCount > 1000) {
+                lastFPSCount = getCurrentTime();
+                Global.FRAMES_PER_SECOND = frames;
+                frames = 0;
             }
-            // Timing mechanism
-            try {Thread.sleep(1);} catch (Exception e){}
         }
     }
-
-    /**
-     * Paints the game and calls the render() method
-     */
-    public final void paint(Graphics g){
-        try {
-            // We need the Graphics2D class, not the legacy Graphics
-            Graphics2D g2D = (Graphics2D) g;
+    
+    private void updateGame(long elapsedTime){
+        // Update the game and map
+        update(elapsedTime);
+        if (state == GameState.GAME_PLAYING) {
+            Map.updateObjects(elapsedTime);
+        }
+        // Show or hide the cursor
+        if (Global.HIDE_CURSOR) {
+            setCursor(GInput.INVISIBLE_CURSOR);
+        } else {
+            setCursor(Cursor.getDefaultCursor());
+        }
+    }
+    
+    private void displayGame(){
+        try{
+            Graphics2D g2D = (Graphics2D)buffer.getDrawGraphics();
             // Smooth the text rendering
             g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             // Create a back buffer, if none
@@ -165,7 +172,9 @@ public abstract class Game extends JPanel implements Updateable, Runnable {
                 g2D.drawImage(backImage, 0, 0, Global.WIDTH, Global.HEIGHT, null);
             }
             g2D.dispose();
-        } catch (NullPointerException e) {}
+            buffer.show();
+            Toolkit.getDefaultToolkit().sync();
+        } catch (Exception e){}
     }
     
     /**
@@ -244,8 +253,8 @@ public abstract class Game extends JPanel implements Updateable, Runnable {
      * Returns the current time in milliseconds with high resolution timer
      * available in the JRE.
      */
-    public static double getCurrentTime(){
-        return System.nanoTime() * 0.000001;
+    public static long getCurrentTime(){
+        return (System.nanoTime()/1000000);
     }
     
 }

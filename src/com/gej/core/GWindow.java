@@ -102,7 +102,6 @@ public final class GWindow extends JFrame implements ActionListener {
         // Set and add the game object
         this.game = game;
         add(game);
-        this.game.start();
         game.setFocusable(true);
         setVisible(true);
         // Fix the repaint issue on some older machines
@@ -123,6 +122,7 @@ public final class GWindow extends JFrame implements ActionListener {
                 }
             }
         });
+        this.game.start();
     }
 
     /**
