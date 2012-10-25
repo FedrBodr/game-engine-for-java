@@ -1,7 +1,6 @@
 package com.gej.core;
 
 import java.awt.Canvas;
-import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
@@ -11,6 +10,7 @@ import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 
+import com.gej.graphics.GCursor;
 import com.gej.input.GInput;
 import com.gej.map.Map;
 import com.gej.util.ImageTool;
@@ -140,10 +140,9 @@ public abstract class Game extends Canvas implements Updateable, Runnable {
         }
         // Show or hide the cursor
         if (Global.HIDE_CURSOR) {
-            setCursor(GInput.INVISIBLE_CURSOR);
-        } else {
-            setCursor(Cursor.getDefaultCursor());
+            GCursor.setCursor(GCursor.INVISIBLE);
         }
+        setCursor(GCursor.CURRENT);
     }
     
     private void displayGame(){

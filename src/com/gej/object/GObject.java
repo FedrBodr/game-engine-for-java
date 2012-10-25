@@ -7,7 +7,6 @@ import java.awt.Rectangle;
 import com.gej.core.Global;
 import com.gej.core.Updateable;
 import com.gej.graphics.Animation;
-import com.gej.input.GInput;
 import com.gej.input.GMouse;
 import com.gej.util.GUtil;
 import com.gej.util.ImageTool;
@@ -241,23 +240,11 @@ public class GObject implements Updateable {
     }
 
     /**
-     * Returns true if this object has been clicked by the mouse
-     * 
-     * @return True if mouse has been clicked on this object.
+     * Returns true if this object has been clicked by a mouse button
      */
     public boolean isClicked(){
-        return isClicked(GInput.MOUSE_BUTTON_1);
-    }
-
-    /**
-     * Returns true if this object has been clicked by a mouse button
-     * 
-     * @param button The Mouse code of the button
-     * @return True if clicked. Else false
-     */
-    public boolean isClicked(int button){
         return (getBounds().contains(GMouse.MOUSE_X, GMouse.MOUSE_Y))
-                && (GMouse.isMouseClicked(button));
+                && (GMouse.isClicked());
     }
 
     /**

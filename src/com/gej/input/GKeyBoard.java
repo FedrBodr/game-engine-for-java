@@ -1,7 +1,5 @@
 package com.gej.input;
 
-import java.util.HashMap;
-
 /**
  * This class can be used to note keyboard input from any class. The values are
  * automatically updated by the GInput object.
@@ -10,57 +8,26 @@ import java.util.HashMap;
  */
 public abstract class GKeyBoard {
 
-    // The map containing booleans and keys
-    private static HashMap<Integer, Boolean> keys = new HashMap<Integer, Boolean>();
-
-    // The number of keys which are pressed now
-    private static int keysPressed = 0;
-
+    /** The number of key codes present in the KeyEvent class */
+    public static final int NUM_KEY_CODES = 603;
+    
+    /** The key code which was processed recently */
+    public static int RECENT_KEY_CODE = 602;
+    
     /**
-     * Notify if a key has been pressed
-     * 
-     * @param keyCode The key code.
+     * Set the detection type of a key code
+     * @param keyCode The code
+     * @param b The behavior
      */
-    public static void KeyPress(int keyCode){
-        if (!isPressed(keyCode)) {
-            keys.put(keyCode, true);
-            keysPressed++;
-        }
+    public static void setDetectionType(int keyCode, GInput.Behaviour b){
+        GInput.KEY_ACTIONS[keyCode].setDetectionType(b);
     }
-
+    
     /**
-     * Notify if a key has been released
-     * 
-     * @param keyCode The key code.
-     */
-    public static void KeyReleased(int keyCode){
-        if (isPressed(keyCode)) {
-            keys.put(keyCode, false);
-            keysPressed--;
-        }
-    }
-
-    /**
-     * Returns whether a key is pressed or not.
-     * 
-     * @param keyCode The key code.
-     * @return The boolean value of the key pressed
+     * Check if a key has been pressed
      */
     public static boolean isPressed(int keyCode){
-        Boolean bool = keys.get(keyCode);
-        if (bool == null) {
-            bool = false;
-        }
-        return bool;
-    }
-
-    /**
-     * Returns true if no key is pressed now.
-     * 
-     * @return true if no key is pressed. Else false.
-     */
-    public static boolean isNoKeyPressed(){
-        return (keysPressed == 0);
+        return GInput.KEY_ACTIONS[keyCode].isPressed();
     }
 
 }

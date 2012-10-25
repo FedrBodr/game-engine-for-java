@@ -7,20 +7,40 @@ import java.awt.Toolkit;
 
 import com.gej.util.ImageTool;
 
-public class GCursor {
+/**
+ * Contains some default cursors and ability to create custom cursors from images.
+ * 
+ * @author Sri Harsha Chilakapati
+ */
+public final class GCursor {
     
+    // Cannot instantiate this class
+    private GCursor(){}
+    
+    /** The default cursor */
     public static Cursor DEFAULT = Cursor.getDefaultCursor();
     
+    /** The current cursor */
+    public static Cursor CURRENT = DEFAULT;
+    
+    /** The hand cursor */
     public static Cursor HAND = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
     
-    public static Cursor CROSSHAIR = Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
+    /** The invisible cursor */
+    public static Cursor INVISIBLE = fromImage(ImageTool.getEmptyImage(1, 1));
     
-    public static Cursor INVISIBLE = Toolkit.getDefaultToolkit().createCustomCursor(ImageTool.getEmptyImage(1, 1), new Point(0, 0), "Invisible Cursor");
-    
-    public static Cursor MOVE_CURSOR = Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR);
-    
-    public static Cursor FROM_IMAGE(Image img){
+    /**
+     * Creates a custom cursor from an image
+     */
+    public static Cursor fromImage(Image img){
         return Toolkit.getDefaultToolkit().createCustomCursor(img, new Point(0, 0), img.toString());
+    }
+    
+    /**
+     * Set's the game cursor
+     */
+    public static void setCursor(Cursor c){
+        CURRENT = c;
     }
 
 }

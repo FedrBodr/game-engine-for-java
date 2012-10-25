@@ -67,7 +67,7 @@ public final class Global {
     /** A map containing various properties */
     public static HashMap<String, Object> PROPERTIES = new HashMap<String, Object>();
     /** Variable containing the current GEJ version */
-    public static final String GEJ_VERSION = "GEJ V0.8 R3";
+    public static final String GEJ_VERSION = "GEJ V0.9";
     
     /**
      * Set's the time for each step to take place. Any negative time will be made
