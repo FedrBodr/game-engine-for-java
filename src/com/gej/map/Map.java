@@ -33,7 +33,8 @@ public abstract class Map {
     private static int MAP_WIDTH = 0;
     private static int MAP_HEIGHT = 0;
     
-    private static QuadTree quad = null;
+    /** The QuadTree used to make collisions quicker */
+    public static QuadTree quad = null;
 
     // Collection of all the game objects and tiles
     private static ArrayList<GObject> objects = null;

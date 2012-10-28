@@ -9,6 +9,7 @@ import java.awt.image.BufferStrategy;
 import java.util.HashMap;
 
 import javax.swing.ImageIcon;
+import javax.swing.JApplet;
 
 import com.gej.graphics.GCursor;
 import com.gej.input.GInput;
@@ -17,9 +18,9 @@ import com.gej.util.ImageTool;
 
 /**
  * This class is the main class for any game. You should extend this class to
- * write a game. The games requires J2SE 1.5 or more to run. To run as an
- * Applet, use the GApplet class. This class uses triple buffering if available
- * or uses double buffering. The default game template could be like this.
+ * write a game. The games requires J2SE 1.5 or more to run. This class uses
+ * triple buffering if available or uses double buffering. The default game
+ * template could be like this.
  * 
  * <pre>
  * public class MyGame extends Game {
@@ -41,7 +42,7 @@ import com.gej.util.ImageTool;
  * 
  * @author Sri Harsha Chilakapati
  */
-public abstract class Game extends Canvas implements Updateable, Runnable {
+public abstract class Game extends JApplet implements Updateable, Runnable {
 
     /**
      * 
@@ -57,6 +58,8 @@ public abstract class Game extends Canvas implements Updateable, Runnable {
     // The game state
     private static GameState state = GameState.GAME_LOADING;
     
+    private Canvas canvas = null;
+    
     /** The BufferStrategy of the game */
     public static BufferStrategy buffer = null;
 
@@ -67,8 +70,12 @@ public abstract class Game extends Canvas implements Updateable, Runnable {
      * Start the game and the game loop
      */
     public final void start(){
-        createBufferStrategy(2);
-        buffer = getBufferStrategy();
+        canvas = new Canvas();
+        add(canvas);
+        canvas.setIgnoreRepaint(true);
+        canvas.requestFocus();
+        canvas.createBufferStrategy(2);
+        buffer = canvas.getBufferStrategy();
         // Finalize the VM
         System.gc();
         System.runFinalization();
@@ -76,7 +83,7 @@ public abstract class Game extends Canvas implements Updateable, Runnable {
         setFocusable(true);
         // Create the cache and input
         cache = new HashMap<String, Image>();
-        input = GInput.install(this);
+        input = GInput.install(canvas);
         running = true;
         // Start the game loop in new thread
         Thread th = new Thread(this);
@@ -163,12 +170,20 @@ public abstract class Game extends Canvas implements Updateable, Runnable {
             render(backGraphics);
             // Dispose the graphics and flip the display
             backGraphics.dispose();
-            if (Global.FULLSCREEN) {
-                g2D.drawImage(backImage, 0, 0, GWindow.RESOLUTION_X, GWindow.RESOLUTION_Y, null);
-            } else if (Global.STRETCH_TO_SCREEN) {
-                g2D.drawImage(backImage, 0, 0, getWidth(), getHeight(), null);
+            if (!Global.WEB_MODE){
+                if (Global.FULLSCREEN){
+                    g2D.drawImage(backImage, 0, 0, GWindow.RESOLUTION_X, GWindow.RESOLUTION_Y, null);
+                } else if (Global.STRETCH_TO_SCREEN) {
+                    g2D.drawImage(backImage, 0, 0, getWidth(), getHeight(), null);
+                } else {
+                    g2D.drawImage(backImage, 0, 0, Global.WIDTH, Global.HEIGHT, null);
+                }
             } else {
-                g2D.drawImage(backImage, 0, 0, Global.WIDTH, Global.HEIGHT, null);
+                if (Global.STRETCH_TO_SCREEN) {
+                    g2D.drawImage(backImage, 0, 0, getWidth(), getHeight(), null);
+                } else {
+                    g2D.drawImage(backImage, 0, 0, Global.WIDTH, Global.HEIGHT, null);
+                }
             }
             g2D.dispose();
             buffer.show();

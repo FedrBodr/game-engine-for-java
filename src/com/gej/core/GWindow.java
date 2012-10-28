@@ -91,6 +91,7 @@ public final class GWindow extends JFrame implements ActionListener {
     private GWindow(Game game, String title, int width, int height) {
         // Configure and create the title bar
         super(title);
+        Global.WEB_MODE = false;
         setUndecorated(true);
         setResizable(false);
         setTitle(title);
@@ -102,7 +103,7 @@ public final class GWindow extends JFrame implements ActionListener {
         // Set and add the game object
         this.game = game;
         add(game);
-        game.setFocusable(true);
+        game.setSize(getSize());
         setVisible(true);
         // Fix the repaint issue on some older machines
         repaintFix();
@@ -204,13 +205,15 @@ public final class GWindow extends JFrame implements ActionListener {
      */
     public static void closeWindow(){
         Global.FULLSCREEN = false;
-        window.timer.stop();
-        window.setFullScreen(false);
-        window.dispose();
-        if (!Global.WEB_MODE){
-            // terminate the VM
-            System.exit(0);
-        }
+        try {
+            window.timer.stop();
+            window.setFullScreen(false);
+            window.dispose();
+            if (!Global.WEB_MODE){
+                // terminate the VM
+                System.exit(0);
+            }
+        } catch (Exception e){}
     }
 
 }

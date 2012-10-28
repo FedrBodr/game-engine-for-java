@@ -63,11 +63,11 @@ public final class Global {
     /**
      * Indicates that the game has been running in the web mode
      */
-    public static boolean WEB_MODE = false;
+    public static boolean WEB_MODE = true;
     /** A map containing various properties */
     public static HashMap<String, Object> PROPERTIES = new HashMap<String, Object>();
     /** Variable containing the current GEJ version */
-    public static final String GEJ_VERSION = "GEJ V0.9";
+    public static final String GEJ_VERSION = "GEJ V0.9 R1";
     
     /**
      * Set's the time for each step to take place. Any negative time will be made
