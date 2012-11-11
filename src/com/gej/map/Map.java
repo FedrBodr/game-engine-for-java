@@ -38,6 +38,8 @@ public abstract class Map {
 
     // Collection of all the game objects and tiles
     private static ArrayList<GObject> objects = null;
+    // The objects to be removed will be placed in this list
+    private static ArrayList<GObject> removed = null;
 
     // Layering data
     private static HashMap<Integer, MapLayer> layers = null;
@@ -53,6 +55,7 @@ public abstract class Map {
      */
     public static void initMap(){
         objects = new ArrayList<GObject>();
+        removed = new ArrayList<GObject>();
         layers = new HashMap<Integer, MapLayer>();
         quad = new QuadTree();
     }
@@ -196,51 +199,28 @@ public abstract class Map {
     }
 
     /**
-     * Get the colliding object at a specific position and width and height
-     * 
-     * @param x The x-position
-     * @param y The y-position
-     * @param width The width
-     * @param height The height
-     * @return The colliding GObject. Returns null if nothing found
-     */
-    public static GObject getCollidingObject(float x, float y, int width, int height){
-        GObject obj = null;
-        Rectangle bounds = new Rectangle(Math.round(x), Math.round(y), width, height);
-        for (int i = 0; i < objects.size(); i++) {
-            GObject object = objects.get(i);
-            if (bounds.intersects(object.getBounds())) {
-                obj = object;
-            }
-        }
-        return obj;
-    }
-
-    /**
      * Checks if a specific position is collision free in the map.
      * 
      * @param x The x-position of the object
      * @param y The y-position of the object
      * @param solid Whether to check only for solid object
-     * @param object The object ( uses image for pixel-perfect collision
-     *            detection )
+     * @param object The object ( used for width and height )
      * @return True if no-collision and false if it collides.
      */
     public static boolean isObjectCollisionFree(float x, float y, boolean solid, GObject object){
         boolean bool = true;
         Rectangle bounds = new Rectangle(Math.round(x), Math.round(y), object.getWidth(), object.getHeight());
-        for (int i = 0; i < objects.size(); i++) {
-            GObject obj = objects.get(i);
-            if (object != obj && (obj.isSolid() == solid)) {
-                if (bounds.intersects(obj.getBounds())) {
-                    if (obj.isAlive()) {
+        ArrayList<GObject> collidables = quad.retrieve(bounds);
+        for (int i=0; i<collidables.size(); i++){
+            GObject obj = collidables.get(i);
+            if (obj.isSolid()==solid && obj !=object){
+                if (obj.isAlive()){
+                    if (bounds.intersects(obj.getBounds())){
                         bool = false;
-                    }
-                    if (bool && Global.USE_PIXELPERFECT_COLLISION) {
-                        bool = GUtil.isPixelPerfectCollision(x, y, object.getAnimation().getBufferedImage(), obj.getX(), obj.getY(), obj.getAnimation().getBufferedImage());
-                        if (bool) {
-                            bool = false;
+                        if (Global.USE_PIXELPERFECT_COLLISION){
+                            bool = !GUtil.isPixelPerfectCollision(x, y, object.getAnimation().getBufferedImage(), obj.getX(), obj.getY(), obj.getAnimation().getBufferedImage());
                         }
+                        break;
                     }
                 }
             }
@@ -347,9 +327,11 @@ public abstract class Map {
                 obj.move();
                 checkCollisions(obj);
             } else {
-                objects.remove(i);
+                removed.add(obj);
             }
         }
+        objects.removeAll(removed);
+        removed.clear();
     }
 
     /*
@@ -369,9 +351,11 @@ public abstract class Map {
                     obj.collision(other);
                 }
             } else {
-                objects.remove(other);
+                removed.add(other);
             }
         }
+        objects.removeAll(removed);
+        removed.clear();
     }
 
     /**
@@ -406,9 +390,11 @@ public abstract class Map {
         for (int i = 0; i < objects.size(); i++) {
             GObject obj = objects.get(i);
             if (c.isInstance(obj)) {
-                objects.remove(i);
+                removed.add(obj);
             }
         }
+        objects.removeAll(removed);
+        removed.clear();
     }
 
     /**

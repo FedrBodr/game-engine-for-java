@@ -12,11 +12,10 @@ import java.util.ArrayList;
  * 
  * @author Sri Harsha Chilakapati
  */
-public abstract class GUtil {
+public final class GUtil {
 
     // Prevent instantiation
-    private GUtil() {
-    }
+    private GUtil() {}
 
     // Direction and velocities
 

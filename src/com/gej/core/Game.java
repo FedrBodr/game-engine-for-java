@@ -108,18 +108,16 @@ public abstract class Game extends JApplet implements Updateable, Runnable {
         // UPD counter
         int updates = 0;
         long lastUPDCount = getCurrentTime();
-        // update info
-        long elapsedTime = 0;
-        long lastUpdateTime = 0;
+        // The current time
+        long now;
         while (running){
+            now = getCurrentTime();
             loops = 0;
-            while(getCurrentTime()>gameTime && loops<Global.MAX_FRAMESKIP){
-                elapsedTime = getCurrentTime() - lastUpdateTime;
-                lastUpdateTime = getCurrentTime();
-                updateGame(elapsedTime);
+            while(now>gameTime && loops<Global.MAX_FRAMESKIP){
+                updateGame(SKIP_STEPS);
                 // calculate update count
                 updates++;
-                if (getCurrentTime() - lastUPDCount > 1000){
+                if (now - lastUPDCount > 1000){
                     lastUPDCount = getCurrentTime();
                     Global.ACTUAL_STEPS_FOR_SECOND = updates;
                     Global.UPDATE_RATE = (int)((float)((float)Global.ACTUAL_STEPS_FOR_SECOND/(float)Global.STEPS_FOR_SECOND)*100);
@@ -131,8 +129,8 @@ public abstract class Game extends JApplet implements Updateable, Runnable {
             displayGame();
             // FPS counter
             frames++;
-            if (getCurrentTime() - lastFPSCount > 1000) {
-                lastFPSCount = getCurrentTime();
+            if (now - lastFPSCount > 1000) {
+                lastFPSCount = now;
                 Global.FRAMES_PER_SECOND = frames;
                 frames = 0;
             }

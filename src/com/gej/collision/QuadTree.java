@@ -113,6 +113,29 @@ public class QuadTree {
         return index;
     }
     
+    // Get the index of a rectangle
+    private int getIndex(Rectangle r){
+        int index = -1;
+        double verticalMidpoint = bounds.x + (bounds.width / 2);
+        double horizontalMidpoint = bounds.y + (bounds.height / 2);
+        boolean topQuadrant = (r.y < horizontalMidpoint && r.y + r.height < horizontalMidpoint);
+        boolean bottomQuadrant = (r.y > horizontalMidpoint);
+        if (r.x < verticalMidpoint && r.x + r.width < verticalMidpoint){
+            if (topQuadrant){
+                index = 1;
+            } else if (bottomQuadrant){
+                index = 2;
+            }
+        } else if (r.getX() > verticalMidpoint){
+            if (topQuadrant){
+                index = 0;
+            } else if (bottomQuadrant){
+                index = 3;
+            }
+        }
+        return index;
+    }
+    
     /**
      * Insert an object into this tree
      */
@@ -159,5 +182,18 @@ public class QuadTree {
         retrieveList.addAll(objects);
         return retrieveList;
     }
-
+    
+    /**
+     * Returns the collidable objects with the given rectangle
+     */
+    public ArrayList<GObject> retrieve(Rectangle r){
+        retrieveList.clear();
+        int index = getIndex(r);
+        if (index != -1 && nodes[0] != null){
+            retrieveList = nodes[index].retrieve(r);
+        }
+        retrieveList.addAll(objects);
+        return retrieveList;
+    }
+    
 }

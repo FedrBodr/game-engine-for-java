@@ -54,9 +54,6 @@ public class GObject implements Updateable {
     private float oldX;
     private float oldY;
 
-    // The direction of this object
-    protected float direction = 0;
-
     // The depth of this object
     protected int depth = 0;
 
@@ -211,21 +208,6 @@ public class GObject implements Updateable {
      */
     public int getDepth(){
         return depth;
-    }
-
-    /**
-     * Returns the direction of this object. The angles are as followed.
-     * 
-     * <pre>
-     * 0&deg;   : moving upwards
-     * 90&deg;  : moving right or stationary
-     * 180&deg; : moving down
-     * 270&deg; : moving left
-     * </pre>
-     */
-    public int getDirection(){
-        return (int) (direction = 90 + (int) Math.toDegrees(Math.atan2(getNextY()
-                - y, getNextX() - x)));
     }
 
     /**
@@ -531,6 +513,47 @@ public class GObject implements Updateable {
             dx = -dx;
         } else {
             dy = -dy;
+        }
+    }
+    
+    /**
+     * This object is aligned next to an object.
+     */
+    public void alignNextTo(GObject other){
+        int xd = (int) ((other.x + other.getWidth() / 2) - (x + getWidth() / 2));
+        int yd = (int) ((other.y + other.getHeight() / 2) - (y + getHeight() / 2));
+        if (xd < 0) {
+            xd = -xd;
+        }
+        if (yd < 0) {
+            yd = -yd;
+        }
+        if (xd > yd) {
+            alignHorizontallyTo(other);
+        } else {
+            alignVerticallyTo(other);
+        }
+    }
+    
+    /**
+     * Align this object horizontally with other
+     */
+    public void alignHorizontallyTo(GObject other){
+        if (getX()>other.getX()){
+            setX(other.getX()+other.getWidth());
+        } else if (getX()<other.getX()){
+            setX(other.getX()-getWidth());
+        }
+    }
+    
+    /**
+     * Align this object vertically with other
+     */
+    public void alignVerticallyTo(GObject other){
+        if (getY()>other.getY()){
+            setY(other.getY()+other.getHeight());
+        } else if (getY()<other.getY()){
+            setY(other.getY()-getHeight());
         }
     }
 

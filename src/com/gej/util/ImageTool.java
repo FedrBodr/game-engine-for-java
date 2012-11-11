@@ -243,5 +243,24 @@ public abstract class ImageTool {
         g.dispose();
         return toImage(bimg);
     }
+    
+    /**
+     * Makes a color in an Image transparent.
+     */
+    public static Image mask(Image img, Color color){
+        BufferedImage bimg = toBufferedImage(getEmptyImage(img.getWidth(null), img.getHeight(null)));
+        Graphics2D g = bimg.createGraphics();
+        g.drawImage(img, 0, 0, null);
+        g.dispose();
+        for (int y=0; y<bimg.getHeight(); y++){
+            for (int x=0; x<bimg.getWidth(); x++){
+                int col = bimg.getRGB(x, y);
+                if (col==color.getRGB()){
+                    bimg.setRGB(x, y, col & 0x00ffffff);
+                }
+            }
+        }
+        return toImage(bimg);
+    }
 
 }
