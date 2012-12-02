@@ -53,7 +53,7 @@ public class GObject implements Updateable {
     private float dy;
     private float oldX;
     private float oldY;
-
+    
     // The depth of this object
     protected int depth = 0;
 
@@ -63,6 +63,9 @@ public class GObject implements Updateable {
     // If this object is solid and alive
     private boolean solid = false;
     private boolean alive = true;
+    
+    // Is this object a collision listener???
+    private boolean collision_listener = true;
 
     /**
      * Constructs an object which is invisible
@@ -429,10 +432,12 @@ public class GObject implements Updateable {
 
     /**
      * Called by the map automatically if a collision event occurs.
+     * Don't call the super method.
      * 
      * @param other The object which has been collided.
      */
     public void collision(GObject other){
+        collision_listener = false;
     }
 
     /**
@@ -788,6 +793,13 @@ public class GObject implements Updateable {
      */
     public void setImage(Image img){
         this.anim = new Animation(new Image[] { img }, 150);
+    }
+    
+    /**
+     * @return Whether the collision method was implemented by the object.
+     */
+    public boolean isCollisionListener(){
+        return collision_listener;
     }
 
     /**

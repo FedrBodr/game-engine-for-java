@@ -42,14 +42,6 @@ public final class Global {
     /** The actual speed of the game in steps per second */
     public static int ACTUAL_STEPS_FOR_SECOND = 0;
     /**
-     * The MAX number of frames that can be skipped.
-     * Set the number according to the needs. A large
-     * value means odd-looking graphics and very less
-     * means smooth graphics but the machine may not
-     * handle them. The default value is 10.
-     */
-    public static int MAX_FRAMESKIP = 10;
-    /**
      * The percentage of updates done by the engine. Best if the percentage is
      * greater than 70.
      */

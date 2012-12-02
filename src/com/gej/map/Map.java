@@ -210,9 +210,9 @@ public abstract class Map {
     public static boolean isObjectCollisionFree(float x, float y, boolean solid, GObject object){
         boolean bool = true;
         Rectangle bounds = new Rectangle(Math.round(x), Math.round(y), object.getWidth(), object.getHeight());
-        ArrayList<GObject> collidables = quad.retrieve(bounds);
-        for (int i=0; i<collidables.size(); i++){
-            GObject obj = collidables.get(i);
+        //ArrayList<GObject> collidables = quad.retrieve(bounds);
+        for (int i=0; i<objects.size(); i++){
+            GObject obj = objects.get(i);
             if (obj.isSolid()==solid && obj !=object){
                 if (obj.isAlive()){
                     if (bounds.intersects(obj.getBounds())){
@@ -325,7 +325,9 @@ public abstract class Map {
             if (obj.isAlive()) {
                 obj.superUpdate(elapsedTime);
                 obj.move();
-                checkCollisions(obj);
+                if (obj.isCollisionListener()){
+                    checkCollisions(obj);
+                }
             } else {
                 removed.add(obj);
             }
