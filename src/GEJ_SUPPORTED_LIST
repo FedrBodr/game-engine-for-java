@@ -1,6 +1,6 @@
 [GEJ SUPPORTED LIST]
   [Actions]
-    * Total Done Actions 35
+    * Total Done Actions 36
     * Total TODO Actions 17
     * Total PARTIALLY_DONE Actions 1
     * Total Done GML Functions 9
@@ -31,6 +31,7 @@
     * Reverse Vertical
     * Jump To Position
     * Align to Grid
+    * Align with
     * Bounce
     ; Main Actions Set 1
     * Create Instance

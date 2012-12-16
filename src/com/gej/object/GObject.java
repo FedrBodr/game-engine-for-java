@@ -66,6 +66,9 @@ public class GObject implements Updateable {
     
     // Is this object a collision listener???
     private boolean collision_listener = true;
+    
+    // The bounds
+    private Rectangle bounds;
 
     /**
      * Constructs an object which is invisible
@@ -238,7 +241,13 @@ public class GObject implements Updateable {
      * @return The boundaries of this object as a rectangle.
      */
     public Rectangle getBounds(){
-        return new Rectangle(Math.round(getX()), Math.round(getY()), getWidth(), getHeight());
+        if (bounds==null)
+            return bounds = new Rectangle(Math.round(getX()), Math.round(getY()), getWidth(), getHeight());
+        bounds.x = (int)getX();
+        bounds.y = (int)getY();
+        bounds.width = getWidth();
+        bounds.height = getHeight();
+        return bounds;
     }
 
     /**
@@ -277,6 +286,34 @@ public class GObject implements Updateable {
             bool = GUtil.isPixelPerfectCollision(x, y, getAnimation().getBufferedImage(), other.getX(), other.getY(), other.getAnimation().getBufferedImage());
         }
         return bool;
+    }
+    
+    /**
+     * Automatically aligns this object with other
+     * @param other The other object
+     */
+    public void alignWith(GObject other){
+        // Get the intersection rectangle
+        Rectangle i = getBounds().intersection(other.getBounds());
+        if (i.width > i.height){
+            // A vertical collision
+            if (getY()<other.getY()){
+                // We're on top of other
+                setY(other.getY()-getHeight());
+            } else if (getY()>other.getY()){
+                // We're below other
+                setY(other.getY()+other.getHeight());
+            }
+        } else {
+            // A horizontal collision
+            if (getX()<other.getX()){
+                // We're left to other
+                setX(other.getX()-getWidth());
+            } else if (getX()>other.getX()){
+                // We're right to other
+                setX(other.getX()+other.getWidth());
+            }
+        }
     }
 
     /**

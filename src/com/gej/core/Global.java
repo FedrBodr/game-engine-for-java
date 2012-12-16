@@ -40,7 +40,7 @@ public final class Global {
     /** The FPS of the game */
     public static int FRAMES_PER_SECOND = 60;
     /** The actual speed of the game in steps per second */
-    public static int ACTUAL_STEPS_FOR_SECOND = 0;
+    public static int ACTUAL_STEPS_FOR_SECOND = 33;
     /**
      * The percentage of updates done by the engine. Best if the percentage is
      * greater than 70.

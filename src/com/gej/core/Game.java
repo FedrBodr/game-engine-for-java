@@ -98,51 +98,41 @@ public abstract class Game extends JApplet implements Updateable, Runnable {
         Map.initMap();
         initResources();
         // Game loop initialization
-        long elapsedTime = 0;
-        long lastUpdateTime = getCurrentTime();
-        long currentTime = lastUpdateTime;
-        // Time taken by a frame
-        long frameTime = 0;
-        // The maximum time of a frame
-        long expectedET = 1000/Global.STEPS_FOR_SECOND;
+        long now = getCurrentTime();
+        long step_size = 1000/Global.STEPS_FOR_SECOND;
+        long game_time = getCurrentTime();
         // FPS counter
         int frames = 0;
         long lastFPSCount = getCurrentTime();
         // UPD counter
         int updates = 0;
         long lastUPDCount = getCurrentTime();
+        // Frame-skips
+        int loops = 0;
         while (running){
-            // Measure the time
-            currentTime = getCurrentTime();
-            elapsedTime = currentTime - lastUpdateTime;
-            // Don't run zero or negative length frames
-            if (elapsedTime <= 0)
-                continue;
-            // Update the game
-            while (elapsedTime > 0) {
-                frameTime = elapsedTime;
-                if (frameTime > expectedET)
-                    frameTime = expectedET;
-                updateGame(frameTime);
+            loops = 0;
+            now = getCurrentTime();
+            while (now > game_time && loops<2){
+                updateGame(1000/Global.ACTUAL_STEPS_FOR_SECOND);
+                game_time += step_size;
                 // calculate update count
                 updates++;
-                if (currentTime - lastUPDCount > 1000){
-                    lastUPDCount = currentTime;
+                loops++;
+                if (now - lastUPDCount > 1000){
+                    lastUPDCount = now;
                     Global.ACTUAL_STEPS_FOR_SECOND = updates;
                     Global.UPDATE_RATE = (int)((float)((float)Global.ACTUAL_STEPS_FOR_SECOND/(float)Global.STEPS_FOR_SECOND)*100);
                     updates = 0;
                 }
-                elapsedTime -= frameTime;
             }
             displayGame();
             // FPS counter
             frames++;
-            if (currentTime - lastFPSCount > 1000) {
-                lastFPSCount = currentTime;
+            if (now - lastFPSCount > 1000) {
+                lastFPSCount = now;
                 Global.FRAMES_PER_SECOND = frames;
                 frames = 0;
             }
-            lastUpdateTime = currentTime;
         }
     }
     
