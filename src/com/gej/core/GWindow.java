@@ -24,8 +24,6 @@ import javax.swing.Timer;
  * windowed application. It is invoked like this.<br>
  * 
  * <pre>
- * GWindow.setup(Game game, String title);
- * 
  * GWindow.setup(Game game);
  * </pre>
  * 
@@ -104,7 +102,6 @@ public final class GWindow extends JFrame implements ActionListener {
         this.game = game;
         add(game);
         game.setSize(getSize());
-        setVisible(true);
         // Fix the repaint issue on some older machines
         repaintFix();
         device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
@@ -123,6 +120,7 @@ public final class GWindow extends JFrame implements ActionListener {
                 }
             }
         });
+        setVisible(true);
         this.game.start();
     }
 

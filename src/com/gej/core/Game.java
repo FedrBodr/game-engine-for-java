@@ -58,7 +58,8 @@ public abstract class Game extends JApplet implements Updateable, Runnable {
     // The game state
     private static GameState state = GameState.GAME_LOADING;
     
-    private Canvas canvas = null;
+    /** The game canvas */
+    public static Canvas canvas = new Canvas();
     
     /** The BufferStrategy of the game */
     public static BufferStrategy buffer = null;
@@ -70,7 +71,6 @@ public abstract class Game extends JApplet implements Updateable, Runnable {
      * Start the game and the game loop
      */
     public final void start(){
-        canvas = new Canvas();
         add(canvas);
         canvas.setIgnoreRepaint(true);
         canvas.requestFocus();
